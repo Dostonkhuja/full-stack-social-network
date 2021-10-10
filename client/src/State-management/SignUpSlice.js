@@ -1,0 +1,38 @@
+import {createSlice, createAsyncThunk} from '@reduxjs/toolkit'
+import {authAPI} from "../api/authAPI";
+
+export const sendSignUp = createAsyncThunk(
+    'signUp/sendSignUp', async (data,thunkAPI) => {
+        thunkAPI.dispatch(setSignInData({values:{email: data.email, password: data.password}}))
+        return await authAPI.signUp(data)
+    })
+
+const signUpSlice = createSlice({
+    name: 'SignUp',
+    initialState: {
+        user: null,
+        signInData: null,
+        errorMessage: null
+    },
+    reducers: {
+        setSignInData: (state,action) => {
+            state.signInData = action.payload
+        }
+    },
+    extraReducers: {
+        [sendSignUp.fulfilled]: (state, action) => {
+            if (action.payload.status === 400) {
+                state.errorMessage = action.payload.data
+            } else {
+                state.errorMessage = null
+                state.user = action.payload
+            }
+        },
+        [sendSignUp.rejected]: (state, action) => {
+            state.errorMessage = action.data
+        }
+    }
+})
+
+export default signUpSlice.reducer
+export const {setSignInData} = signUpSlice.actions

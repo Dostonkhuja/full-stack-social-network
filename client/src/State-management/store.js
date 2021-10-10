@@ -1,9 +1,15 @@
 import {configureStore} from '@reduxjs/toolkit'
-import loginReducer from "./loginSlice";
+import signInSlice from "./SignInSlice";
+import signUpSlice from "./SignUpSlice";
+import profileSlice from "./ProfileSlice";
+import usersSlice from './UsersSlice'
 
 export const store = configureStore({
     reducer: {
-        signIn: loginReducer
+        signIn: signInSlice,
+        signUp:signUpSlice,
+        profile:profileSlice,
+        users:usersSlice
     },
     middleware: (getDefaultMiddleware) => getDefaultMiddleware({serializableCheck: false})
 })

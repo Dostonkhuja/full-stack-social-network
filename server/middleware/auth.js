@@ -10,6 +10,6 @@ module.exports = function auth(req, res, next) {
         req.user = decoded
         next()
     } catch (ex) {
-        return res.status(400).send('yaroqsiz token',ex)
+        return res.status(403).send('yaroqsiz token',ex)
     }
 }

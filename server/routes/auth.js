@@ -3,14 +3,12 @@ const _ = require("lodash")
 const bcrypt = require("bcrypt")
 const router = require('express').Router()
 const auth = require('../middleware/auth')
-const {Schema} = require("mongoose");
 
 //Auth me
 router.get('/me', auth, async (req, res) => {
     const me = await User.findById(req.user._id).select({password: 0, __v: 0})
     if (!me)
         return res.status(404).send('bunday foydalanuvchi mavjud emas')
-
     res.send(me)
 })
 
@@ -41,12 +39,9 @@ router.post('/signUp', async (req, res) => {
     let user = await User.findOne(_.pick(req.body, ['email']))
     if (user)
         return res.status(400).send('bunday email bilan ro\'yxatdan o\'tilgan')
-    console.log(user)
-
-    console.log(req.body.name)
 
     user = await User.findOne({name: req.body.name})
-    console.log(user)
+
     if (user)
         return res.status(400).send('bu ism band')
 

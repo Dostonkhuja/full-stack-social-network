@@ -25,9 +25,9 @@ router.post('/:id', auth, async (req, res) => {
     if (!mongoose.Types.ObjectId.isValid(req.params.id))
         return res.status(400).send('ID standart objectId emas')
 
-    //o'z o'ziga follow bosilsa fasle qaytarib beramiz
+    //o'z o'ziga follow bosilsa false qaytarib beramiz
     if (req.params.id === req.user._id)
-        return res.status(200).send({follow:false})
+        return res.status(200).send({follow: false})
 
     //foydalanuvchini bor yoki yo'qligini tekshiramiz
     const user = await User.findById(req.params.id, 'followed')
@@ -38,13 +38,13 @@ router.post('/:id', auth, async (req, res) => {
     if (user.followed.length !== 0 && user.followed.filter(f => {
         String(f._id) === req.params.id
     })) {
-        return res.status(200).send({follow:true})
+        return res.status(200).send({follow: true})
     }
 
     //hammasi joyida bo'lsa muvaffaqiyatli follow true qaytarib beramiz
-    user.followed.push({_id: req.user._id})
+    user.followed.push(req.user._id)
     await user.save()
-    res.send({follow:true})
+    res.status(200).send({follow: true})
 })
 
 //unfollows
@@ -54,14 +54,14 @@ router.delete('/:id', auth, async (req, res) => {
         return res.status(400).send('ID standart objectId emas')
 
     //foydalanuvchini bor yoki yo'qligini tekshiramiz
-    const user = await User.findById(req.params.id, 'followed')
+    let user = await User.findById(req.params.id, 'followed')
     if (!user)
         return res.status(404).send('bunday foydalanuvchi mavjud emas')
 
-    const removed = _.remove(user.followed, item => String(item) === req.user._id)
-    if (removed.length > 0)
-        await user.save()
-    return res.status(200).send({follow: false, message: "unfollow muvaffaqiyatli amalga oshirildi"})
+    user.followed = user.followed.filter(f=> f === req.user._id)
+    await user.save()
+
+    res.status(200).send({follow: false})
 })
 
 module.exports = router

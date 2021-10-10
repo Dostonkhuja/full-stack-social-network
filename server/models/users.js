@@ -7,13 +7,22 @@ const jwt = require('jsonwebtoken')
 const userSchema = new mongoose.Schema({
     email: {type: String, minLength: 5, maxLength: 50, unique: true, required: true},
     password: {type: String, required: true},
-    fullName: {type: String, minlength: 3, maxlength: 50, default: null},
-    name: {type: String, minlength: 3, maxlength: 50, default: null},
-    status: {type: String, minlength: 1, maxlength: 1024, default: null},
-    photos: {type: Object, small: {type: String}, large: {type: String}, default: null},
-    followed: [{type:mongoose.Schema.Types.ObjectId,ref:'user'}],
-    contacts: {type: Object, "phoneNumber": {type: String, minlength: 5, maxlength: 14}}
+    fullName: {type: String, maxlength: 50, default: null},
+    name: {type: String, maxlength: 50, default: null},
+    status: {type: String,maxlength: 1024, default: null},
+    photos: {type: Object, small: {type: String, default: null}, large: {type: String, default: null},default:null},
+    followed: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}],
+    isFollow: {type:Boolean,default:false},
+    contacts: {type: Object, "phoneNumber": {type: String, minlength: 5, maxlength: 14},default:null}
 })
+
+//virtual schema
+// userSchema.virtual('following', {
+//     ref: 'User',
+//     localField: '_id',
+//     foreignField: 'followed',
+//     justOne: false
+// })
 
 //tokenni generatsiya qilamiz
 userSchema.methods.generateAuthToken = function () {
@@ -34,9 +43,9 @@ const userValidate = Joi.object({
             min: 6, max: 50, lowerCase: 1, upperCase: 1, symbol: 1, requirementCount: 1, numeric: 1
         }
     ).required(),
-    name: Joi.string().min(3).max(50),
-    fullName: Joi.string().min(3).max(50),
-    status: Joi.string().min(1).max(1024),
+    name: Joi.string().max(50),
+    fullName: Joi.string().max(50),
+    status: Joi.string().max(1024),
     photos: Joi.string(),
     followed: Joi.array(),
     contacts: contactsValidate
