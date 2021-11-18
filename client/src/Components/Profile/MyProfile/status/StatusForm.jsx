@@ -8,9 +8,7 @@ const StatusForm = React.memo(({updateMyStatus}) => {
     const dispatch = useDispatch()
 
     const formik = useFormik({
-        initialValues: {
-            status: ''
-        },
+        initialValues: {status: ''},
         onSubmit: values => {
             dispatch(updateMyStatus(values))
             formik.values.status = ''

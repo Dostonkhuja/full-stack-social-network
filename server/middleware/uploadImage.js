@@ -8,7 +8,7 @@ cloudinary.config({
     api_secret: process.env.api_secret
 })
 
-const storage = new cloudinaryStorage({
+const storageUserPhoto = new cloudinaryStorage({
     cloudinary: cloudinary,
     uploadOptions: {
         folder:'social-network',
@@ -16,4 +16,12 @@ const storage = new cloudinaryStorage({
     },
 })
 
-module.exports = multer({storage: storage})
+const storageCover = new cloudinaryStorage({
+    cloudinary: cloudinary,
+    uploadOptions: {
+        folder:'social-network-covers'
+    }
+})
+
+module.exports.userPhotos = multer({storage: storageUserPhoto})
+module.exports.coverImage = multer({storage: storageCover})

@@ -8,6 +8,9 @@ export const getAuthMe = createAsyncThunk('authMe/get', async () => {
 export const updateMyAvatar = createAsyncThunk('profile/photo', async (data) => {
     return await profileAPI.photo(data)
 })
+export const updateMyCoverImage = createAsyncThunk('profile/coverImage', async (data) => {
+    return await profileAPI.coverImage(data)
+})
 export const updateMyStatus = createAsyncThunk('profile/status', async (data) => {
     return await profileAPI.status(data)
 })
@@ -23,17 +26,29 @@ const profileSlice = createSlice({
     initialState: {
         isOwner: false,
         ownerId: '',
+        ownerProfile:null,
         profile: null,
         errorMessage: null,
         photosUploadErrorMessage: null,
         statusErrorMessage: null,
         profileErrorMessage: null
     },
+    reducers: {
+        logoutAuth: (state,action) => {
+            localStorage.removeItem('x-auth-token')
+            state.isOwner = false
+            state.ownerId = ''
+            state.ownerProfile = null
+        }
+    },
     extraReducers: {
         [getAuthMe.fulfilled]: (state, action) => {
             if (action.payload.status === 200) {
+                state.ownerProfile = action.payload.data
                 state.profile = action.payload.data
-                state.ownerId = action.payload.data._id
+                if(state.ownerId !== action.payload.data._id){
+                    state.ownerId = action.payload.data._id
+                }
                 state.isOwner = true
             } else {
                 state.errorMessage = action.payload.data
@@ -42,6 +57,9 @@ const profileSlice = createSlice({
         [getAuthMe.rejected]: (state, action) => {
             state.errorMessage = action.data
         },
+        [updateMyAvatar.rejected]: (state, action) => {
+            state.photosUploadErrorMessage = action.data
+        },
         [updateMyAvatar.fulfilled]: (state, action) => {
             if (action.payload.status === 200) {
                 state.profile.photos = action.payload.data
@@ -49,8 +67,12 @@ const profileSlice = createSlice({
                 state.photosUploadErrorMessage = action.payload.data
             }
         },
-        [updateMyAvatar.rejected]: (state, action) => {
-            state.photosUploadErrorMessage = action.data
+        [updateMyCoverImage.fulfilled]: (state, action) => {
+            if (action.payload.status === 200) {
+                state.profile.photos.coverImage = action.payload.data
+            } else {
+                state.photosUploadErrorMessage = action.payload.data
+            }
         },
         [updateMyStatus.fulfilled]: (state, action) => {
             if (action.payload.status === 200) {
@@ -72,7 +94,6 @@ const profileSlice = createSlice({
             if (action.payload.status === 200) {
                 state.profile = action.payload.data
                 if (state.ownerId === action.payload.data._id) {
-                    console.log('true')
                     state.isOwner = true
                 } else {
                     state.isOwner = false
@@ -85,4 +106,4 @@ const profileSlice = createSlice({
 })
 
 export default profileSlice.reducer
-export const {setIsOwnerId} = profileSlice.actions
+export const {logoutAuth} = profileSlice.actions

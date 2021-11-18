@@ -1,10 +1,20 @@
-import {instance} from "./api";
+import instance from "./api";
 
 export const profileAPI = {
     photo(photo) {
         const formData = new FormData();
         formData.append('avatar', photo);
-        return instance.post('/profile/photo', formData)
+        return instance.post('/profile/photo',formData)
+            .then((res) => {return res})
+            .catch(e => {
+                if (e.response && e.response.data)
+                    return e.response
+            })
+    },
+    coverImage(coverImage) {
+        const formData = new FormData();
+        formData.append('coverImage', coverImage);
+        return instance.post('/profile/coverImage',formData)
             .then((res) => {return res})
             .catch(e => {
                 if (e.response && e.response.data)

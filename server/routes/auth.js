@@ -6,7 +6,13 @@ const auth = require('../middleware/auth')
 
 //Auth me
 router.get('/me', auth, async (req, res) => {
-    const me = await User.findById(req.user._id).select({password: 0, __v: 0})
+    const me = await User
+        .findById(req.user._id)
+        .select({password: 0, __v: 0,isFollow:0})
+        .populate('following followed',{password: 0, __v: 0,isFollow:0})
+
+    // console.log(me)
+
     if (!me)
         return res.status(404).send('bunday foydalanuvchi mavjud emas')
     res.send(me)
@@ -55,7 +61,8 @@ router.post('/signUp', async (req, res) => {
 
 //logout
 router.get('/logout', auth, (req, res) => {
-    res.header("x-auth-token", '', {maxAge: 1}).send(true)
-    res.redirect('/')
+    // res.header("x-auth-token", '').send(true)
+    res.send(true)
 })
+
 module.exports = router

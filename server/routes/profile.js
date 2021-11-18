@@ -3,7 +3,7 @@ const auth = require('../middleware/auth')
 const {User, contactsValidate, validate} = require('../models/users')
 const _ = require('lodash')
 const Joi = require("joi")
-const upload = require('../middleware/uploadImage')
+const {userPhotos,coverImage} = require('../middleware/uploadImage')
 const mongoose = require('mongoose')
 
 //update myProfile
@@ -33,16 +33,31 @@ router.get('/:id',async (req, res) => {
 })
 
 //Update Photo
-router.post('/photo', upload.single('avatar'), auth, async (req, res) => {
+router.post('/photo', userPhotos.single('avatar'), auth, async (req, res) => {
     if (req.file) {
         const user = await User.findByIdAndUpdate(req.user._id, {
-            photos: {large: req.file.url, small: req.file.eager[0].url}
+            $set:{'photos.large':req.file.url,'photos.small':req.file.eager[0].url}
         },{new: true})
 
         if (!user)
             return res.status(404).send('mavjud bo\'lmagan foydalanuvchi')
 
         res.status(200).send(user.photos)
+    }
+})
+
+//Update Photo Cover
+router.post('/coverImage', coverImage.single('coverImage'), auth, async (req, res) => {
+    if (req.file) {
+
+        const user = await User.findByIdAndUpdate(req.user._id, {
+            $set:{'photos.coverImage':req.file.url}
+        },{new: true})
+
+        if (!user)
+            return res.status(404).send('mavjud bo\'lmagan foydalanuvchi')
+
+        res.status(200).send(user.photos.coverImage)
     }
 })
 

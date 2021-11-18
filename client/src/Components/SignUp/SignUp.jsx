@@ -36,8 +36,8 @@ const SignUp = React.memo(() => {
                         alignItems: 'center',
                     }}
                 >
-                    <Avatar sx={{m: 1, bgcolor: 'secondary.main'}}>
-                        <LockOutlinedIcon/>
+                    <Avatar  sx={{m: 1, backgroundColor: '#a7e05b'}}>
+                        <LockOutlinedIcon />
                     </Avatar>
                     <Typography component="h1" variant="h5">
                         Sign up

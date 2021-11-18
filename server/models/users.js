@@ -10,19 +10,19 @@ const userSchema = new mongoose.Schema({
     fullName: {type: String, maxlength: 50, default: null},
     name: {type: String, maxlength: 50, default: null},
     status: {type: String,maxlength: 1024, default: null},
-    photos: {type: Object, small: {type: String, default: null}, large: {type: String, default: null},default:null},
-    followed: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}],
+    photos: {
+        type: Object,
+        small: {type: String, default: null},
+        large: {type: String, default: null},
+        coverImage: {type: String, default: null}
+    },
+    followed: [{type: mongoose.Schema.Types.ObjectId, ref: "user"}],
+    following: [{type: mongoose.Schema.Types.ObjectId, ref: "user"}],
     isFollow: {type:Boolean,default:false},
+    isOnline: {type:Boolean,default:false},
     contacts: {type: Object, "phoneNumber": {type: String, minlength: 5, maxlength: 14},default:null}
 })
 
-//virtual schema
-// userSchema.virtual('following', {
-//     ref: 'User',
-//     localField: '_id',
-//     foreignField: 'followed',
-//     justOne: false
-// })
 
 //tokenni generatsiya qilamiz
 userSchema.methods.generateAuthToken = function () {

@@ -1,13 +1,15 @@
-import {createSlice, createAsyncThunk} from '@reduxjs/toolkit'
+import {createAsyncThunk, createSlice} from '@reduxjs/toolkit'
 import {usersAPI} from "../api/usersAPI";
 
 //asyncThunk
-export const getUsers = createAsyncThunk('users/getUsers', async () => await usersAPI.getUsers())
+export const getUsers = createAsyncThunk('users/getUsers', async ({pageSize, pageNumber}) => {
+    return await usersAPI.getUsers(pageSize, pageNumber)
+})
 export const follow = createAsyncThunk('users/follow', async (id, thunkAPI) => {
     thunkAPI.dispatch(setFollowId(id))
     return await usersAPI.follow(id)
 })
-export const unfollow = createAsyncThunk('users/follow', async (id, thunkAPI) => {
+export const unfollow = createAsyncThunk('users/unfollow', async (id, thunkAPI) => {
     thunkAPI.dispatch(setFollowId(id))
     return await usersAPI.unfollow(id)
 })
@@ -17,6 +19,7 @@ const usersSlice = createSlice({
     name: 'SignIn',
     initialState: {
         users: null,
+        totalUsersCount: 0,
         followId: '',
         errorMessage: null,
     },
@@ -28,7 +31,8 @@ const usersSlice = createSlice({
     extraReducers: {
         [getUsers.fulfilled]: (state, action) => {
             if (action.payload.status === 200) {
-                state.users = action.payload.data
+                state.users = action.payload.data.users
+                state.totalUsersCount = action.payload.data.totalUsersCount
             } else {
                 state.errorMessage = action.payload.data
             }
@@ -61,5 +65,5 @@ const usersSlice = createSlice({
     }
 })
 
-export default usersSlice.reducer
 export const {setFollowId} = usersSlice.actions
+export default usersSlice.reducer

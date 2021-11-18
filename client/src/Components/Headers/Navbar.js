@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { styled, alpha } from '@mui/material/styles';
+import {alpha, styled} from '@mui/material/styles';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -14,9 +14,13 @@ import AccountCircle from '@mui/icons-material/AccountCircle';
 import MailIcon from '@mui/icons-material/Mail';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
-import {Link} from "@mui/icons-material";
+import {useDispatch} from "react-redux";
+import {logout} from "../../State-management/SignInSlice";
+import {useHistory} from "react-router-dom";
+import {logoutAuth} from "../../State-management/ProfileSlice";
+import {socketDisconnect} from "../../Redux-middleware/initOnlineSocketMiddleware";
 
-const Search = styled('div')(({ theme }) => ({
+const Search = styled('div')(({theme}) => ({
     position: 'relative',
     borderRadius: theme.shape.borderRadius,
     backgroundColor: alpha(theme.palette.common.white, 0.15),
@@ -32,7 +36,7 @@ const Search = styled('div')(({ theme }) => ({
     },
 }));
 
-const SearchIconWrapper = styled('div')(({ theme }) => ({
+const SearchIconWrapper = styled('div')(({theme}) => ({
     padding: theme.spacing(0, 2),
     height: '100%',
     position: 'absolute',
@@ -42,7 +46,7 @@ const SearchIconWrapper = styled('div')(({ theme }) => ({
     justifyContent: 'center',
 }));
 
-const StyledInputBase = styled(InputBase)(({ theme }) => ({
+const StyledInputBase = styled(InputBase)(({theme}) => ({
     color: 'inherit',
     '& .MuiInputBase-input': {
         padding: theme.spacing(1, 1, 1, 0),
@@ -56,9 +60,25 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     },
 }));
 
-export default function Navbar() {
+function Navbar() {
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
+
+    //custom start
+    const dispatch = useDispatch()
+    const history = useHistory()
+
+    const token = localStorage.getItem('x-auth-token')
+
+    const handleLogout = () => {
+        dispatch(socketDisconnect())
+        dispatch(logoutAuth())
+        dispatch(logout())
+        history.push('/signIn')
+        setAnchorEl(null);
+        handleMobileMenuClose();
+    }
+    //custom end
 
     const isMenuOpen = Boolean(anchorEl);
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -99,6 +119,7 @@ export default function Navbar() {
         >
             <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
             <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+            {token && <MenuItem onClick={handleLogout}>logout</MenuItem>}
         </Menu>
     );
 
@@ -122,7 +143,7 @@ export default function Navbar() {
             <MenuItem>
                 <IconButton size="large" aria-label="show 4 new mails" color="inherit">
                     <Badge badgeContent={4} color="error">
-                        <MailIcon />
+                        <MailIcon/>
                     </Badge>
                 </IconButton>
                 <p>Messages</p>
@@ -134,7 +155,7 @@ export default function Navbar() {
                     color="inherit"
                 >
                     <Badge badgeContent={17} color="error">
-                        <NotificationsIcon />
+                        <NotificationsIcon/>
                     </Badge>
                 </IconButton>
                 <p>Notifications</p>
@@ -147,79 +168,94 @@ export default function Navbar() {
                     aria-haspopup="true"
                     color="inherit"
                 >
-                    <AccountCircle />
+                    <AccountCircle/>
                 </IconButton>
                 <p>Profile</p>
             </MenuItem>
         </Menu>
     );
 
-    return (
-        <Box sx={{ flexGrow: 1 }}>
-            <AppBar position="static" color='green'>
-                <Toolbar>
-                    <Typography
-                        variant="h6"
-                        noWrap
-                        component="div"
-                        sx={{ display: { xs: 'none', sm: 'block' } }}
-                    >
-                        Social Network
-                    </Typography>
-                    <Search>
-                        <SearchIconWrapper>
-                            <SearchIcon />
-                        </SearchIconWrapper>
-                        <StyledInputBase
-                            placeholder="Search…"
-                            inputProps={{ 'aria-label': 'search' }}
-                        />
-                    </Search>
 
-                    <Box sx={{ flexGrow: 1 }} />
-                    <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-                        <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-                            <Badge badgeContent={4} color="error">
-                                <MailIcon />
-                            </Badge>
-                        </IconButton>
-                        <IconButton
-                            size="large"
-                            aria-label="show 17 new notifications"
-                            color="inherit"
+    return (<>
+            <Box sx={{flexGrow: 1}}>
+                <AppBar position="static" color='green'>
+                    <Toolbar>
+                        <Typography
+                            variant="h6"
+                            noWrap
+                            component="div"
+                            sx={{display: {xs: 'none', sm: 'block'}}}
                         >
-                            <Badge badgeContent={17} color="error">
-                                <NotificationsIcon />
-                            </Badge>
-                        </IconButton>
-                        <IconButton
-                            size="large"
-                            edge="end"
-                            aria-label="account of current user"
-                            aria-controls={menuId}
-                            aria-haspopup="true"
-                            onClick={handleProfileMenuOpen}
-                            color="inherit"
-                        >
-                            <AccountCircle />
-                        </IconButton>
-                    </Box>
-                    <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
-                        <IconButton
-                            size="large"
-                            aria-label="show more"
-                            aria-controls={mobileMenuId}
-                            aria-haspopup="true"
-                            onClick={handleMobileMenuOpen}
-                            color="inherit"
-                        >
-                            <MoreIcon />
-                        </IconButton>
-                    </Box>
-                </Toolbar>
-            </AppBar>
-            {renderMobileMenu}
-            {renderMenu}
-        </Box>
+                            Social Network
+                        </Typography>
+                        <Search>
+                            <SearchIconWrapper>
+                                <SearchIcon/>
+                            </SearchIconWrapper>
+                            <StyledInputBase
+                                placeholder="Search…"
+                                inputProps={{'aria-label': 'search'}}
+                            />
+                        </Search>
+
+                        <Box sx={{flexGrow: 1}}/>
+                        <Box sx={{display: {xs: 'none', md: 'flex'}}}>
+
+                            <IconButton size="large" aria-label="show 4 new mails" color="inherit">
+                                <Badge badgeContent={4} color="error">
+                                    <MailIcon/>
+                                </Badge>
+                            </IconButton>
+                            <IconButton
+                                size="large"
+                                aria-label="show 17 new notifications"
+                                color="inherit"
+                            >
+                                <Badge badgeContent={17} color="error">
+                                    <NotificationsIcon/>
+                                </Badge>
+                            </IconButton>
+                            <IconButton
+                                size="large"
+                                edge="end"
+                                aria-label="account of current user"
+                                aria-controls={menuId}
+                                aria-haspopup="true"
+                                onClick={handleProfileMenuOpen}
+                                color="inherit"
+                            >
+                                <AccountCircle/>
+                            </IconButton>
+                        </Box>
+                        <Box sx={{display: {xs: 'flex', md: 'none'}}}>
+                            <IconButton
+                                size="large"
+                                aria-label="show more"
+                                aria-controls={mobileMenuId}
+                                aria-haspopup="true"
+                                onClick={handleMobileMenuOpen}
+                                color="inherit"
+                            >
+                                <MoreIcon/>
+                            </IconButton>
+                        </Box>
+                    </Toolbar>
+                </AppBar>
+
+
+
+
+
+
+
+
+
+
+                {renderMobileMenu}
+                {renderMenu}
+            </Box>
+        </>
     );
 }
+
+export default React.memo(Navbar)

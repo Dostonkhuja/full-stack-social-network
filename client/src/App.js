@@ -1,36 +1,47 @@
-import {memo} from "react";
-import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
+import {Redirect, Route} from "react-router-dom";
 import SignIn from "./Components/SignIn/SignIn";
 import SignUp from "./Components/SignUp/SignUp";
 import Users from "./Components/Users/Users";
 import RootProfile from "./Components/Profile/RootProfile";
 import Navbar from "./Components/Headers/Navbar";
 import {Grid, Hidden} from "@mui/material";
+import NavigationMenu from "./Components/Nav-Menu/NavigationMenu";
+import Messenger from "./Components/Messenger/Messenger";
+import {useEffect} from "react";
+import {useDispatch, useSelector} from "react-redux";
+import {initalisationSocket} from "./Redux-middleware/initOnlineSocketMiddleware";
 
 function App() {
-    return (<>
 
+    const dispatch = useDispatch()
+
+    const ownerId = useSelector(state => state.profile.ownerId)
+
+    useEffect(() => {
+        if (ownerId !== ''){
+            dispatch(initalisationSocket(ownerId))
+        }
+    }, [ownerId])
+
+    return (<>
+        <Redirect to={'/profile'}/>
         <Navbar/>
-        <Grid container>
+        <Grid container spacing={1}>
             <Hidden only={['xs', 'sm', 'md']}>
                 <Grid item xs={2} sx={{}}>
-                    this is Menu
+                    <NavigationMenu/>
                 </Grid>
             </Hidden>
-            <Grid item xs={12} sm={12} md={12} lg={8}>
-                <Router>
-                    <Switch>
-                        <Route exact path='/' render={() => <RootProfile/>}/>
-                        <Route path='/profile/:userId?' render={() => <RootProfile/>}/>
-                        <Route path='/users' render={() => <Users/>}/>
-                        <Route path='/signIn' render={() => <SignIn/>}/>
-                        <Route path='/signUp' render={() => <SignUp/>}/>
-                    </Switch>
-                </Router>
+            <Grid item xs={12} sm={12} md={12} lg={10} xl={12}>
+                <Route exact path='/' render={() => <h1>HOME PAGE</h1>}/>
+                <Route path='/profile/:userId?' render={() => <RootProfile/>}/>
+                <Route path='/users' render={() => <Users/>}/>
+                <Route path='/signIn' render={() => <SignIn/>}/>
+                <Route path='/signUp' render={() => <SignUp/>}/>
+                <Route path='/messenger' render={() => <Messenger/>}/>
             </Grid>
         </Grid>
-
     </>)
 }
 
-export default memo(App)
+export default App

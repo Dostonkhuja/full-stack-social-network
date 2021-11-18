@@ -1,36 +1,36 @@
 import instance from "./api";
 
-export const authAPI = {
-    signIn(data) {
-        return instance.post('auth/signIn', data.values)
+export const messenjerAPI = {
+    getMessage(conversationId) {
+        return instance.get(`messages/${conversationId}`)
             .then((res) => res)
             .catch((e) => {
                 if (e.response && e.response.data)
                     return e.response // some reason error message
             })
     },
-    signUp(data) {
-        return instance.post('/auth/signUp', data)
-            .then(res => res.data)
-            .catch(e => {
-                if (e.response && e.response.data)
-                    return e.response
-            })
-    },
-    me() {
-        return instance.get('/auth/me',{ headers: {"x-auth-token": localStorage.getItem('x-auth-token')}})
-            .then((res) => res)
-            .catch(e => {
-                if (e.response && e.response.data)
-                    return e.response
-            })
-    },
-    logout() {
-        return instance.get('auth/logout')
+    sendMessage(data) {
+        return instance.post(`messages`, data)
             .then((res) => res)
             .catch((e) => {
                 if (e.response && e.response.data)
                     return e.response // some reason error message
             })
     },
+    newConversation(userId) {
+        return instance.post(`conversation/${userId}`)
+            .then((res) => res)
+            .catch((e) => {
+                if (e.response && e.response.data)
+                    return e.response // some reason error message
+            })
+    },
+    getOwnerConversations() {
+        return instance.get('conversation')
+            .then((res) => res)
+            .catch((e) => {
+                if (e.response && e.response.data)
+                    return e.response // some reason error message
+            })
+    }
 }

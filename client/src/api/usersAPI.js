@@ -1,8 +1,8 @@
-import {instance} from "./api";
+import instance from "./api";
 
 export const usersAPI = {
-    getUsers() {
-        return instance.get('users')
+    getUsers(pageSize,pageNumber) {
+        return instance.get(`users?pageSize=${pageSize}&pageNumber=${pageNumber}`)
             .then((res) => res)
             .catch((e) => {
                 if (e.response && e.response.data)

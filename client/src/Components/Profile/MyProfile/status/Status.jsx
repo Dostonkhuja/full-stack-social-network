@@ -5,18 +5,6 @@ import {Card, CardContent, Grid, Typography} from "@mui/material";
 import StatusForm from "./StatusForm";
 
 const Status = React.memo(({isOwner, profile, updateMyStatus}) => {
-    const dispatch = useDispatch()
-
-    const formik = useFormik({
-        initialValues: {
-            status: ''
-        },
-        onSubmit: values => {
-            dispatch(updateMyStatus(values))
-            formik.values.status = ''
-        }
-    })
-
     return <>
         {isOwner && <StatusForm updateMyStatus={updateMyStatus}/>}
                 <Card sx={{backgroundColor: '#8ade49',mt:'1rem'}}>

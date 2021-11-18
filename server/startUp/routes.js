@@ -8,6 +8,8 @@ module.exports = (app) => {
     app.use('/',require('../routes/main'))
     app.use('/api/auth',require('../routes/auth'))
     app.use('/api/profile',require('../routes/profile'))
+    app.use('/api/messages',require('../routes/messages'))
+    app.use('/api/conversation',require('../routes/conversation'))
     app.use('/api/follow',require('../routes/follow'))
     app.use('/api/users',require('../routes/users'))
 

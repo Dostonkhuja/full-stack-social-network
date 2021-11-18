@@ -78,7 +78,7 @@ const SignInForm = ({errorMessage}) => {
                 {errorMessage !== null && errorMessage}
             </Typography>
 
-            <Button type="submit" fullWidth variant="contained" sx={{mt: 3, mb: 2}}>Sign In</Button>
+            <Button type="submit" fullWidth variant="contained" color={'green'} sx={{mt: 3, mb: 2}}>Sign In</Button>
 
             <Grid container>
                 <Grid item xs>
