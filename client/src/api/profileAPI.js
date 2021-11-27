@@ -22,12 +22,14 @@ export const profileAPI = {
             })
     },
     status(status){
-        return instance.post('/profile/status',status)
-            .then((res) => {return res})
-            .catch(e => {
-                if (e.response && e.response.data)
-                    return e.response
-            })
+            return instance.post('/profile/status', status)
+                .then((res) => {
+                    return res
+                })
+                .catch(e => {
+                    if (e.response && e.response.data)
+                        return e.response
+                })
     },
     profile(data){
         return instance.post('/profile',data)

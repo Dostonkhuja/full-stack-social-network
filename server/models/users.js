@@ -3,13 +3,14 @@ const Joi = require('joi')
 const PasswordComplexity = require('joi-password-complexity')
 const jwt = require('jsonwebtoken')
 
+
 //User uchun schema tuzamiz
 const userSchema = new mongoose.Schema({
     email: {type: String, minLength: 5, maxLength: 50, unique: true, required: true},
     password: {type: String, required: true},
     fullName: {type: String, maxlength: 50, default: null},
     name: {type: String, maxlength: 50, default: null},
-    status: {type: String,maxlength: 1024, default: null},
+    status: [{type: mongoose.Schema.Types.ObjectId, ref: "status"}],
     photos: {
         type: Object,
         small: {type: String, default: null},
@@ -45,7 +46,6 @@ const userValidate = Joi.object({
     ).required(),
     name: Joi.string().max(50),
     fullName: Joi.string().max(50),
-    status: Joi.string().max(1024),
     photos: Joi.string(),
     followed: Joi.array(),
     contacts: contactsValidate

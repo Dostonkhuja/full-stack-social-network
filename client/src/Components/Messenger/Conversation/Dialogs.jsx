@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useRef} from 'react';
 import {Avatar, Button, Grid, TextField} from "@mui/material";
 import {useFormik} from "formik";
 
@@ -7,6 +7,8 @@ import * as timeago from 'timeago.js'
 import vi from 'timeago.js/lib/lang/ru'
 import {newMessage} from "../../../Redux-middleware/initMessengerSocketMiddleware";
 import {useDispatch} from "react-redux";
+import styled from "@emotion/styled";
+import Badge from "@mui/material/Badge";
 
 timeago.register('vi', vi);
 
@@ -29,15 +31,67 @@ const Dialogs = ({messages,ownerProfile,currentConversation }) => {
 
             formik.values.message = ''
         }
+
+
     })
+
+    const StyledBadge = styled(Badge)(({ theme }) => ({
+        '& .MuiBadge-badge': {
+            backgroundColor: '#44b700',
+            color: '#44b700',
+            boxShadow: `0 0 0 2px ${theme.palette.background.paper}`,
+            '&::after': {
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                width: '100%',
+                height: '100%',
+                borderRadius: '50%',
+                animation: 'ripple 1.2s infinite ease-in-out',
+                border: '1px solid currentColor',
+                content: '""',
+            },
+        },
+        '@keyframes ripple': {
+            '0%': {
+                transform: 'scale(.8)',
+                opacity: 1,
+            },
+            '100%': {
+                transform: 'scale(2.4)',
+                opacity: 0,
+            },
+        },
+    }));
 
     return (<>
             {<div style={{display:'flex',alignItems:'center',borderBottom:'1px solid'}}>
-                <Avatar
-                    src={currentConversation && currentConversation.members[0].photos ?currentConversation.members[0].photos.large : ''}
-                    sx={{bgcolor: 'pink', border: '3px solid white', width: 55, height: 55, cursor: 'pointer'}}
-                /> {currentConversation && currentConversation.members[0].name}
+
+                { currentConversation && currentConversation.members[0].isOnline
+                    ? <div>
+                        <StyledBadge
+                            overlap="circular"
+                            anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                            variant="dot"
+                        >
+                            <Avatar
+                                src={currentConversation && currentConversation.members[0].photos ?currentConversation.members[0].photos.large : ''}
+                                sx={{bgcolor: 'pink', border: '3px solid white', width: 55, height: 55, cursor: 'pointer'}}
+                            />
+                        </StyledBadge>
+                        {currentConversation && currentConversation.members[0].name}
+                    </div>
+                    :  <div>
+                        <Avatar
+                            src={currentConversation && currentConversation.members[0].photos ?currentConversation.members[0].photos.large : ''}
+                            sx={{bgcolor: 'pink', border: '3px solid white', width: 55, height: 55, cursor: 'pointer'}}
+                        />
+                        {currentConversation && currentConversation.members[0].name}
+                    </div>
+                }
             </div>}
+
+
         <div style={{height:'450px',overflowY:'scroll'}}>
             {messages && messages.map(m=><Message message={m} currentConversation={currentConversation} ownerProfile={ownerProfile} key={m._id}/>)}
         </div>
@@ -58,11 +112,15 @@ const Dialogs = ({messages,ownerProfile,currentConversation }) => {
         </>
     )
 }
-//?{display:'flex',justifyContent:'flex-end',backgroundColor:'#0084ff',color:'white',margin:'1rem'}
-//             :{display:'flex',justifyContent:'flex-start',backgroundColor:'#e4e6eb',margin:'1rem'}}>
 
 function Message({message,currentConversation,ownerProfile}) {
-    return <>
+    const scrollRef = useRef();
+
+    useEffect(() => {
+        scrollRef.current?.scrollIntoView({ behavior: "smooth" });
+    }, [message]);
+
+    return <div  ref={scrollRef}>
 
         <div style={message.sender === ownerProfile._id
             ? {display: 'flex', justifyContent: 'flex-end', margin: '1rem'}
@@ -82,7 +140,7 @@ function Message({message,currentConversation,ownerProfile}) {
                 <TimeAgo style={{color:'#777575'}} datetime={message.createdAt} locale='vi'/>
             </div>
         </div>
-    </>
+    </div>
 }
 
 export default Dialogs;

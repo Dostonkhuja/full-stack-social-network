@@ -76,7 +76,7 @@ const profileSlice = createSlice({
         },
         [updateMyStatus.fulfilled]: (state, action) => {
             if (action.payload.status === 200) {
-                state.profile.status = action.payload.data
+                state.profile.status.push(action.payload.data)
             } else {
                 state.statusErrorMessage = action.payload.data
             }

@@ -1,10 +1,11 @@
 const router = require('express').Router()
+const mongoose = require('mongoose')
 const auth = require('../middleware/auth')
 const {User, contactsValidate, validate} = require('../models/users')
+const {Status} = require('../models/status')
 const _ = require('lodash')
 const Joi = require("joi")
-const {userPhotos,coverImage} = require('../middleware/uploadImage')
-const mongoose = require('mongoose')
+const {userPhotos,coverImage,statusPhotos} = require('../middleware/uploadImage')
 
 //update myProfile
 router.post('/', auth, async (req, res) => {
@@ -26,6 +27,7 @@ router.get('/:id',async (req, res) => {
         return res.status(400).send('ID tasdiqlangan standart objectId emas')
 
     const user = await User.findById(req.params.id).select({password: 0, __v: 0})
+        .populate('following followed status',{password: 0, __v: 0,isFollow:0})
     if (!user)
         return res.status(404).send('mavjud bo\'lmagan foydalanuvchi')
 
@@ -62,38 +64,39 @@ router.post('/coverImage', coverImage.single('coverImage'), auth, async (req, re
 })
 
 //update status
+
 router.post('/status', auth, async (req, res) => {
-    const {error} = statusValidate.validate(req.body)
-    if (error)
-        return res.status(400).send(error.details[0].message)
-
-    const user = await User.findByIdAndUpdate(req.user._id, {status: req.body.status},{new:true})
-    if (!user)
-        return res.status(404).send('bunday foydalanuvchi mavjud emas')
-
-    res.send(user.status)
+    if(req.body.photoFile !==null ){
+         const uploadResult  = await statusPhotos.upload(req.body.photoFile, {upload_preset:'ml_default',folder: 'social-network-status-images'})
+       req.body.photoFile = uploadResult.url
+    }
+    req.body.userId = req.user._id
+    const newStatus = new Status(req.body)
+    await newStatus.save()
+    const user = await User.findById(req.user._id)
+    user.status.push(newStatus._id)
+    await user.save()
+    res.status(200).json(newStatus)
 })
 
 //get status by id
-router.get('/status/:id', auth, async (req, res) => {
-    const isValidId = mongoose.Types.ObjectId.isValid(req.params.id)
-    if (!isValidId)
-        return res.status(400).send('ID tasdiqlangan standart objectId emas')
-
-    const user = await User.findById(req.params.id).select({status: 1})
-    if (!user)
-        return res.status(404).send('bunday foydalanuvchi mavjud emas')
-
-    res.send(user.status)
-})
+// router.get('/status/:id', auth, async (req, res) => {
+//     const isValidId = mongoose.Types.ObjectId.isValid(req.params.id)
+//     if (!isValidId)
+//         return res.status(400).send('ID tasdiqlangan standart objectId emas')
+//
+//     const user = await User.findById(req.params.id).select({status: 1})
+//     if (!user)
+//         return res.status(404).send('bunday foydalanuvchi mavjud emas')
+//
+//     res.send(user.status)
+// })
 
 const userProfileValidate = Joi.object({
     name: Joi.string().min(3).max(50),
     fullName: Joi.string().min(3).max(50),
     contacts: contactsValidate
 })
-const statusValidate = Joi.object({
-    status: Joi.string().min(1).max(1024)
-})
+
 
 module.exports = router

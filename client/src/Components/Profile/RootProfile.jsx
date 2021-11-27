@@ -1,12 +1,7 @@
 import React, {useEffect} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {
-    getAuthMe,
-    getProfileById,
-    updateMyAvatar,
-    updateMyCoverImage,
-    updateMyProfile,
-    updateMyStatus
+    getAuthMe, getProfileById, updateMyAvatar, updateMyCoverImage, updateMyProfile, updateMyStatus
 } from "../../State-management/ProfileSlice";
 import MyProfile from "./MyProfile/MyProfile";
 import {useHistory, useParams} from "react-router-dom";

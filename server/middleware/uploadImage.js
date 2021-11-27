@@ -15,7 +15,6 @@ const storageUserPhoto = new cloudinaryStorage({
         eager: {width: 170, height: 170, crop: "pad"}
     },
 })
-
 const storageCover = new cloudinaryStorage({
     cloudinary: cloudinary,
     uploadOptions: {
@@ -25,3 +24,4 @@ const storageCover = new cloudinaryStorage({
 
 module.exports.userPhotos = multer({storage: storageUserPhoto})
 module.exports.coverImage = multer({storage: storageCover})
+module.exports.statusPhotos = cloudinary.uploader

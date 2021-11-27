@@ -9,9 +9,8 @@ router.get('/me', auth, async (req, res) => {
     const me = await User
         .findById(req.user._id)
         .select({password: 0, __v: 0,isFollow:0})
-        .populate('following followed',{password: 0, __v: 0,isFollow:0})
-
-    // console.log(me)
+        .populate('following followed status',{password: 0, __v: 0,isFollow:0})
+        // .populate('status')
 
     if (!me)
         return res.status(404).send('bunday foydalanuvchi mavjud emas')

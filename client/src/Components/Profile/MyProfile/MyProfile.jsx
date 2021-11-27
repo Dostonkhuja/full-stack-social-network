@@ -5,7 +5,7 @@ import Status from "./status/Status";
 import UpdateProfile from "./UpdateProfile";
 import {PhotoCamera} from "@mui/icons-material";
 import IconButton from "@mui/material/IconButton";
-import {Link} from "react-router-dom";
+import Followers from "../Friends/Followers";
 
 const MyProfile = React.memo(({isOwner, profile, updateMyStatus, updateMyProfile, updateMyAvatar, updateMyCoverImage}) => {
     const dispatch = useDispatch()
@@ -30,7 +30,7 @@ const MyProfile = React.memo(({isOwner, profile, updateMyStatus, updateMyProfile
         }}>
 
             <Grid item sx={{
-                backgroundImage: `url(${profile.photos.coverImage ? profile.photos.coverImage : profile.photos.large})`,
+                backgroundImage: `url(${profile.photos ?profile.photos.coverImage ? profile.photos.coverImage : profile.photos.large:''})`,
                 backgroundPosition: 'center',
                 backgroundRepeat: 'no-repeat',
                 backgroundSize: 'cover',
@@ -57,10 +57,12 @@ const MyProfile = React.memo(({isOwner, profile, updateMyStatus, updateMyProfile
             </Grid>
 
             <div style={{position: 'relative', marginTop: '-6rem'}}>
+
                 <Avatar
                     src={profile.photos ? profile.photos.large : ''}
                     sx={{bgcolor: 'pink', border: '3px solid white', width: 156, height: 156, cursor: 'pointer'}}
                 />
+
                 {isOwner && <div>
                     <label htmlFor="avatar"
                            style={{position: 'absolute', bottom: '3px', right: '-1px'}}>
@@ -89,7 +91,14 @@ const MyProfile = React.memo(({isOwner, profile, updateMyStatus, updateMyProfile
         </div>
 
         {isOwner && <UpdateProfile profile={profile} updateMyProfile={updateMyProfile}/>}
-        <Status isOwner={isOwner} profile={profile} updateMyStatus={updateMyStatus}/>
+        <Grid container xs={12}>
+        <Grid item xs={5}>
+            <Followers profile={profile} />
+        </Grid>
+        <Grid item xs={7}>
+            <Status isOwner={isOwner} profile={profile} updateMyStatus={updateMyStatus}/>
+        </Grid>
+        </Grid>
     </>
 })
 

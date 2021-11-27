@@ -21,7 +21,7 @@ module.exports = (io) => {
                     let conversation = await Conversation
                         .find({members: {$in: [action.data.userId]}})
                         .select({__v: 0})
-                        .populate(`members`, {name: 1, photos: 1, _id: 1})
+                        .populate(`members`, {name: 1, photos: 1,isOnline:1, _id: 1})
 
                     conversation = conversation.map(c => {
                         c.members = c.members.find(m => String(m._id) !== action.data.userId)

@@ -175,10 +175,10 @@ function Navbar() {
         </Menu>
     );
 
-
+    // color='green'
     return (<>
             <Box sx={{flexGrow: 1}}>
-                <AppBar position="static" color='green'>
+                <AppBar position="static" color='inherit'>
                     <Toolbar>
                         <Typography
                             variant="h6"
@@ -241,15 +241,6 @@ function Navbar() {
                         </Box>
                     </Toolbar>
                 </AppBar>
-
-
-
-
-
-
-
-
-
 
                 {renderMobileMenu}
                 {renderMenu}
