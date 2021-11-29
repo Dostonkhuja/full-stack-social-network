@@ -10,7 +10,7 @@ const userSchema = new mongoose.Schema({
     password: {type: String, required: true},
     fullName: {type: String, maxlength: 50, default: null},
     name: {type: String, maxlength: 50, default: null},
-    status: [{type: mongoose.Schema.Types.ObjectId, ref: "status"}],
+    status: [{type: mongoose.Schema.Types.ObjectId, ref: "status",comments:{type:Array,ref:'comments'}}],
     photos: {
         type: Object,
         small: {type: String, default: null},
@@ -22,8 +22,7 @@ const userSchema = new mongoose.Schema({
     isFollow: {type:Boolean,default:false},
     isOnline: {type:Boolean,default:false},
     contacts: {type: Object, "phoneNumber": {type: String, minlength: 5, maxlength: 14},default:null}
-})
-
+},)
 
 //tokenni generatsiya qilamiz
 userSchema.methods.generateAuthToken = function () {
@@ -40,9 +39,7 @@ const contactsValidate = Joi.object({
 })
 const userValidate = Joi.object({
     email: Joi.string().min(3).max(50).required(),
-    password: new PasswordComplexity({
-            min: 6, max: 50, lowerCase: 1, upperCase: 1, symbol: 1, requirementCount: 1, numeric: 1
-        }
+    password: new PasswordComplexity({min: 6, max: 50, lowerCase: 1, upperCase: 1, symbol: 1, requirementCount: 1, numeric: 1}
     ).required(),
     name: Joi.string().max(50),
     fullName: Joi.string().max(50),

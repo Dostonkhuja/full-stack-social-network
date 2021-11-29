@@ -12,7 +12,7 @@ router.get('/', decoded, async (req, res) => {
         .find()
         .skip((pageNumber - 1) * pageSize)
         .limit(Number(pageSize))
-        .sort({_id: 1})
+        .sort({_id: -1})
         .select({password: 0, __v: 0})
 
     const totalUsersCount = await User.find().countDocuments()

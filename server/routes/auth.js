@@ -9,8 +9,15 @@ router.get('/me', auth, async (req, res) => {
     const me = await User
         .findById(req.user._id)
         .select({password: 0, __v: 0,isFollow:0})
-        .populate('following followed status',{password: 0, __v: 0,isFollow:0})
-        // .populate('status')
+        .populate({
+            path:'following followed status',
+            select:{password: 0, __v: 0,isFollow:0},
+            populate:{
+                path:'comments',
+                populate:{path:'user', select:{name:1,photos:1}}
+            }
+        })
+
 
     if (!me)
         return res.status(404).send('bunday foydalanuvchi mavjud emas')

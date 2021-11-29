@@ -3,6 +3,7 @@ const mongoose = require('mongoose')
 const auth = require('../middleware/auth')
 const {User, contactsValidate, validate} = require('../models/users')
 const {Status} = require('../models/status')
+const {Comments} = require('../models/comments')
 const _ = require('lodash')
 const Joi = require("joi")
 const {userPhotos,coverImage,statusPhotos} = require('../middleware/uploadImage')
@@ -64,7 +65,6 @@ router.post('/coverImage', coverImage.single('coverImage'), auth, async (req, re
 })
 
 //update status
-
 router.post('/status', auth, async (req, res) => {
     if(req.body.photoFile !==null ){
          const uploadResult  = await statusPhotos.upload(req.body.photoFile, {upload_preset:'ml_default',folder: 'social-network-status-images'})
@@ -78,6 +78,19 @@ router.post('/status', auth, async (req, res) => {
     await user.save()
     res.status(200).json(newStatus)
 })
+
+//send comment
+router.post('/status/:statusId', auth, async (req, res) => {
+    req.body.user = req.user._id
+    const newComment = new Comments(req.body)
+    await newComment.save()
+
+    const status = await Status.findById(req.params.statusId)
+    status.comments.push(newComment._id)
+    await status.save()
+    res.status(200).json(newComment)
+})
+
 
 //get status by id
 // router.get('/status/:id', auth, async (req, res) => {

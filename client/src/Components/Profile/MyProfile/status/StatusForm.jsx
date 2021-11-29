@@ -11,7 +11,6 @@ const StatusForm = React.memo(({updateMyStatus}) => {
 
     const [preview, setPreview] = useState(null)
 
-
     const formik = useFormik({
         initialValues: {text: '',photoFile:null, video:null},
         onSubmit: values => {
@@ -31,9 +30,7 @@ const StatusForm = React.memo(({updateMyStatus}) => {
         }
     }
 
-    const handleChange = (e)=>{
-        base64(e.target.files[0])
-    }
+    const handleChange = (e)=>{base64(e.target.files[0])}
 
     return <form onSubmit={formik.handleSubmit}>
         <Grid container sx={{display: 'flex', justifyContent: 'center',mt:'1rem'}}>

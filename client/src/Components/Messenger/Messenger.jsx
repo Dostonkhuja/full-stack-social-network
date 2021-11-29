@@ -28,21 +28,23 @@ const Messenger = () => {
 
     return (
         <>
-            <div style={{display: 'flex', justifyContent: 'space-between'}}>
+            {ownerConversations && ownerConversations.length !== 0
+                ? <div style={{display: 'flex', justifyContent: 'space-between'}}>
 
-                <div style={{width:'75%'}}>
-                    <Dialogs messages={messages} ownerProfile={ownerProfile} currentConversation={currentConversation}/>
-                </div>
+                    <div style={{width:'75%'}}>
+                        <Dialogs messages={messages} ownerProfile={ownerProfile} currentConversation={currentConversation}/>
+                    </div>
 
-                <div style={{height:'595px',width:'30%',overflowY:'scroll'}}>
-                    {
-                        ownerConversations && ownerConversations.map(c =>
-                            <div onClick={() => handleCurrentConversation(c)} key={c._id}>
-                            <Conversation conversation={c}/>
-                        </div>)
-                    }
+                    <div style={{height:'595px',width:'30%',overflowY:'scroll'}}>
+                        {
+                            ownerConversations && ownerConversations.map(c =>
+                                <div onClick={() => handleCurrentConversation(c)} key={c._id}>
+                                    <Conversation conversation={c}/>
+                                </div>)
+                        }
+                    </div>
                 </div>
-            </div>
+                :<div style={{color:'#a6a6a6',opacity:'0.5',width:'fullwidth',textAlign:'center',fontSize:'32px'}}><h1>no conversations, you need to select a conversation...</h1></div>}
         </>
     );
 };

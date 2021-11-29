@@ -14,6 +14,9 @@ export const updateMyCoverImage = createAsyncThunk('profile/coverImage', async (
 export const updateMyStatus = createAsyncThunk('profile/status', async (data) => {
     return await profileAPI.status(data)
 })
+export const newComment = createAsyncThunk('profile/status/newComment', async (data) => {
+    return await profileAPI.comment(data)
+})
 export const updateMyProfile = createAsyncThunk('profile', async (data) => {
     return await profileAPI.profile(data)
 })
@@ -44,6 +47,7 @@ const profileSlice = createSlice({
     extraReducers: {
         [getAuthMe.fulfilled]: (state, action) => {
             if (action.payload.status === 200) {
+                console.log(action.payload.data)
                 state.ownerProfile = action.payload.data
                 state.profile = action.payload.data
                 if(state.ownerId !== action.payload.data._id){
@@ -54,12 +58,12 @@ const profileSlice = createSlice({
                 state.errorMessage = action.payload.data
             }
         },
-        [getAuthMe.rejected]: (state, action) => {
-            state.errorMessage = action.data
-        },
-        [updateMyAvatar.rejected]: (state, action) => {
-            state.photosUploadErrorMessage = action.data
-        },
+        // [getAuthMe.rejected]: (state, action) => {
+        //     state.errorMessage = action.data
+        // },
+        // [updateMyAvatar.rejected]: (state, action) => {
+        //     state.photosUploadErrorMessage = action.data
+        // },
         [updateMyAvatar.fulfilled]: (state, action) => {
             if (action.payload.status === 200) {
                 state.profile.photos = action.payload.data
@@ -77,6 +81,19 @@ const profileSlice = createSlice({
         [updateMyStatus.fulfilled]: (state, action) => {
             if (action.payload.status === 200) {
                 state.profile.status.push(action.payload.data)
+            } else {
+                state.statusErrorMessage = action.payload.data
+            }
+        },
+        [newComment.fulfilled]: (state, action) => {
+            if (action.payload.status === 200) {
+                state.profile.status =  state.profile.status.map(s=>{
+                    if(s._id === action.payload.data.statusId){
+                        s.comments = [...s.comments,action.payload.data]
+                        return s
+                    }
+                    return s
+                })
             } else {
                 state.statusErrorMessage = action.payload.data
             }

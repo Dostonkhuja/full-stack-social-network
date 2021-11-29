@@ -11,13 +11,12 @@ const Users = () => {
     const dispatch = useDispatch()
     const history = useHistory()
 
-    const ownerId = useSelector(state => state.profile.ownerId)
-
     const handleSendMessage = (userId) => {
         dispatch(createNewConversation({ownerId,userId}))
         history.push('/messenger')
     }
 
+    const ownerId = useSelector(state => state.profile.ownerId)
     const users = useSelector(state => state.users.users)
     const totalUsersCount = useSelector(state => state.users.totalUsersCount)
     const token = localStorage.getItem('x-auth-token')
@@ -35,7 +34,7 @@ const Users = () => {
             <Pagination count={Math.ceil(totalUsersCount / 10)} size="large" onChange={paginationHandle}/>
         </Grid>
         <Grid container spacing={2} sx={{mt: '1rem', display: 'flex'}}>
-            {users !== null && users.map(u => <User user={u} handleSendMessage={handleSendMessage} follow={follow} unfollow={unfollow} token={token} key={u._id}/>)}
+            {users !== null && users.map(u => <User user={u} handleSendMessage={handleSendMessage} follow={follow} unfollow={unfollow} token={token} key={u._id} ownerId={ownerId}/>)}
         </Grid>
     </>
 }

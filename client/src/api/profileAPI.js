@@ -31,6 +31,16 @@ export const profileAPI = {
                         return e.response
                 })
     },
+    comment(comment){
+            return instance.post(`/profile/status/${comment.statusId}`,comment)
+                .then((res) => {
+                    return res
+                })
+                .catch(e => {
+                    if (e.response && e.response.data)
+                        return e.response
+                })
+    },
     profile(data){
         return instance.post('/profile',data)
             .then((res) => {return res})

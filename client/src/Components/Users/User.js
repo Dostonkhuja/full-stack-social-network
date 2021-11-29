@@ -5,7 +5,7 @@ import FollowButton from "./FollowButton";
 import styled from "@emotion/styled";
 import Badge from "@mui/material/Badge";
 
-const User = ({user, follow, unfollow, token, handleSendMessage}) => {
+const User = ({user, follow, unfollow, token, handleSendMessage,ownerId}) => {
 
     const StyledBadge = styled(Badge)(({ theme }) => ({
         '& .MuiBadge-badge': {
@@ -70,10 +70,10 @@ const User = ({user, follow, unfollow, token, handleSendMessage}) => {
                     <Typography variant="body2" color="text.secondary">
                         {user.email}
                     </Typography>
-                    {token && <FollowButton user={user} follow={follow} unfollow={unfollow}/>}
+                    {token && ownerId !== user._id &&<FollowButton user={user} follow={follow} unfollow={unfollow}/>}
                 </div>
+                { ownerId !== user._id && <button onClick={()=> {handleSendMessage(user._id)}}>send message</button>}
 
-                <button onClick={()=> {handleSendMessage(user._id)}}>send message</button>
             </Card>
         </Grid>
     )

@@ -47,11 +47,14 @@ export default function Friends({profile}) {
                 </Tabs>
             </Box>
             <TabPanel value={value} index={0}>
-                {profile !==null && profile.followed.map(f=><div key={f._id}>
+                <div style={{display:'flex',justifyContent:'space-between', flexWrap:'wrap', padding:'1rem'}}>
+                {profile !==null && profile.followed.map(f=>
+                    <div key={f._id}>
                     <Avatar variant="square"  src={f.photos ? f.photos.large : ''}
                             sx={{bgcolor: 'pink', width: 116, height: 116, borderRadius:'1rem', cursor: 'pointer'}}/>
                     {f.name}
                 </div>)}
+                </div>
             </TabPanel>
             <TabPanel value={value} index={1}>
                 <div style={{display:'flex',justifyContent:'space-between', flexWrap:'wrap', padding:'1rem'}}>

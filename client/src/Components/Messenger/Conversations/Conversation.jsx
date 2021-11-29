@@ -32,13 +32,11 @@ const Conversation = ({conversation}) => {
                 opacity: 0,
             },
         },
-    }));
-
-    console.log(conversation.members[0])
+    }))
 
     return (
         <div style={{display:'flex' ,alignItems:'center', margin:'1rem'}}>
-            { conversation && conversation.members[0].isOnline
+            { conversation && conversation.members && conversation.members[0].isOnline
                 ? <StyledBadge
                     overlap="circular"
                     anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
@@ -50,7 +48,7 @@ const Conversation = ({conversation}) => {
                     />
                 </StyledBadge>
                 : <Avatar
-                    src={conversation && conversation.members[0].photos ?conversation.members[0].photos.large : ''}
+                    src={conversation ? conversation.members[0].photos ?conversation.members[0].photos.large : '':''}
                     sx={{bgcolor: 'pink', border: '3px solid white', width: 55, height: 55, cursor: 'pointer'}}
                 />
             }
