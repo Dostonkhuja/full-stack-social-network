@@ -17,6 +17,10 @@ const signUpSlice = createSlice({
     reducers: {
         setSignInData: (state,action) => {
             state.signInData = action.payload
+        },
+        signUpLogout: (state, action) => {
+            state.user = null
+            state.signInData = null
         }
     },
     extraReducers: {
@@ -35,4 +39,4 @@ const signUpSlice = createSlice({
 })
 
 export default signUpSlice.reducer
-export const {setSignInData} = signUpSlice.actions
+export const {setSignInData,signUpLogout} = signUpSlice.actions

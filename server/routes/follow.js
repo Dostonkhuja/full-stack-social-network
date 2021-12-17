@@ -44,6 +44,8 @@ router.post('/:id', auth, async (req, res) => {
     //hammasi joyida bo'lsa muvaffaqiyatli follow true qaytarib beramiz
     user.followed.push(req.user._id)
     ownerUser.following.push(req.params.id)
+    user.followedCount = user.followed.length
+    ownerUser.followingCount = ownerUser.following.length
     await user.save()
     await ownerUser.save()
     res.status(200).send({follow: true})
@@ -63,6 +65,9 @@ router.delete('/:id', auth, async (req, res) => {
 
     user.followed = user.followed.filter(f=> String(f) !== req.user._id)
     ownerUser.following = ownerUser.following.filter(f => String(f) !== req.params.id)
+
+    user.followedCount = user.followed.length
+    ownerUser.followingCount = ownerUser.following.length
 
     await user.save()
     await ownerUser.save()

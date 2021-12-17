@@ -4,8 +4,7 @@ import {authAPI} from '../api/authAPI'
 //asyncThunk
 export const sendSIgnIn = createAsyncThunk('signIn/sendSignIn', async (data) => {
         return await authAPI.signIn(data)
-    }
-)
+    })
 
 
 //Slice
@@ -17,8 +16,8 @@ const signInSlice = createSlice({
         logout: false
     },
     reducers:{
-        logout:(state)=>{
-            state.isAuth = false
+        logout:(state,action)=>{
+            state.isAuth = action.payload
         }
     },
     extraReducers: {
@@ -29,6 +28,7 @@ const signInSlice = createSlice({
             if (action.payload.status === 200) {
                 state.isAuth = action.payload.data
                 localStorage.setItem('x-auth-token', action.payload.headers['x-auth-token'])
+                state.errorMessage = null
             } else {
                 state.errorMessage = action.payload.data
             }

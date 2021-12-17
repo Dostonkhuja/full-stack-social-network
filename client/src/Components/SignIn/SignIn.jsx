@@ -7,21 +7,18 @@ import {useSelector} from "react-redux";
 
 const SignIn = () => {
 
-
     const errorMessage = useSelector(state => state.signIn.errorMessage)
     const isAuth = useSelector(state => state.signIn.isAuth)
 
-    if (isAuth)
+    if (isAuth){
         return <Redirect to='/profile' />
+    }
 
-    return (<>
-            <Container component="main" maxWidth="xs">
+    return <Container component="main" maxWidth="xs">
                 <Box sx={{marginTop: 8, display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
                     <Avatar sx={{m: 1, bgcolor:'#a7e05b'}}> <LockOutlinedIcon/> </Avatar>
                     <Typography component="h1" variant="h5">Sign in</Typography>
-
                     <SignInForm errorMessage={errorMessage}/>
-
                 </Box>
                 <Typography variant="body2" color="text.secondary" align="center" sx={{mt: 8, mb: 4}}>
                     {'Copyright © '}
@@ -32,8 +29,6 @@ const SignIn = () => {
                     {'.'}
                 </Typography>
             </Container>
-        </>
-    )
 }
 
 export default React.memo(SignIn)

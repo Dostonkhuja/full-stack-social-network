@@ -22,11 +22,12 @@ const SignUp = React.memo(() => {
         }
     }, [user])
 
-    if (isAuth)
+    if (isAuth){
+        debugger
         return <Redirect to='/profile'/>
+    }
 
-    return (<>
-            <Container component="main" maxWidth="xs">
+    return <Container component="main" maxWidth="xs">
                 <CssBaseline/>
                 <Box
                     sx={{
@@ -55,8 +56,6 @@ const SignUp = React.memo(() => {
                     {'.'}
                 </Typography>
             </Container>
-        </>
-    )
 })
 
 export default SignUp

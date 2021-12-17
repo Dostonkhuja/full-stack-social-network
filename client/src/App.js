@@ -7,7 +7,7 @@ import Navbar from "./Components/Headers/Navbar";
 import {Grid, Hidden} from "@mui/material";
 import NavigationMenu from "./Components/Nav-Menu/NavigationMenu";
 import Messenger from "./Components/Messenger/Messenger";
-import {useEffect} from "react";
+import React, {useEffect} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {initalisationSocket} from "./Redux-middleware/initOnlineSocketMiddleware";
 
@@ -25,7 +25,9 @@ function App() {
 
     return (<>
         <Redirect to={'/profile'}/>
-        <Navbar/>
+        <div style={{position: 'sticky',top:'0',zIndex:'999999'}}>
+            <Navbar/>
+        </div>
         <Grid container spacing={1}>
             <Hidden only={['xs', 'sm', 'md']}>
                 <Grid item xs={2} sx={{}}>

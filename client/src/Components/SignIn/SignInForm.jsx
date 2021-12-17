@@ -14,7 +14,10 @@ const SignInForm = ({errorMessage}) => {
 
     const formik = useFormik({
         initialValues: {email: '', password: ''},
-        onSubmit: values => dispatch(sendSIgnIn({values}))
+        onSubmit: values => {
+            dispatch(sendSIgnIn({values}))
+            formik.values = ''
+        }
     })
 
     const handleOnBlurEmail = ({errorMessage}) => {

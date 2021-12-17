@@ -17,7 +17,10 @@ const SignUpForm = React.memo(({errorMessage}) => {
 
     const formik = useFormik({
         initialValues: {name: '', email: '', password: ''},
-        onSubmit: values => dispatch(sendSignUp(values))
+        onSubmit: values => {
+            dispatch(sendSignUp(values))
+            formik.values = ''
+        }
     })
 
     const handleOnBlurEmail = () => {

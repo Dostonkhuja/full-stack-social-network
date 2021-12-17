@@ -10,16 +10,11 @@ cloudinary.config({
 
 const storageUserPhoto = new cloudinaryStorage({
     cloudinary: cloudinary,
-    uploadOptions: {
-        folder:'social-network',
-        eager: {width: 170, height: 170, crop: "pad"}
-    },
+    uploadOptions: {folder:'social-network', eager: {width: 170, height: 170, crop: "pad"}},
 })
 const storageCover = new cloudinaryStorage({
     cloudinary: cloudinary,
-    uploadOptions: {
-        folder:'social-network-covers'
-    }
+    uploadOptions: {folder:'social-network-covers'}
 })
 
 module.exports.userPhotos = multer({storage: storageUserPhoto})

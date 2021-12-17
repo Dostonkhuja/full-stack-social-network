@@ -31,8 +31,48 @@ export const profileAPI = {
                         return e.response
                 })
     },
+    getStatus(data){
+            return instance.get(`/profile/status/${data.profileId}?ownerId=${data.ownerId}&pageNumber=${data.pageNumber}`)
+                .then((res) => {
+                    return res
+                })
+                .catch(e => {
+                    if (e.response && e.response.data)
+                        return e.response
+                })
+    },
     comment(comment){
-            return instance.post(`/profile/status/${comment.statusId}`,comment)
+            return instance.post(`/profile/comment/${comment.statusId}`,comment)
+                .then((res) => {
+                    return res
+                })
+                .catch(e => {
+                    if (e.response && e.response.data)
+                        return e.response
+                })
+    },
+    liked(statusId){
+        return instance.get(`/profile/liked/${statusId}`)
+            .then((res) => {
+                return res
+            })
+            .catch(e => {
+                if (e.response && e.response.data)
+                    return e.response
+            })
+    },
+    disLiked(statusId){
+        return instance.get(`/profile/disLiked/${statusId}`)
+            .then((res) => {
+                return res
+            })
+            .catch(e => {
+                if (e.response && e.response.data)
+                    return e.response
+            })
+    },
+    showComments({statusId, count}){
+            return instance.get(`/profile/comment/${statusId}?count=${count}`)
                 .then((res) => {
                     return res
                 })
@@ -48,9 +88,9 @@ export const profileAPI = {
                 if (e.response && e.response.data)
                     return e.response
             })
-    } ,
-    profileById(userId){
-        return instance.get(`/profile/${userId}`)
+    },
+    profileById(data){
+        return instance.get(`/profile/${data.userId ? data.userId:data}?ownerId=${data.ownerId ? data.ownerId:''}`)
             .then((res) => {return res})
             .catch(e => {
                 if (e.response && e.response.data)

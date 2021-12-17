@@ -10,13 +10,11 @@ const userSchema = new mongoose.Schema({
     password: {type: String, required: true},
     fullName: {type: String, maxlength: 50, default: null},
     name: {type: String, maxlength: 50, default: null},
-    status: [{type: mongoose.Schema.Types.ObjectId, ref: "status",comments:{type:Array,ref:'comments'}}],
-    photos: {
-        type: Object,
-        small: {type: String, default: null},
-        large: {type: String, default: null},
-        coverImage: {type: String, default: null}
-    },
+    status: [{type: mongoose.Schema.Types.ObjectId, ref: "status",comments:{type:Array,default:[],ref:'comments'},liked:{type:Array,default:[],ref:'user',}}],
+    statusCount: {type:Number,default:0},
+    followedCount: {type:Number,default:0},
+    followingCount: {type:Number,default:0},
+    photos: {type: Object, small: {type: String, default: null}, large: {type: String, default: null}, coverImage: {type: String, default: null},default: {small:null,large:null,coverImage:null}},
     followed: [{type: mongoose.Schema.Types.ObjectId, ref: "user"}],
     following: [{type: mongoose.Schema.Types.ObjectId, ref: "user"}],
     isFollow: {type:Boolean,default:false},

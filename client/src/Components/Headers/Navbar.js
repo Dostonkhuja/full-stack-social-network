@@ -19,6 +19,8 @@ import {logout} from "../../State-management/SignInSlice";
 import {useHistory} from "react-router-dom";
 import {logoutAuth} from "../../State-management/ProfileSlice";
 import {socketDisconnect} from "../../Redux-middleware/initOnlineSocketMiddleware";
+import Followers from "../Profile/Friends/Followers";
+import {signUpLogout} from "../../State-management/SignUpSlice";
 
 const Search = styled('div')(({theme}) => ({
     position: 'relative',
@@ -73,7 +75,8 @@ function Navbar() {
     const handleLogout = () => {
         dispatch(socketDisconnect())
         dispatch(logoutAuth())
-        dispatch(logout())
+        dispatch(logout(false))
+        dispatch(signUpLogout())
         history.push('/signIn')
         setAnchorEl(null);
         handleMobileMenuClose();
@@ -178,72 +181,71 @@ function Navbar() {
     // color='green'
     return (<>
             <Box sx={{flexGrow: 1}}>
-                <AppBar position="static" color='inherit'>
-                    <Toolbar>
-                        <Typography
-                            variant="h6"
-                            noWrap
-                            component="div"
-                            sx={{display: {xs: 'none', sm: 'block'}}}
-                        >
-                            Social Network
-                        </Typography>
-                        <Search>
-                            <SearchIconWrapper>
-                                <SearchIcon/>
-                            </SearchIconWrapper>
-                            <StyledInputBase
-                                placeholder="Search…"
-                                inputProps={{'aria-label': 'search'}}
-                            />
-                        </Search>
-
-                        <Box sx={{flexGrow: 1}}/>
-                        <Box sx={{display: {xs: 'none', md: 'flex'}}}>
-
-                            <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-                                <Badge badgeContent={4} color="error">
-                                    <MailIcon/>
-                                </Badge>
-                            </IconButton>
-                            <IconButton
-                                size="large"
-                                aria-label="show 17 new notifications"
-                                color="inherit"
+                    <AppBar position="static" color='inherit'>
+                        <Toolbar>
+                            <Typography
+                                variant="h6"
+                                noWrap
+                                component="div"
+                                sx={{display: {xs: 'none', sm: 'block'}}}
                             >
-                                <Badge badgeContent={17} color="error">
-                                    <NotificationsIcon/>
-                                </Badge>
-                            </IconButton>
-                            <IconButton
-                                size="large"
-                                edge="end"
-                                aria-label="account of current user"
-                                aria-controls={menuId}
-                                aria-haspopup="true"
-                                onClick={handleProfileMenuOpen}
-                                color="inherit"
-                            >
-                                <AccountCircle/>
-                            </IconButton>
-                        </Box>
-                        <Box sx={{display: {xs: 'flex', md: 'none'}}}>
-                            <IconButton
-                                size="large"
-                                aria-label="show more"
-                                aria-controls={mobileMenuId}
-                                aria-haspopup="true"
-                                onClick={handleMobileMenuOpen}
-                                color="inherit"
-                            >
-                                <MoreIcon/>
-                            </IconButton>
-                        </Box>
-                    </Toolbar>
-                </AppBar>
+                                Social Network
+                            </Typography>
+                            <Search>
+                                <SearchIconWrapper>
+                                    <SearchIcon/>
+                                </SearchIconWrapper>
+                                <StyledInputBase
+                                    placeholder="Search…"
+                                    inputProps={{'aria-label': 'search'}}
+                                />
+                            </Search>
 
-                {renderMobileMenu}
-                {renderMenu}
+                            <Box sx={{flexGrow: 1}}/>
+                            <Box sx={{display: {xs: 'none', md: 'flex'}}}>
+
+                                <IconButton size="large" aria-label="show 4 new mails" color="inherit">
+                                    <Badge badgeContent={4} color="error">
+                                        <MailIcon/>
+                                    </Badge>
+                                </IconButton>
+                                <IconButton
+                                    size="large"
+                                    aria-label="show 17 new notifications"
+                                    color="inherit"
+                                >
+                                    <Badge badgeContent={17} color="error">
+                                        <NotificationsIcon/>
+                                    </Badge>
+                                </IconButton>
+                                <IconButton
+                                    size="large"
+                                    edge="end"
+                                    aria-label="account of current user"
+                                    aria-controls={menuId}
+                                    aria-haspopup="true"
+                                    onClick={handleProfileMenuOpen}
+                                    color="inherit"
+                                >
+                                    <AccountCircle/>
+                                </IconButton>
+                            </Box>
+                            <Box sx={{display: {xs: 'flex', md: 'none'}}}>
+                                <IconButton
+                                    size="large"
+                                    aria-label="show more"
+                                    aria-controls={mobileMenuId}
+                                    aria-haspopup="true"
+                                    onClick={handleMobileMenuOpen}
+                                    color="inherit"
+                                >
+                                    <MoreIcon/>
+                                </IconButton>
+                            </Box>
+                        </Toolbar>
+                    </AppBar>
+                    {renderMobileMenu}
+                    {renderMenu}
             </Box>
         </>
     );

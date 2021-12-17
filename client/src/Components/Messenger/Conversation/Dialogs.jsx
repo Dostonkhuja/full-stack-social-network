@@ -1,14 +1,13 @@
 import React, {useEffect, useRef} from 'react';
 import {Avatar, Button, Grid, TextField} from "@mui/material";
 import {useFormik} from "formik";
-
-import TimeAgo from 'timeago-react'
-import * as timeago from 'timeago.js'
-import vi from 'timeago.js/lib/lang/ru'
 import {newMessage} from "../../../Redux-middleware/initMessengerSocketMiddleware";
 import {useDispatch} from "react-redux";
 import styled from "@emotion/styled";
 import Badge from "@mui/material/Badge";
+import TimeAgo from 'timeago-react'
+import * as timeago from 'timeago.js'
+import vi from 'timeago.js/lib/lang/ru'
 
 timeago.register('vi', vi);
 

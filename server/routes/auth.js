@@ -6,21 +6,17 @@ const auth = require('../middleware/auth')
 
 //Auth me
 router.get('/me', auth, async (req, res) => {
-    const me = await User
+    let me = await User
         .findById(req.user._id)
         .select({password: 0, __v: 0,isFollow:0})
-        .populate({
-            path:'following followed status',
-            select:{password: 0, __v: 0,isFollow:0},
-            populate:{
-                path:'comments',
-                populate:{path:'user', select:{name:1,photos:1}}
-            }
-        })
-
+        .populate({path:'following followed',options:{limit:9,sort: {date:-1}},select:{password: 0, __v: 0,isFollow:0}})
+        .populate({path:'status',populate:{path:'comments', options: {sort: {createdAt:-1},limit: 2}, populate:{path:'user', select:{name:1,photos:1}}},})
+        .populate({path:'status',options:{sort: {createdAt:-1},limit:5},populate:{path:'liked', select:{name:1,photos:1,isFollow:1,_id:1}}})
+        me.status = me.status.map(s=>s.liked = s.liked.map(l=> l.isFollow = me.following.some(u=>String(u._id) === String(l._id))))
 
     if (!me)
         return res.status(404).send('bunday foydalanuvchi mavjud emas')
+
     res.send(me)
 })
 

@@ -1,4 +1,4 @@
-import React, {useCallback} from "react";
+import React, {useCallback, useState} from "react";
 import Status from "./status/Status";
 import {useDispatch} from "react-redux";
 import UpdateProfile from "./UpdateProfile";
@@ -6,11 +6,16 @@ import Followers from "../Friends/Followers";
 import {PhotoCamera} from "@mui/icons-material";
 import IconButton from "@mui/material/IconButton";
 import {Avatar, Grid, Typography} from "@mui/material";
+import Box from "@mui/material/Box";
+import AllFollowers from "./AllFollowers";
 
-const MyProfile = React.memo(({isOwner, profile, updateMyStatus, updateMyProfile, updateMyAvatar, updateMyCoverImage}) => {
+
+const MyProfile = React.memo(({getStatus,token,liked,disliked,ownerId,profileFollow,profileUnfollow,showComments,isOwner,ownerPhoto,profile,updateMyStatus,updateMyProfile,updateMyAvatar,updateMyCoverImage}) => {
     const dispatch = useDispatch()
 
     console.log('my profile rendered')
+
+    const [openAllFollowers,setOpenAllFollowers]= useState(false)
 
     const mainPhotoSelected = useCallback((e) => {
         dispatch(updateMyAvatar(e.target.files[0]))
@@ -62,12 +67,27 @@ const MyProfile = React.memo(({isOwner, profile, updateMyStatus, updateMyProfile
 
         <Grid item spacing={1} container xs={12}>
             <Grid item xs={5}>
-                <Followers profile={profile}/>
+                <div style={{position: 'sticky',top:'5rem'}}>
+                    <div>
+                        <Followers profile={profile} openAllFollowers={openAllFollowers} setOpenAllFollowers={setOpenAllFollowers}/>
+                    </div>
+
+                    {!openAllFollowers && <Typography sx={{mx:'2rem',fontSize:'14px'}}>
+                        Privacy · Terms of Service · Advertising · Advertising Preferences · Cookies · © Doston Sheraliyev 2021
+                    </Typography>}
+                </div>
             </Grid>
-            <Grid item xs={7}>
-                <Status isOwner={isOwner} profile={profile} updateMyStatus={updateMyStatus}/>
-            </Grid>
+
+            {!openAllFollowers && <Grid item xs={7}>
+                <Status isOwner={isOwner} showComments={showComments} ownerId={ownerId}  profileFollow={profileFollow}
+                        profileUnfollow={profileUnfollow} liked={liked} disliked={disliked} ownerPhoto={ownerPhoto}
+                        token={token} profile={profile} updateMyStatus={updateMyStatus} getStatus={getStatus}/>
+            </Grid>}
         </Grid>
+        {openAllFollowers && <Box sx={{borderColor: 'divider'}}>
+            555555555555555555555555
+            <AllFollowers/>
+        </Box>}
     </>
 })
 

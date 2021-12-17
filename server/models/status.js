@@ -6,8 +6,10 @@ const statusSchema = new mongoose.Schema({
     photoFile: {type: Object, default: null},
     video: {type: String, default: null},
     likeCount:{type:Number,default:0},
-    comments:[{type: mongoose.Schema.Types.ObjectId,ref:'comments'}],
-},{ timestamps: true ,strict: false})
+    liked:[{type: mongoose.Schema.Types.ObjectId,ref:'user'}],
+    commentsCount:Number,
+    comments:[{type: mongoose.Schema.Types.ObjectId,ref:'comments'}]
+},{ timestamps: true})
 
 
 const Status = mongoose.model('status', statusSchema)
