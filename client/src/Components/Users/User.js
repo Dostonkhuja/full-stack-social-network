@@ -37,7 +37,7 @@ const User = ({user, follow, unfollow, token, handleSendMessage,ownerId}) => {
     }));
 
     return (
-        <Grid item xs={12} xl={6} lg={6} sx={{}}>
+        <Grid item xs={12} xl={6} lg={6}>
             <Card sx={{display: 'flex', justifyContent: 'space-around', flexWrap: 'wrap', padding: '1rem'}}>
                 <Link to={`/profile/${user._id}`}>
                     { user.isOnline
@@ -48,17 +48,17 @@ const User = ({user, follow, unfollow, token, handleSendMessage,ownerId}) => {
                     >
                         <Avatar
                             src={user.photos ? user.photos.large : ''}
-                            sx={{bgcolor: 'pink', width: 116, height: 116, cursor: 'pointer'}}
+                            sx={{bgcolor: 'pink', width: 100 , height: 100, cursor: 'pointer'}}
                         />
                     </StyledBadge>
                         : <Avatar
                             src={user.photos ? user.photos.large : ''}
-                            sx={{bgcolor: 'pink', width: 116, height: 116, cursor: 'pointer'}}
+                            sx={{bgcolor: 'pink', width: 100, height: 100, cursor: 'pointer'}}
                         />
                     }
                 </Link>
                 <div style={{
-                    minWidth: '230px',
+                    minWidth: '200px',
                     display: 'flex',
                     justifayContent: 'center',
                     alignItems: 'center',
@@ -72,8 +72,7 @@ const User = ({user, follow, unfollow, token, handleSendMessage,ownerId}) => {
                     </Typography>
                     {token && ownerId !== user._id &&<FollowButton user={user} follow={follow} unfollow={unfollow}/>}
                 </div>
-                { ownerId !== user._id && <button onClick={()=> {handleSendMessage(user._id)}}>send message</button>}
-
+                {token && ownerId !== user._id && <button onClick={()=> {handleSendMessage(user._id)}}>send message</button>}
             </Card>
         </Grid>
     )

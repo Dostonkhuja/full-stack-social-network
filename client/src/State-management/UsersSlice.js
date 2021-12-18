@@ -1,5 +1,6 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit'
 import {usersAPI} from "../api/usersAPI";
+import {setFollowIdAllFollowersSlice} from "./AllFollowersSlice";
 
 //asyncThunk
 export const getUsers = createAsyncThunk('users/getUsers', async ({pageSize, pageNumber}) => {
@@ -7,18 +8,20 @@ export const getUsers = createAsyncThunk('users/getUsers', async ({pageSize, pag
 })
 export const follow = createAsyncThunk('users/follow', async (id, thunkAPI) => {
     thunkAPI.dispatch(setFollowId(id))
+    thunkAPI.dispatch(setFollowIdAllFollowersSlice(id))
     return await usersAPI.follow(id)
 })
 export const unfollow = createAsyncThunk('users/unfollow', async (id, thunkAPI) => {
     thunkAPI.dispatch(setFollowId(id))
+    thunkAPI.dispatch(setFollowIdAllFollowersSlice(id))
     return await usersAPI.unfollow(id)
 })
 
 //Slice
 const usersSlice = createSlice({
-    name: 'SignIn',
+    name: 'users',
     initialState: {
-        users: null,
+        users: [],
         totalUsersCount: 0,
         followId: '',
         errorMessage: null,

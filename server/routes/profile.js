@@ -36,7 +36,7 @@ router.get('/:id',async (req, res) => {
 
     const user = await User.findById(req.params.id)
         .select({password: 0, __v: 0})
-        .populate('following followed',{password: 0, __v: 0,isFollow:0})
+        .populate({path:'following followed',options:{limit:9,sort: {date:-1}},select:{password: 0, __v: 0,isFollow:0}})
         .populate({path:'status',populate:{path:'comments', options: {sort: {createdAt:-1},limit: 2}, populate:{path:'user', select:{name:1,photos:1}}},})
         .populate({path:'status',options:{sort: {createdAt:-1},limit:5},populate:{path:'liked', select:{name:1,photos:1,isFollow:1}}})
     user.status = user.status.map(s=>s.liked = s.liked.map(l=>{
@@ -209,8 +209,6 @@ router.get('/disLiked/:statusId', auth, async (req, res) => {
     }
 })
 
-
-
 //get status by id
 // router.get('/status/:id', auth, async (req, res) => {
 //     const isValidId = mongoose.Types.ObjectId.isValid(req.params.id)
@@ -229,6 +227,5 @@ const userProfileValidate = Joi.object({
     fullName: Joi.string().min(3).max(50),
     contacts: contactsValidate
 })
-
 
 module.exports = router

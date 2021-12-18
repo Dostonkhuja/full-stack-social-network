@@ -6,9 +6,7 @@ import Followers from "../Friends/Followers";
 import {PhotoCamera} from "@mui/icons-material";
 import IconButton from "@mui/material/IconButton";
 import {Avatar, Grid, Typography} from "@mui/material";
-import Box from "@mui/material/Box";
 import AllFollowers from "./AllFollowers";
-
 
 const MyProfile = React.memo(({getStatus,token,liked,disliked,ownerId,profileFollow,profileUnfollow,showComments,isOwner,ownerPhoto,profile,updateMyStatus,updateMyProfile,updateMyAvatar,updateMyCoverImage}) => {
     const dispatch = useDispatch()
@@ -16,6 +14,8 @@ const MyProfile = React.memo(({getStatus,token,liked,disliked,ownerId,profileFol
     console.log('my profile rendered')
 
     const [openAllFollowers,setOpenAllFollowers]= useState(false)
+    const [onFollowers, setOnFollowers] = React.useState(false);
+
 
     const mainPhotoSelected = useCallback((e) => {
         dispatch(updateMyAvatar(e.target.files[0]))
@@ -69,12 +69,12 @@ const MyProfile = React.memo(({getStatus,token,liked,disliked,ownerId,profileFol
             <Grid item xs={5}>
                 <div style={{position: 'sticky',top:'5rem'}}>
                     <div>
-                        <Followers profile={profile} openAllFollowers={openAllFollowers} setOpenAllFollowers={setOpenAllFollowers}/>
+                        <Followers profile={profile} openAllFollowers={openAllFollowers}  setOpenAllFollowers={setOpenAllFollowers} setOnFollowers={setOnFollowers}/>
                     </div>
-
-                    {!openAllFollowers && <Typography sx={{mx:'2rem',fontSize:'14px'}}>
+                    {!openAllFollowers &&
+                        <Typography sx={{textAlign:'center',fontSize:'14px'}}>
                         Privacy · Terms of Service · Advertising · Advertising Preferences · Cookies · © Doston Sheraliyev 2021
-                    </Typography>}
+                        </Typography>}
                 </div>
             </Grid>
 
@@ -84,10 +84,7 @@ const MyProfile = React.memo(({getStatus,token,liked,disliked,ownerId,profileFol
                         token={token} profile={profile} updateMyStatus={updateMyStatus} getStatus={getStatus}/>
             </Grid>}
         </Grid>
-        {openAllFollowers && <Box sx={{borderColor: 'divider'}}>
-            555555555555555555555555
-            <AllFollowers/>
-        </Box>}
+        {openAllFollowers && <AllFollowers onFollowers={onFollowers} userId={profile._id} followedCount={profile.followedCount} followingCount={profile.followingCount}/>}
     </>
 })
 

@@ -44,6 +44,9 @@ export const profileUnfollow = createAsyncThunk('profile/unfollow', async (id, t
     thunkAPI.dispatch(setFollowId(id))
     return await usersAPI.unfollow(id)
 })
+const followOutSide = createAsyncThunk('users/follow')
+const unfollowOutside = createAsyncThunk('users/unfollow')
+
 
 const profileSlice = createSlice({
     name: 'Profile',
@@ -213,6 +216,7 @@ const profileSlice = createSlice({
                         }
                     })
                 })
+                state.profile.followingCount = state.profile.followingCount + 1
             } else {
                 state.errorMessage = action.payload.data
             }
@@ -226,10 +230,25 @@ const profileSlice = createSlice({
                         }
                     })
                 })
+                state.profile.followingCount = state.profile.followingCount - 1
             } else {
                 state.errorMessage = action.payload.data
             }
-        }
+        },
+        [followOutSide.fulfilled]: (state, action) => {
+            if (action.payload.status === 200) {
+                state.profile.followingCount = state.profile.followingCount + 1
+            } else {
+                state.errorMessage = action.payload.data
+            }
+        },
+        [unfollowOutside.fulfilled]: (state, action) => {
+            if (action.payload.status === 200) {
+                state.profile.followingCount = state.profile.followingCount - 1
+            } else {
+                state.errorMessage = action.payload.data
+            }
+        },
     }
 })
 

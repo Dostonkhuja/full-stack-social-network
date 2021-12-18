@@ -56,7 +56,8 @@ const RootProfile = () => {
                                  updateMyAvatar={updateMyAvatar}
                                  updateMyProfile={updateMyProfile}
                                  updateMyStatus={updateMyStatus}
-                                 updateMyCoverImage={updateMyCoverImage}/>
+                                 updateMyCoverImage={updateMyCoverImage}
+    />
 }
 
 export default RootProfile

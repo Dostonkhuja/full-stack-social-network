@@ -1,4 +1,5 @@
 import * as React from 'react'
+import {useEffect, useRef, useState} from 'react'
 import Commenty from "./Comment"
 import Card from '@mui/material/Card'
 import SendComment from "./SendComment"
@@ -18,14 +19,13 @@ import {Button, Dialog, DialogActions, DialogContent, DialogTitle} from "@mui/ma
 import {useDispatch} from "react-redux";
 import CancelIcon from "@mui/icons-material/Cancel";
 import Box from "@mui/material/Box";
-import StatusForm from "./StatusForm";
-import {useEffect, useRef, useState} from "react";
 import FollowButton from "../../../Users/FollowButton";
-import Link from "react-router-dom/es/Link";
+
 
 import TimeAgo from 'timeago-react'
 import * as timeago from 'timeago.js'
 import vi from 'timeago.js/lib/lang/ru'
+import {Link} from "react-router-dom";
 
 timeago.register('vi', vi);
 
@@ -76,10 +76,10 @@ export default function StatusMedia({isOwner,token,showComments,profileFollow,pr
    },[])
 
     return (<>
-        <Card fullwidth='true' sx={{mt:'3rem',pb:2,border:'1px solid #bdbdbd',borderRadius:'10px'}}>
+        <Card fullwidth='true' sx={{mt:'3rem',pb:2,boxShadow: 'rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px',borderRadius:'10px'}}>
             <CardHeader
                 avatar={<Avatar src={profile.photos ? profile.photos.large : ''} sx={{bgcolor: 'pink', border: '3px solid white'}}/>}
-                action={<Button disabled='true' sx={{cursor:'default'}}> <MoreVertIcon /> </Button>}
+                action={<Button disabled={true} sx={{cursor:'default'}}> <MoreVertIcon /> </Button>}
                 title={profile.name}
                 subheader={<TimeAgo style={{color:'#777575'}} datetime={status.createdAt} locale='vi'/>}/>
 

@@ -4,8 +4,7 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import {Avatar, Button, Grid} from "@mui/material";
-import AllFollowers from "../MyProfile/AllFollowers";
+import {Avatar, Button} from "@mui/material";
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -20,7 +19,7 @@ function TabPanel(props) {
         >
             {value === index && (
                 <Box sx={{ p: 3 }}>
-                    <Typography>{children}</Typography>
+                    <div>{children}</div>
                 </Box>
             )}
         </div>
@@ -32,61 +31,73 @@ TabPanel.propTypes = {
     value: PropTypes.number.isRequired,
 };
 
-export default function Friends({profile,openAllFollowers,setOpenAllFollowers}) {
+export default function Friends({profile,openAllFollowers,setOpenAllFollowers,setOnFollowers}) {
     const [value, setValue] = React.useState(0);
 
     const handleChange = (event, newValue) => {
         setValue(newValue)
         setOpenAllFollowers(false)
+        setOnFollowers(true)
     };
 
+    const handleAllFollowers = () => {
+        setOpenAllFollowers(true)
+        setOnFollowers(true)
+    }
+
+    const handleAllFollowed = () => {
+        setOpenAllFollowers(true)
+        setOnFollowers(false)
+    }
+
     return (
-        <Box>
+        <>
             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                 <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
                     <Tab label="Followers"/>
                     <Tab label="Followed"/>
                 </Tabs>
             </Box>
-            {!openAllFollowers && <Box sx={{height:'550px'}}>
+            {!openAllFollowers &&
+                <div style={{height:'470px'}}>
             <TabPanel value={value} index={0}>
                 {!openAllFollowers && <div>
-                    <Typography variant="h5" component="h5" sx={{display:'flex',color:'#bdbdbd',alignItems:'center',justifyContent:'space-between'}}>
-                        <div>
+                    <div style={{display:'flex',color:'#bdbdbd',alignItems:'center',justifyContent:'space-between'}}>
+                        <Typography>
                             followers
                             <span style={{color:'#bdbdbd',marginLeft:'0.5rem'}}>{profile.followedCount}</span>
-                        </div>
-                        <Button onClick={()=>setOpenAllFollowers(true)}>All followers</Button>
-                    </Typography>
+                        </Typography>
+                        <Button onClick={handleAllFollowers}>All followers</Button>
+                    </div>
                     <div style={{display:'flex',justifyContent:'space-between', flexWrap:'wrap', padding:'1rem',alignItems:'center'}}>
-                        {profile !==null && profile.followed.map(f=>
-                            <div key={f._id} style={{display:'flex',alignItems:'center',flexDirection:'column'}}>
+                        {profile !==null && profile.followed.map(f=> <div key={f._id} style={{display:'flex',alignItems:'center',flexDirection:'column'}}>
                                 <Avatar variant="square"  src={f.photos ? f.photos.large : ''}
-                                        sx={{bgcolor: 'pink', width: 116, height: 116, borderRadius:'1rem', cursor: 'pointer'}}/>
-                                {f.name}
+                                        sx={{bgcolor: 'pink', width: 100, height: 100, borderRadius:'1rem', cursor: 'pointer'}}/>
+                               <span> {f.name}</span>
                             </div>)}
                     </div>
                 </div>}
                 </TabPanel>
             <TabPanel value={value} index={1}>
                 <div>
-                <Typography variant="h5" component="h5" sx={{display:'flex',color:'#bdbdbd',alignItems:'center',justifyContent:'space-between'}}>
-                    <div>
+                <div style={{display:'flex',color:'#bdbdbd',alignItems:'center',justifyContent:'space-between'}}>
+                    <Typography>
                         followed
                         <span style={{color:'#bdbdbd',marginLeft:'0.5rem'}}>{profile.followingCount}</span>
-                    </div>
-                    <Button >All followed</Button>
-                </Typography>
+                    </Typography>
+                    <Button onClick={handleAllFollowed}>All followed</Button>
+                </div>
                 <div style={{display:'flex',justifyContent:'space-between', flexWrap:'wrap', padding:'1rem',alignItems:'center'}}>
                     {profile !==null && profile.following.map(f=><div key={f._id} style={{display:'flex',alignItems:'center',flexDirection:'column',marginTop:'0.5rem'}}>
                         <Avatar variant="square"  src={f.photos ? f.photos.large : ''}
-                                sx={{bgcolor: 'pink', width: 116, height: 116, borderRadius:'1rem', cursor: 'pointer'}}/>
-                        {f.name}
+                                sx={{bgcolor: 'pink', width: 100, height: 100, borderRadius:'1rem', cursor: 'pointer'}}/>
+                        <span>{f.name}</span>
                     </div>)}
                 </div>
                 </div>
             </TabPanel>
-            </Box>}
-        </Box>
+            </div>
+            }
+        </>
     );
 }
