@@ -87,8 +87,8 @@ export default function Friends({profile,openAllFollowers,setOpenAllFollowers,se
                     </Typography>
                     <Button onClick={handleAllFollowed}>All followed</Button>
                 </div>
-                <div style={{display:'flex',justifyContent:'space-between', flexWrap:'wrap', padding:'1rem',alignItems:'center'}}>
-                    {profile !==null && profile.following.map(f=><div key={f._id} style={{display:'flex',alignItems:'center',flexDirection:'column',marginTop:'0.5rem'}}>
+                <div style={{display:'flex',justifyContent:'flax-start', flexWrap:'wrap', padding:'1rem',alignItems:'center'}}>
+                    {profile !==null && profile.following.map(f=><div key={f._id} style={{display:'flex',alignItems:'center',flexDirection:'column',marginTop:'0.5rem',marginRight:'1.2rem'}}>
                         <Avatar variant="square"  src={f.photos ? f.photos.large : ''}
                                 sx={{bgcolor: 'pink', width: 100, height: 100, borderRadius:'1rem', cursor: 'pointer'}}/>
                         <span>{f.name}</span>

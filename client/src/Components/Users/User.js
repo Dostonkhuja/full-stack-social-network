@@ -1,11 +1,13 @@
 import React from 'react';
-import {Avatar, Card, Grid, Typography} from "@mui/material";
+import {Avatar, Button, Card, Typography} from "@mui/material";
 import {Link} from "react-router-dom";
 import FollowButton from "./FollowButton";
 import styled from "@emotion/styled";
 import Badge from "@mui/material/Badge";
+import EmailIcon from '@mui/icons-material/Email';
+import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 
-const User = ({user, follow, unfollow, token, handleSendMessage,ownerId}) => {
+const User = ({user, follow, unfollow, token, handleSendMessage,ownerId,handleCloseAllFollowers}) => {
 
     const StyledBadge = styled(Badge)(({ theme }) => ({
         '& .MuiBadge-badge': {
@@ -37,9 +39,8 @@ const User = ({user, follow, unfollow, token, handleSendMessage,ownerId}) => {
     }));
 
     return (
-        <Grid item xs={12} xl={6} lg={6}>
             <Card sx={{display: 'flex', justifyContent: 'space-around', flexWrap: 'wrap', padding: '1rem'}}>
-                <Link to={`/profile/${user._id}`}>
+                <Link to={`/profile/${user._id}`} onClick={()=> handleCloseAllFollowers && handleCloseAllFollowers()}>
                     { user.isOnline
                         ? <StyledBadge
                         overlap="circular"
@@ -70,11 +71,13 @@ const User = ({user, follow, unfollow, token, handleSendMessage,ownerId}) => {
                     <Typography variant="body2" color="text.secondary">
                         {user.email}
                     </Typography>
-                    {token && ownerId !== user._id &&<FollowButton user={user} follow={follow} unfollow={unfollow}/>}
+                    {token && <FollowButton user={user} follow={follow} unfollow={unfollow} token={token} ownerId={ownerId}/>}
                 </div>
-                {token && ownerId !== user._id && <button onClick={()=> {handleSendMessage(user._id)}}>send message</button>}
+                {token &&
+                    <div onClick={()=>ownerId !== user._id && handleSendMessage(user._id)} style={{cursor:'pointer'}}>
+                    <EmailIcon color={ownerId !== user._id ? 'primary':'disabled'}/>
+                    </div>}
             </Card>
-        </Grid>
     )
 }
 

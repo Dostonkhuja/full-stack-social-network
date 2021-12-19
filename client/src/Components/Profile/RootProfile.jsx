@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useLayoutEffect} from "react";
 import MyProfile from "./MyProfile/MyProfile";
 import {useDispatch, useSelector} from "react-redux";
 import {useHistory, useParams} from "react-router-dom";
@@ -41,6 +41,9 @@ const RootProfile = () => {
         }
         else {token ? dispatch(getAuthMe()) : history.push('/signIn')}
     }, [token,userId])
+
+    if (!profile)
+        return <></>
 
     return profile && <MyProfile profile={profile}
                                  token={token}

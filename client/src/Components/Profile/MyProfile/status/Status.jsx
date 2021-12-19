@@ -9,7 +9,7 @@ import {useDispatch} from "react-redux";
 import CircularProgress from '@mui/material/CircularProgress';
 
 
-const Status = React.memo(({getStatus,token,liked,disliked,ownerId,profileUnfollow,profileFollow,showComments,isOwner,ownerPhoto, profile, updateMyStatus}) => {
+const Status = React.memo(({handleCurrentImage,getStatus,token,liked,disliked,ownerId,profileUnfollow,profileFollow,showComments,isOwner,ownerPhoto, profile, updateMyStatus}) => {
 
     const dispatch = useDispatch()
 
@@ -54,7 +54,7 @@ const Status = React.memo(({getStatus,token,liked,disliked,ownerId,profileUnfoll
                             <StatusMedia key={s._id} isOwner={isOwner} token={token} showComments={showComments} liked={liked}
                                          disliked={disliked} profileFollow={profileFollow}
                                          profileUnfollow={profileUnfollow} ownerId={ownerId} ownerPhoto={ownerPhoto}
-                                         profile={profile} status={s}/>
+                                         profile={profile} status={s} handleCurrentImage={handleCurrentImage}/>
                     )}
                 </InfiniteScroll>
         </div>

@@ -29,7 +29,7 @@ import {Link} from "react-router-dom";
 
 timeago.register('vi', vi);
 
-export default function StatusMedia({isOwner,token,showComments,profileFollow,profileUnfollow,ownerId,liked,disliked,profile,ownerPhoto,status}) {
+export default function StatusMedia({handleCurrentImage,isOwner,token,showComments,profileFollow,profileUnfollow,ownerId,liked,disliked,profile,ownerPhoto,status}) {
     console.log(status)
 
     const dispatch = useDispatch()
@@ -89,7 +89,7 @@ export default function StatusMedia({isOwner,token,showComments,profileFollow,pr
                 </Typography>
             </CardContent>}
 
-            {status.photoFile && <CardMedia component="img" height="280" image={status.photoFile}/>}
+            {status.photoFile && <CardMedia onClick={()=>handleCurrentImage(null,status.photoFile)} component="img" height="280" image={status.photoFile} style={{cursor:'pointer'}}/>}
 
             <CardActions disableSpacing>
                 <IconButton onClick={handleClickOpen}> <FavoriteIcon/> {status.likeCount} </IconButton>

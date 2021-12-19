@@ -9,7 +9,7 @@ import User from "../../Users/User";
 import {follow, unfollow} from "../../../State-management/UsersSlice";
 import {createNewConversation} from "../../../Redux-middleware/initMessengerSocketMiddleware";
 
-const AllFollowers = ({userId,followedCount,onFollowers,followingCount}) => {
+const AllFollowers = ({userId,followedCount,onFollowers,followingCount,handleCloseAllFollowers}) => {
     const dispatch = useDispatch()
     const history = useHistory()
 
@@ -52,12 +52,16 @@ const AllFollowers = ({userId,followedCount,onFollowers,followingCount}) => {
                 dataLength={onFollowers ? followers.length : followed.length}
                 next={fetchMoreData}
                 hasMore={onFollowers ? followers.length < followedCount : followed.length < followingCount}
-                loader={<div style={{ height: "100%", overflow:"hidden", display:'flex',justifyContent:'center',marginTop:'0.5rem'}}> <CircularProgress/> </div>}
+                loader={<div style={{ height: "100%", overflow:"hidden", display:'flex',justifyContent:'space-between',flexWrap:'wrap',marginTop:'0.5rem'}}> <CircularProgress/> </div>}
             >
-                <Grid container spacing={2} sx={{mt: '1rem', display: 'flex'}}>
-                    {onFollowers && followers.length !== 0 && followers.map(u => <User user={u} handleSendMessage={handleSendMessage} follow={follow} unfollow={unfollow} token={token} key={u._id} ownerId={ownerId}/>)}
-                    {!onFollowers && followed.length !== 0 && followed.map(u => <User user={u} handleSendMessage={handleSendMessage} follow={follow} unfollow={unfollow} token={token} key={u._id} ownerId={ownerId}/>)}
-                </Grid>
+                    <Grid container spacing={2} sx={{py:'1rem'}}>
+                    {onFollowers && followers.length !== 0 && followers.map(u => <Grid item xs={6}  key={u._id} >
+                        <User user={u} handleSendMessage={handleSendMessage} follow={follow} unfollow={unfollow} token={token} ownerId={ownerId}/>
+                    </Grid>)}
+                    {!onFollowers && followed.length !== 0 && followed.map(u => <Grid item xs={6} key={u._id}>
+                        <User user={u}  handleSendMessage={handleSendMessage} handleCloseAllFollowers={handleCloseAllFollowers} follow={follow} unfollow={unfollow} token={token} ownerId={ownerId} />
+                        </Grid>)}
+                    </Grid>
             </InfiniteScroll>
         </div>
     )

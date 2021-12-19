@@ -34,7 +34,11 @@ const Users = () => {
             <Pagination count={Math.ceil(totalUsersCount / 10)} size="large" onChange={paginationHandle}/>
         </Grid>
         <Grid container spacing={2} sx={{mt: '1rem', display: 'flex'}}>
-            {users !== null && users.map(u => <User user={u} handleSendMessage={handleSendMessage} follow={follow} unfollow={unfollow} token={token} key={u._id} ownerId={ownerId}/>)}
+            {users !== null && users.map(u =>
+                <Grid item xs={12} xl={6} lg={6}  key={u._id}>
+                <User user={u} handleSendMessage={handleSendMessage} follow={follow} unfollow={unfollow} token={token} ownerId={ownerId}/>
+                </Grid>
+            )}
         </Grid>
     </>
 }

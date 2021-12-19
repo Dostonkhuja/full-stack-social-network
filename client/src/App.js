@@ -25,7 +25,7 @@ function App() {
 
     return (<>
         <Redirect to={'/profile'}/>
-        <div style={{position: 'sticky',top:'0',zIndex:'999999'}}>
+        <div style={{position: 'sticky',top:'0',zIndex:'1'}}>
             <Navbar/>
         </div>
         <Grid container spacing={1}>

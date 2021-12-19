@@ -73,6 +73,12 @@ const profileSlice = createSlice({
         }
     },
     extraReducers: {
+        // [getAuthMe.rejected]: (state, action) => {
+        //     state.errorMessage = action.data
+        // },
+        // [updateMyAvatar.rejected]: (state, action) => {
+        //     state.photosUploadErrorMessage = action.data
+        // },
         [getAuthMe.fulfilled]: (state, action) => {
             if (action.payload.status === 200) {
                 state.ownerProfile = action.payload.data
@@ -85,12 +91,26 @@ const profileSlice = createSlice({
                 state.errorMessage = action.payload.data
             }
         },
-        // [getAuthMe.rejected]: (state, action) => {
-        //     state.errorMessage = action.data
-        // },
-        // [updateMyAvatar.rejected]: (state, action) => {
-        //     state.photosUploadErrorMessage = action.data
-        // },
+        [getAuthMe.pending]: (state) => {
+                // state.ownerProfile = null
+                state.profile = null
+        }
+        ,[getProfileById.pending]: (state) => {
+                // state.ownerProfile = null
+                state.profile = null
+        },
+        [getProfileById.fulfilled]: (state, action) => {
+            if (action.payload.status === 200) {
+                state.profile = action.payload.data
+                if (state.ownerId === action.payload.data._id) {
+                    state.isOwner = true
+                } else {
+                    state.isOwner = false
+                }
+            } else {
+                state.profileErrorMessage = action.payload.data
+            }
+        },
         [updateMyAvatar.fulfilled]: (state, action) => {
             if (action.payload.status === 200) {
                 state.profile.photos = action.payload.data
@@ -195,18 +215,6 @@ const profileSlice = createSlice({
                 state.statusErrorMessage = action.payload.data
             }
         },
-        [getProfileById.fulfilled]: (state, action) => {
-            if (action.payload.status === 200) {
-                state.profile = action.payload.data
-                if (state.ownerId === action.payload.data._id) {
-                    state.isOwner = true
-                } else {
-                    state.isOwner = false
-                }
-            } else {
-                state.profileErrorMessage = action.payload.data
-            }
-        },
         [profileFollow.fulfilled]: (state, action) => {
             if (action.payload.status === 200) {
                 state.profile.status.map(s => {
@@ -237,14 +245,18 @@ const profileSlice = createSlice({
         },
         [followOutSide.fulfilled]: (state, action) => {
             if (action.payload.status === 200) {
-                state.profile.followingCount = state.profile.followingCount + 1
+                if(state.ownerId === state.profile._id){
+                    state.profile.followingCount = state.profile.followingCount + 1
+                }
             } else {
                 state.errorMessage = action.payload.data
             }
         },
         [unfollowOutside.fulfilled]: (state, action) => {
             if (action.payload.status === 200) {
-                state.profile.followingCount = state.profile.followingCount - 1
+                if(state.ownerId === state.profile._id){
+                    state.profile.followingCount = state.profile.followingCount - 1
+                }
             } else {
                 state.errorMessage = action.payload.data
             }
