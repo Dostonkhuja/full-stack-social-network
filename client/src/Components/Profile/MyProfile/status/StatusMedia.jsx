@@ -1,8 +1,8 @@
 import * as React from 'react'
 import {useEffect, useRef, useState} from 'react'
-import Commenty from "./Comment"
+import Commenty from "./comments/Comment"
 import Card from '@mui/material/Card'
-import SendComment from "./SendComment"
+import SendComment from "./comments/SendComment"
 import Avatar from '@mui/material/Avatar'
 import CardMedia from '@mui/material/CardMedia'
 import CardHeader from '@mui/material/CardHeader'
@@ -29,7 +29,7 @@ import {Link} from "react-router-dom";
 
 timeago.register('vi', vi);
 
-export default function StatusMedia({handleCurrentImage,isOwner,token,showComments,profileFollow,profileUnfollow,ownerId,liked,disliked,profile,ownerPhoto,status}) {
+export default function StatusMedia({handleCurrentImage,token,showComments,profileFollow,profileUnfollow,ownerId,liked,disliked,profile,ownerPhoto,status}) {
     console.log(status)
 
     const dispatch = useDispatch()
@@ -40,7 +40,7 @@ export default function StatusMedia({handleCurrentImage,isOwner,token,showCommen
     const handleClickOpen = () => {setOpen(true)}
     const handleClose = () => {setOpen(false)}
     const handleMaxWidthChange = (event) => {
-        setMaxWidth(event.target.value,);
+        setMaxWidth(event.target.value);
     };
     const handleFullWidthChange = (event) => {
         setFullWidth(event.target.checked);
@@ -80,7 +80,7 @@ export default function StatusMedia({handleCurrentImage,isOwner,token,showCommen
             <CardHeader
                 avatar={<Avatar src={profile.photos ? profile.photos.large : ''} sx={{bgcolor: 'pink', border: '3px solid white'}}/>}
                 action={<Button disabled={true} sx={{cursor:'default'}}> <MoreVertIcon /> </Button>}
-                title={profile.name}
+                title={profile.firstName + ' ' + profile.lastName}
                 subheader={<TimeAgo style={{color:'#777575'}} datetime={status.createdAt} locale='vi'/>}/>
 
             {status.text && <CardContent>
@@ -106,7 +106,6 @@ export default function StatusMedia({handleCurrentImage,isOwner,token,showCommen
                         <Button onClick={onButtonClickFocusInput} style={{marginLeft:'3rem'}}> <QuestionAnswerIcon color={'primary'}/> <p style={{marginLeft:'0.5rem'}}>to comment on</p></Button>
                     </div>
                 }
-
             </CardActions>
 
             {ownerId && <SendComment ownerPhoto={ownerPhoto} statusId={statusId} inputEl={inputEl}/>}
@@ -124,12 +123,12 @@ export default function StatusMedia({handleCurrentImage,isOwner,token,showCommen
 
                 <DialogContent>
                         <Box sx={{display:'flex',flexDirection:'column',height:'200px'}}>
-                            {status.liked && status.liked.map(l=> <div key={l._id} style={{display:'flex',alignItems:'center',justifyContent:'space-between'}}>
+                            {status.liked !==null && status.liked.map(l=> <div key={l._id} style={{display:'flex',alignItems:'center',justifyContent:'space-between'}}>
                                 <div>
                                     <Link to={`/profile/${l._id}`}  style={{display:'flex',alignItems:'center',textDecoration:'none',color:'#212121'}}>
                                         <Avatar src={l.photos.large ? l.photos.large : ''}
                                                 sx={{bgcolor: 'pink', border: '3px solid white',width:36, height: 36}}/>
-                                        <Typography variant="h6" component="h6"> {l.name} </Typography>
+                                        <Typography variant="h6" component="h6"> {l.firstName +' ' + l.lastName} </Typography>
                                     </Link>
                                 </div>
                                 {token && ownerId !== l._id && <FollowButton user={l} follow={profileFollow} unfollow={profileUnfollow}/>}

@@ -17,7 +17,7 @@ const Commenty = ({comment}) => {
                 <div style={{borderRadius: "20px", backgroundColor: '#f0f2f5', border: 'none',
                     outline: 'none', fontSize: '16px', resize: 'none', padding: '1rem'}}>
                     <div>
-                        <b>{comment.user.name}</b>
+                        <b>{comment.user.firstName +' '+ comment.user.lastName}</b>
                     </div>
                     {comment.comment}
                 </div>

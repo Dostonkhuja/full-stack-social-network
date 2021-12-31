@@ -15,13 +15,14 @@ module.exports = (io) => {
             if (action.type === 'server/forceDisconnect') {
                 socket.disconnect()
             }
-
-            socket.on('disconnect', async () => {
-                const user = users.find(u => u.socketId === socket.id)
-                await User.findByIdAndUpdate(user.userId,{isOnline:false})
-                users = users.filter(u => u.socketId !== socket.id)
-                // io.emit('action', {type:'online', data:users});
-            })
+        })
+        socket.on('disconnect', async () => {
+            const user = users.find(u => u.socketId === socket.id)
+            if(user){
+            await User.findByIdAndUpdate(user.userId,{isOnline:false})
+            users = users.filter(u => u.socketId !== socket.id)
+            io.emit('action', {type:'online', data:users});
+            }
         })
     })
 }

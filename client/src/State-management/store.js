@@ -7,6 +7,7 @@ import messengerSlice from './MessengerSlice'
 import AllFollowersSlice from "./AllFollowersSlice";
 import {OnlineSocketIoMiddleware} from "../Redux-middleware/initOnlineSocketMiddleware";
 import {messengerSocketIoMiddleware} from "../Redux-middleware/initMessengerSocketMiddleware";
+import AppSlice from './AppSlice'
 
 export const store = configureStore({
     reducer: {
@@ -16,6 +17,7 @@ export const store = configureStore({
         allFollowers:AllFollowersSlice,
         users:usersSlice,
         messenger:messengerSlice,
+        app:AppSlice
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({serializableCheck: false})

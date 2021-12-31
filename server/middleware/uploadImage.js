@@ -16,7 +16,13 @@ const storageCover = new cloudinaryStorage({
     cloudinary: cloudinary,
     uploadOptions: {folder:'social-network-covers'}
 })
+const storagePhoto = new cloudinaryStorage({
+    cloudinary: cloudinary,
+    uploadOptions: {folder:'social-network-owner-photos'}
+})
+
 
 module.exports.userPhotos = multer({storage: storageUserPhoto})
 module.exports.coverImage = multer({storage: storageCover})
+module.exports.ownerPhoto = multer({storage: storagePhoto})
 module.exports.statusPhotos = cloudinary.uploader

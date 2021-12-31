@@ -4,7 +4,7 @@ import {useDispatch} from "react-redux";
 import Avatar from "@mui/material/Avatar";
 import SendIcon from '@mui/icons-material/Send';
 import {Button, TextareaAutosize} from "@mui/material";
-import {newComment} from "../../../../State-management/ProfileSlice";
+import {newComment} from "../../../../../State-management/ProfileSlice";
 
 const SendComment = ({ownerPhoto,statusId,inputEl}) => {
 

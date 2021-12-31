@@ -2,14 +2,23 @@ import {createAsyncThunk} from "@reduxjs/toolkit";
 import createSocketIoMiddleware from 'redux-socket.io';
 import io from 'socket.io-client';
 
-let socket = io('http://localhost:5000/messenger',{autoConnect:false,transports: ["websocket"]});
+let socket = io('http://localhost:5000/messenger',{autoConnect:false,reconnection: true,transports: ["websocket"]});
 export const messengerSocketIoMiddleware = createSocketIoMiddleware(socket, "messenger/");
 
 // server dispatch
-export const getOwnerConversation = createAsyncThunk('init',(id, thunkAPI) => {
-   socket.connect()
-    thunkAPI.dispatch({type:'messenger/getOwnerConversation', data:{userId:id}})
+export const getOwnerConversation = createAsyncThunk('init',(data, thunkAPI) => {
+     const getOC= ()=> thunkAPI.dispatch({type:'messenger/getOwnerConversation', data:data})
+       socket.on("connect", () => {getOC()});
+       getOC()
 })
+
+export const getNotificationMsg = createAsyncThunk('notificationMsg',(ownerId, thunkAPI) => {
+    socket.connect()
+    const _dispatchMsgNtf =()=> thunkAPI.dispatch({type:'messenger/notificationSubscribe', ownerId})
+    socket.io.on('reconnect', function (attempt) {_dispatchMsgNtf()})
+    _dispatchMsgNtf()
+})
+
 
 export const createNewConversation = createAsyncThunk('create',(data, thunkAPI) => {
     thunkAPI.dispatch({type:'messenger/createConversation', data})
@@ -17,6 +26,14 @@ export const createNewConversation = createAsyncThunk('create',(data, thunkAPI) 
 
 export const joinRoom = createAsyncThunk('joinRoom',(conversationId, thunkAPI) => {
     thunkAPI.dispatch({type:'messenger/joinRoom', conversationId})
+})
+
+export const leaveRoom = createAsyncThunk('leaveRoom',(conversationId, thunkAPI) => {
+    thunkAPI.dispatch({type:'messenger/leaveChatRoom', conversationId})
+})
+
+export const setIsRead = createAsyncThunk('setIsRead',(data, thunkAPI) => {
+   thunkAPI.dispatch({type:'messenger/setIsRead', data})
 })
 
 export const newMessage = createAsyncThunk('newMess',(message, thunkAPI) => {

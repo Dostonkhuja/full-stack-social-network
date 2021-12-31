@@ -3,19 +3,20 @@ import MyProfile from "./MyProfile/MyProfile";
 import {useDispatch, useSelector} from "react-redux";
 import {useHistory, useParams} from "react-router-dom";
 import {
-    getAuthMe,
-    profileFollow,
-    profileUnfollow,
-    getProfileById,
     liked,
     disliked,
+    getAuthMe,
+    getStatus,
     showComments,
+    profileFollow,
+    getProfileById,
     updateMyAvatar,
-    updateMyCoverImage,
-    updateMyProfile,
     updateMyStatus,
-    getStatus
-} from "../../State-management/ProfileSlice";
+    profileUnfollow,
+    updateMyProfile,
+    updateMyCoverImage} from "../../State-management/ProfileSlice";
+import {defaultAllFollowers, getFollowed, getFollowers, isOwnerScope} from "../../State-management/AllFollowersSlice";
+import {setCurrentPage} from '../../State-management/AppSlice'
 
 const RootProfile = () => {
     console.log('Root Profile')
@@ -26,21 +27,23 @@ const RootProfile = () => {
     const {userId} = useParams()
     const token = localStorage.getItem('x-auth-token')
     const isOwner = useSelector(state => state.profile.isOwner)
-    const ownerPhoto = useSelector(state => state.profile.ownerProfile ? state.profile.ownerProfile.photos.large : null)
-    const ownerId = useSelector(state => state.profile.ownerProfile ? state.profile.ownerProfile._id:'')
     const profile = useSelector((state) => state.profile.profile)
+    const ownerId = useSelector(state => state.profile.ownerProfile ? state.profile.ownerProfile._id : '')
+    const ownerPhoto = useSelector(state => state.profile.ownerProfile ? state.profile.ownerProfile.photos.large : null)
 
-    useEffect(() => {
-        if (userId){
-            if (ownerId){
-                dispatch(getProfileById({userId,ownerId}))
-                return window.scrollTo(0, 0)
-            }else{
-                return dispatch(getProfileById(userId))
+    useLayoutEffect(() => {
+        dispatch(setCurrentPage(0))
+        if (userId) {
+            if (ownerId) {
+                dispatch(getProfileById({userId, ownerId}))
+                 window.scrollTo(0, 0)
+            } else {
+                dispatch(getProfileById(userId))
             }
+        } else {
+            token ? dispatch(getAuthMe()) : history.push('/signIn')
         }
-        else {token ? dispatch(getAuthMe()) : history.push('/signIn')}
-    }, [token,userId])
+    }, [token, userId])
 
     if (!profile)
         return <></>
@@ -60,6 +63,10 @@ const RootProfile = () => {
                                  updateMyProfile={updateMyProfile}
                                  updateMyStatus={updateMyStatus}
                                  updateMyCoverImage={updateMyCoverImage}
+                                 defaultAllFollowers={defaultAllFollowers}
+                                 getFollowers={getFollowers}
+                                 getFollowed={getFollowed}
+                                 isOwnerScope={isOwnerScope}
     />
 }
 

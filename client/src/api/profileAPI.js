@@ -1,4 +1,5 @@
 import instance from "./api";
+import {aboutMe} from "../State-management/ProfileSlice";
 
 export const profileAPI = {
     photo(photo) {
@@ -83,6 +84,14 @@ export const profileAPI = {
     },
     profile(data){
         return instance.post('/profile',data)
+            .then((res) => {return res})
+            .catch(e => {
+                if (e.response && e.response.data)
+                    return e.response
+            })
+    },
+    aboutMe(data){
+        return instance.post('/profile/aboutme',data)
             .then((res) => {return res})
             .catch(e => {
                 if (e.response && e.response.data)

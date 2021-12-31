@@ -7,11 +7,11 @@ const FollowButton = ({user, follow, unfollow,ownerId}) => {
 
     return (<>
         {user.isFollow
-            ? <Button disabled={ownerId === user._id && true} onClick={() => {dispatch(unfollow(user._id))}} variant="contained" color="success" sx={{mt: '1rem'}}>
+            ? <Button disabled={ownerId === user._id && true} onClick={() => {dispatch(unfollow(user._id))}} variant="contained" color="primary" sx={{mt: '1rem'}}>
                 unfollow
             </Button>
             :
-            <Button disabled={ownerId === user._id && true} onClick={() => {dispatch(follow(user._id))}} variant="contained" color="success" sx={{mt: '1rem'}}>
+            <Button disabled={ownerId === user._id && true} onClick={() => {dispatch(follow(user._id))}} variant="contained" color="primary" sx={{mt: '1rem'}}>
                 Follow
             </Button>
         }

@@ -23,7 +23,6 @@ const SignUp = React.memo(() => {
     }, [user])
 
     if (isAuth){
-        debugger
         return <Redirect to='/profile'/>
     }
 

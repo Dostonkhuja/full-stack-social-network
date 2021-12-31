@@ -15,13 +15,21 @@ const UpdateProfile = React.memo(({profile, updateMyProfile}) => {
 
     const formik = useFormik({
         initialValues: {
-            fullName: profile.fullName,
-            name: profile.name,
-            phoneNumber: profile.contacts ? profile.contacts.phoneNumber : ''
+            firstName: profile.firstName,
+            lastName: profile.lastName,
+            phoneNumber: profile.contacts ? profile.contacts.phoneNumber : '',
+            city: profile.city,
+            maritalStatus: profile.maritalStatus,
+            workPlace: profile.workPlace
         },
         onSubmit: values => {
             const data = {
-                fullName: values.fullName, name: values.name, contacts: {phoneNumber: values.phoneNumber}
+                firstName: values.firstName,
+                lastName: values.lastName,
+                contacts: {phoneNumber: values.phoneNumber},
+                city: values.city,
+                maritalStatus:values.maritalStatus,
+                workPlace:values.workPlace,
             }
             dispatch(updateMyProfile(data))
         }
@@ -41,22 +49,31 @@ const UpdateProfile = React.memo(({profile, updateMyProfile}) => {
 
     return <>
         <Grid item xs={12} sx={{display: 'flex', justifyContent: 'flex-end'}}>
-            <Button variant='contained' startIcon={<Settings/>} onClick={handleClickOpen}>
-                profile settings
+            <Button variant='contained' sx={{height:'35px',my:'0.5rem'}} size='small' startIcon={<Settings/>} onClick={handleClickOpen}>
+                change profile
             </Button>
             <Dialog fullWidth={fullWidth} maxWidth={maxWidth} open={open} onClose={handleClose}>
                 <DialogTitle>Profile settings</DialogTitle>
                 <DialogContent>
                     <Box sx={{display: 'flex', flexDirection: 'column', m: 'auto', width: 'fit-content',}}>
                         <form onSubmit={formik.handleSubmit}>
-                            <TextField id='name' name='name' value={formik.values.name} onChange={formik.handleChange}
-                                       label="name" variant="standard"/>
+                            <TextField id='firstName' name='firstName' value={formik.values.firstName} onChange={formik.handleChange}
+                                       label="first name" variant="standard"/>
                             <br/>
-                            <TextField id='fullName' name='fullName' value={formik.values.fullName}
-                                       onChange={formik.handleChange} label="full name" variant="standard"/>
+                            <TextField id='lastName' name='lastName' value={formik.values.lastName}
+                                       onChange={formik.handleChange} label="last name" variant="standard"/>
                             <br/>
                             <TextField id='phoneNumber' name='phoneNumber' value={formik.values.phoneNumber}
                                        onChange={formik.handleChange} label="phone number" variant="standard"/>
+                            <br/>
+                            <TextField id='city' name='city' value={formik.values.city}
+                                       onChange={formik.handleChange} label="city" variant="standard"/>
+                            <br/>
+                            <TextField id='maritalStatus' name='maritalStatus' value={formik.values.maritalStatus}
+                                       onChange={formik.handleChange} label="marital Status" variant="standard"/>
+                            <br/>
+                            <TextField id='workPlace' name='workPlace' value={formik.values.workPlace}
+                                       onChange={formik.handleChange} label="work place" variant="standard"/>
                             <br/><br/>
                             <Button type='submit' variant="outlined">change</Button>
                         </form>

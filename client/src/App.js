@@ -10,28 +10,32 @@ import Messenger from "./Components/Messenger/Messenger";
 import React, {useEffect} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {initalisationSocket} from "./Redux-middleware/initOnlineSocketMiddleware";
+import {getNotificationMsg} from './Redux-middleware/initMessengerSocketMiddleware'
+import {setCurrentPage} from './State-management/AppSlice'
 
 function App() {
 
     const dispatch = useDispatch()
 
     const ownerId = useSelector(state => state.profile.ownerId)
+    
 
     useEffect(() => {
         if (ownerId !== ''){
             dispatch(initalisationSocket(ownerId))
+            dispatch(getNotificationMsg(ownerId))
         }
     }, [ownerId])
 
     return (<>
         <Redirect to={'/profile'}/>
-        <div style={{position: 'sticky',top:'0',zIndex:'1'}}>
-            <Navbar/>
+        <div style={{position: 'sticky',top:'0',zIndex:'20'}}>
+            <Navbar setCurrentPage={setCurrentPage}/>
         </div>
         <Grid container spacing={1}>
             <Hidden only={['xs', 'sm', 'md']}>
-                <Grid item xs={2} sx={{}}>
-                    <NavigationMenu/>
+                <Grid item xs={2}>
+                    <NavigationMenu />
                 </Grid>
             </Hidden>
             <Grid item xs={12} sm={12} md={12} lg={10} xl={12}>

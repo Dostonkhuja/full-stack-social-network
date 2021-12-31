@@ -1,7 +1,8 @@
 import React from 'react';
-import {Avatar} from "@mui/material";
+import {Avatar, Typography} from "@mui/material";
 import styled from "@emotion/styled";
 import Badge from "@mui/material/Badge";
+import dateFormat from "dateformat";
 
 const Conversation = ({conversation}) => {
 
@@ -34,8 +35,8 @@ const Conversation = ({conversation}) => {
         },
     }))
 
-    return (
-        <div style={{display:'flex' ,alignItems:'center', margin:'1rem'}}>
+    return (<>
+        <div style={{display:'flex' ,alignItems:'center'}}>
             { conversation && conversation.members && conversation.members[0].isOnline
                 ? <StyledBadge
                     overlap="circular"
@@ -49,14 +50,19 @@ const Conversation = ({conversation}) => {
                 </StyledBadge>
                 : <Avatar
                     src={conversation ? conversation.members[0].photos ?conversation.members[0].photos.large : '':''}
-                    sx={{bgcolor: 'pink', border: '3px solid white', width: 55, height: 55, cursor: 'pointer'}}
-                />
+                    sx={{bgcolor: 'pink', border: '3px solid white', width: 55, height: 55, cursor: 'pointer'}}/>
             }
-
-
-            {conversation && conversation.members[0].name}
+          
+                 <div>
+                {conversation && conversation.members[0].firstName +' '+ conversation.members[0].lastName }
+                { conversation && conversation.members && !conversation.members[0].isOnline &&
+                <Typography variant="body2" color="text.secondary" fontSize={'10px'}>
+                    {dateFormat(conversation.members[0].updatedAt,'mmmm,dddd,h:MM')}
+                </Typography>}
+                </div>
+                <Badge invisible={!conversation.isNotReadingCount} badgeContent={conversation.isNotReadingCount} sx={{ml:'2rem'}} color="error"/>
         </div>
-    );
+    </>);
 };
 
 export default Conversation;

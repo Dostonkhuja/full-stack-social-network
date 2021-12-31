@@ -21,6 +21,15 @@ import {logoutAuth} from "../../State-management/ProfileSlice";
 import {socketDisconnect} from "../../Redux-middleware/initOnlineSocketMiddleware";
 import Followers from "../Profile/Friends/Followers";
 import {signUpLogout} from "../../State-management/SignUpSlice";
+import {useSelector} from "react-redux";
+import {Link} from "react-router-dom";
+import HomeIcon from '@mui/icons-material/Home';
+import PeopleIcon from '@mui/icons-material/People';
+import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
+import GroupWorkOutlinedIcon from '@mui/icons-material/GroupWorkOutlined';
+import {Avatar} from "@mui/material";
+import Tabs from "@mui/material/Tabs";
+import Tab from "@mui/material/Tab";
 
 const Search = styled('div')(({theme}) => ({
     position: 'relative',
@@ -62,7 +71,7 @@ const StyledInputBase = styled(InputBase)(({theme}) => ({
     },
 }));
 
-function Navbar() {
+function Navbar({setCurrentPage}) {
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
 
@@ -71,6 +80,13 @@ function Navbar() {
     const history = useHistory()
 
     const token = localStorage.getItem('x-auth-token')
+    const allNotReadingMessageCountNotification = useSelector(state => state.messenger.allNotReadingMessageCountNotification)
+    const currentPage = useSelector(state=>state.app.currentPage)
+    const ownerProfile = useSelector(state=>state.profile.ownerProfile)
+
+    const handleChange = (event, newValue) => {
+      dispatch(setCurrentPage(Number(newValue)))
+    };
 
     const handleLogout = () => {
         dispatch(socketDisconnect())
@@ -95,6 +111,7 @@ function Navbar() {
     };
 
     const handleMenuClose = () => {
+        history.push('/profile')
         setAnchorEl(null);
         handleMobileMenuClose();
     };
@@ -120,7 +137,6 @@ function Navbar() {
             open={isMenuOpen}
             onClose={handleMenuClose}
         >
-            <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
             <MenuItem onClick={handleMenuClose}>My account</MenuItem>
             {token && <MenuItem onClick={handleLogout}>logout</MenuItem>}
         </Menu>
@@ -201,12 +217,41 @@ function Navbar() {
                                 />
                             </Search>
 
-                            <Box sx={{flexGrow: 1}}/>
+                            <Box sx={{display: {xs: 'none', md: 'flex'}}}>
+                            
+                                <Box  sx={{ml:'4rem'}}>
+                                <Tabs onChange={handleChange} value={String(currentPage)}>
+                                    <Tab label={
+                                        <Link to="/">
+                                        <HomeIcon sx={{fontSize:'28px'}} color={currentPage === 1 ?'primary':'disabled'}/>
+                                        </Link>
+                                    } value="1" sx={{mr:'1rem'}}/>
+                                    <Tab label={
+                                        <Link to="/users">
+                                        <PeopleIcon sx={{fontSize:'28px'}}  color={currentPage === 2 ?'primary':'disabled'}/>
+                                        </Link> 
+                                    } value="2" sx={{mr:'1rem'}}/>
+                                    <Tab label={
+                                       <Link to="/">
+                                       <VisibilityOutlinedIcon sx={{fontSize:'30px'}}  color={currentPage === 4 ?'primary':'disabled'}/>
+                                       </Link>       
+                                    } value="4" sx={{mr:'1rem'}}/>
+                                    <Tab label={
+                                        <Link to="/">
+                                        <GroupWorkOutlinedIcon sx={{fontSize:'25px'}}  color={currentPage === 5 ?'primary':'disabled'}/>
+                                        </Link>      
+                                    } value="5" sx={{mr:'1rem'}}/>
+                                </Tabs>
+                                </Box>   
+                            </Box>
+                                <Box sx={{flexGrow: 1}}/>
                             <Box sx={{display: {xs: 'none', md: 'flex'}}}>
 
                                 <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-                                    <Badge badgeContent={4} color="error">
-                                        <MailIcon/>
+                                    <Badge badgeContent={allNotReadingMessageCountNotification} color="error">
+                                        <Link to="/messenger">
+                                        <MailIcon  sx={{fontSize:'25px'}} color={allNotReadingMessageCountNotification >0 ?'primary':'disabled'}/>
+                                        </Link>  
                                     </Badge>
                                 </IconButton>
                                 <IconButton
@@ -214,8 +259,10 @@ function Navbar() {
                                     aria-label="show 17 new notifications"
                                     color="inherit"
                                 >
-                                    <Badge badgeContent={17} color="error">
-                                        <NotificationsIcon/>
+                                    <Badge badgeContent={1} color="error">
+                                    <Link to="/">
+                                    <NotificationsIcon sx={{fontSize:'25px'}} color="primary"/>
+                                    </Link>  
                                     </Badge>
                                 </IconButton>
                                 <IconButton
@@ -227,7 +274,25 @@ function Navbar() {
                                     onClick={handleProfileMenuOpen}
                                     color="inherit"
                                 >
-                                    <AccountCircle/>
+                                     <Avatar
+                                src={ownerProfile&&ownerProfile.photos.large?ownerProfile.photos.large:''}
+                                sx={{
+                                    bgcolor: 'pink',
+                                    border: '3px solid white',
+                                    width: 28,
+                                    height: 28,
+                                    cursor: 'pointer'
+                                }}
+                            />
+                             <Typography
+                                variant="h6"
+                                noWrap
+                                fontSize="14px"
+                                component="div"
+                                sx={{display: {xs: 'none', sm: 'block'}}}
+                            >
+                                {ownerProfile && ownerProfile.firstName + " " + ownerProfile.lastName}
+                            </Typography>
                                 </IconButton>
                             </Box>
                             <Box sx={{display: {xs: 'flex', md: 'none'}}}>

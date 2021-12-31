@@ -13,10 +13,11 @@ const SignUpForm = React.memo(({errorMessage}) => {
 
     const [mouseErrorEmail, setMouseErrorEmail] = useState(false)
     const [mouseErrorPassword, setMouseErrorPassword] = useState(false)
-    const [mouseErrorNickName, setMouseErrorNickName] = useState(false)
+    const [mouseErrorlastName, setMouseErrorlastName] = useState(false)
+    const [mouseErrorfirstName, setMouseErrorfirstName] = useState(false)
 
     const formik = useFormik({
-        initialValues: {name: '', email: '', password: ''},
+        initialValues: {firstName: '',lastName: '', email: '', password: ''},
         onSubmit: values => {
             dispatch(sendSignUp(values))
             formik.values = ''
@@ -33,13 +34,19 @@ const SignUpForm = React.memo(({errorMessage}) => {
         formik.values.password === "" ? setMouseErrorPassword(true) : setMouseErrorPassword(false)
     }
     const handleOnFocusPassword = () => {
-        formik.values.password === "" ? setMouseErrorPassword(true) : setMouseErrorPassword(false)
+        formik.values.password === "" ? setMouseErrorPassword(false) : setMouseErrorPassword(true)
     }
-    const handleOnBlurNickName = () => {
-        formik.values.name === "" ? setMouseErrorNickName(true) : setMouseErrorNickName(false)
+    const handleOnBlurLastName = () => {
+        formik.values.lastName === "" ? setMouseErrorlastName(true) : setMouseErrorlastName(false)
     }
-    const handleOnFocusNickName = () => {
-        formik.values.name === "" ? setMouseErrorNickName(true) : setMouseErrorNickName(false)
+    const handleOnFocusLastName = () => {
+        formik.values.lastName === "" ? setMouseErrorlastName(false) : setMouseErrorlastName(true)
+    }
+    const handleOnBlurFirstName = () => {
+        formik.values.firstName === "" ? setMouseErrorfirstName(true) : setMouseErrorfirstName(false)
+    }
+    const handleOnFocusFirstName = () => {
+        formik.values.firstName === "" ? setMouseErrorfirstName(false) : setMouseErrorfirstName(true)
     }
 
     return (
@@ -47,17 +54,32 @@ const SignUpForm = React.memo(({errorMessage}) => {
             <Grid container spacing={2}>
                 <Grid item xs={12}>
                     <TextField
-                        onBlur={handleOnBlurNickName}
-                        onFocus={handleOnFocusNickName}
-                        error={mouseErrorNickName}
-                        helperText={mouseErrorNickName && "enter the your nick name"}
+                        onBlur={handleOnBlurFirstName}
+                        onFocus={handleOnFocusFirstName}
+                        error={mouseErrorfirstName}
+                        helperText={mouseErrorfirstName && "enter the your first name"}
                         required
                         fullWidth
-                        id="name"
-                        label="Nick name"
-                        name="name"
+                        id="firstName"
+                        label="first name"
+                        name="firstName"
                         onChange={formik.handleChange}
-                        value={formik.values.name}
+                        value={formik.values.firstName}
+                    />
+                </Grid>
+                <Grid item xs={12}>
+                    <TextField
+                        onBlur={handleOnBlurLastName}
+                        onFocus={handleOnFocusLastName}
+                        error={mouseErrorlastName}
+                        helperText={mouseErrorlastName && "enter the your last name"}
+                        required
+                        fullWidth
+                        id="lastName"
+                        label="last name"
+                        name="lastName"
+                        onChange={formik.handleChange}
+                        value={formik.values.lastName}
                     />
                 </Grid>
                 <Grid item xs={12}>

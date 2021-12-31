@@ -2,6 +2,7 @@ import {createSlice, createAsyncThunk} from "@reduxjs/toolkit";
 import {authAPI} from "../api/authAPI";
 import {profileAPI} from "../api/profileAPI";
 import {usersAPI} from "../api/usersAPI";
+import {myPhotosAPI} from "../api/myPhotosAPI";
 
 export const getAuthMe = createAsyncThunk('authMe/get', async () => {
     return await authAPI.me()
@@ -24,6 +25,9 @@ export const newComment = createAsyncThunk('profile/status/newComment', async (d
 export const updateMyProfile = createAsyncThunk('profile', async (data) => {
     return await profileAPI.profile(data)
 })
+export const aboutMe = createAsyncThunk('profile/aboutMe', async (data) => {
+    return await profileAPI.aboutMe(data)
+})
 export const getProfileById = createAsyncThunk('profile/userId', async (data) => {
     return await profileAPI.profileById(data)
 })
@@ -44,9 +48,16 @@ export const profileUnfollow = createAsyncThunk('profile/unfollow', async (id, t
     thunkAPI.dispatch(setFollowId(id))
     return await usersAPI.unfollow(id)
 })
+
 const followOutSide = createAsyncThunk('users/follow')
 const unfollowOutside = createAsyncThunk('users/unfollow')
 
+export const addNewMyPhoto = createAsyncThunk('profile/addNewMyPhoto', async (data) => {
+    return await myPhotosAPI.addNewMyPhoto(data)
+})
+export const getMyPhotos = createAsyncThunk('profile/getMyPhotos', async (data) => {
+    return await myPhotosAPI.getMyPhotos(data)
+})
 
 const profileSlice = createSlice({
     name: 'Profile',
@@ -55,6 +66,7 @@ const profileSlice = createSlice({
         ownerId: '',
         ownerProfile:null,
         profile: null,
+        myPhotos: null,
         followId:'',
         errorMessage: null,
         photosUploadErrorMessage: null,
@@ -70,6 +82,9 @@ const profileSlice = createSlice({
         },
         setFollowId: (state, action) => {
             state.followId = action.payload
+        },
+        myPhotosScope: (state, action) => {
+            state.myPhotos = []
         }
     },
     extraReducers: {
@@ -96,8 +111,8 @@ const profileSlice = createSlice({
                 state.profile = null
         }
         ,[getProfileById.pending]: (state) => {
-                // state.ownerProfile = null
                 state.profile = null
+                state.myPhotos = []
         },
         [getProfileById.fulfilled]: (state, action) => {
             if (action.payload.status === 200) {
@@ -125,10 +140,23 @@ const profileSlice = createSlice({
                 state.photosUploadErrorMessage = action.payload.data
             }
         },
+        [addNewMyPhoto.fulfilled]: (state, action) => {
+            if (action.payload.status === 200) {
+                state.profile.myPhotos.unshift(action.payload.data)
+                state.profile.myPhotosCount = state.profile.myPhotosCount + 1
+            } else {
+                state.photosUploadErrorMessage = action.payload.data
+            }
+        },
         [updateMyStatus.fulfilled]: (state, action) => {
             if (action.payload.status === 200) {
                 state.profile.status.unshift(action.payload.data.newStatus)
                 state.profile.statusCount = action.payload.data.statusCount
+                if(action.payload.data.newStatus.photoFile !==null){
+                    debugger
+                    state.profile.myPhotos = [...state.profile.myPhotos,{_id:Math.random(),photo:action.payload.data.newStatus.photoFile}]
+                    // state.profile.myPhotosCount = state.profile.myPhotosCount + 1
+                }
             } else {
                 state.statusErrorMessage = action.payload.data
             }
@@ -208,9 +236,19 @@ const profileSlice = createSlice({
         },
         [updateMyProfile.fulfilled]: (state, action) => {
             if (action.payload.status === 200) {
-                state.profile.fullName = action.payload.data.fullName
-                state.profile.name = action.payload.data.name
+                state.profile.firstName = action.payload.data.firstName
+                state.profile.lastName = action.payload.data.lastName
+                state.profile.city = action.payload.data.city
+                state.profile.workPlace = action.payload.data.workPlace
+                state.profile.maritalStatus = action.payload.data.maritalStatus
                 state.profile.contacts = action.payload.data.contacts
+            } else {
+                state.statusErrorMessage = action.payload.data
+            }
+        },
+        [aboutMe.fulfilled]: (state, action) => {
+            if (action.payload.status === 200) {
+                state.profile.aboutMe = action.payload.data.aboutMe
             } else {
                 state.statusErrorMessage = action.payload.data
             }
@@ -261,8 +299,19 @@ const profileSlice = createSlice({
                 state.errorMessage = action.payload.data
             }
         },
+        [getMyPhotos.fulfilled]: (state, action) => {
+            if (action.payload.status === 200) {
+                if(state.myPhotos!==null){
+                    state.myPhotos = [...state.myPhotos,...action.payload.data.myPhotos]
+                }else{
+                    state.myPhotos = action.payload.data.myPhotos
+                }
+            } else {
+                state.errorMessage = action.payload.data
+            }
+        },
     }
 })
 
 export default profileSlice.reducer
-export const {logoutAuth,setFollowId} = profileSlice.actions
+export const {logoutAuth,setFollowId,myPhotosScope} = profileSlice.actions

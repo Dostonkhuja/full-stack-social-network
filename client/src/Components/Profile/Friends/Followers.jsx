@@ -5,6 +5,7 @@ import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import {Avatar, Button} from "@mui/material";
+import {Link} from "react-router-dom";
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -23,31 +24,19 @@ function TabPanel(props) {
                 </Box>
             )}
         </div>
-    );
+    )
 }
 TabPanel.propTypes = {
     children: PropTypes.node,
     index: PropTypes.number.isRequired,
     value: PropTypes.number.isRequired,
-};
+}
 
-export default function Friends({profile,openAllFollowers,setOpenAllFollowers,setOnFollowers}) {
+export default function Friends({profile,handleTabChange}) {
     const [value, setValue] = React.useState(0);
 
     const handleChange = (event, newValue) => {
         setValue(newValue)
-        setOpenAllFollowers(false)
-        setOnFollowers(true)
-    };
-
-    const handleAllFollowers = () => {
-        setOpenAllFollowers(true)
-        setOnFollowers(true)
-    }
-
-    const handleAllFollowed = () => {
-        setOpenAllFollowers(true)
-        setOnFollowers(false)
     }
 
     return (
@@ -58,46 +47,56 @@ export default function Friends({profile,openAllFollowers,setOpenAllFollowers,se
                     <Tab label="Followed"/>
                 </Tabs>
             </Box>
-            {!openAllFollowers &&
-                <div style={{height:'470px'}}>
+                <div>
             <TabPanel value={value} index={0}>
-                {!openAllFollowers && <div>
-                    <div style={{display:'flex',color:'#bdbdbd',alignItems:'center',justifyContent:'space-between'}}>
+                    <div style={{display:'flex',color:'#1a1a1a',alignItems:'center',justifyContent:'space-between'}}>
                         <Typography>
-                            followers
+                            <b>followers</b>
                             <span style={{color:'#bdbdbd',marginLeft:'0.5rem'}}>{profile.followedCount}</span>
                         </Typography>
-                        <Button onClick={handleAllFollowers}>All followers</Button>
+                        <Button onClick={()=>handleTabChange('',1)}>All followers</Button>
                     </div>
-                    <div style={{display:'flex',justifyContent:'space-between', flexWrap:'wrap', padding:'1rem',alignItems:'center'}}>
-                        {profile !==null && profile.followed.map(f=> <div key={f._id} style={{display:'flex',alignItems:'center',flexDirection:'column'}}>
-                                <Avatar variant="square"  src={f.photos ? f.photos.large : ''}
-                                        sx={{bgcolor: 'pink', width: 100, height: 100, borderRadius:'1rem', cursor: 'pointer'}}/>
-                               <span> {f.name}</span>
-                            </div>)}
-                    </div>
-                </div>}
+                    <div style={{display:'grid', gridTemplateColumns:'repeat(auto-fill, 110px)',justifyContent:'space-between'}}>
+                        {profile.followed.map(f=> <div key={f._id}>
+                            <Link to={`/profile/${f._id}`} style={{textDecoration:'none'}}>
+                                <div style={{display:'flex',alignItems:'center',flexDirection:'column',marginTop:'0.5rem',marginRight:'0.5rem'}}>
+                                    <Avatar variant="square"  src={f.photos ? f.photos.large : ''}
+                                            sx={{bgcolor: 'pink', width: 100, height: 100, borderRadius:'1rem', cursor: 'pointer'}}/>
+                                    <Typography fontSize={16} sx={{mt:"5px",color:'#000000'}}>
+                                        <span>{f.firstName + ' '}</span>
+                                        <span>{f.lastName.length > 3 ? f.lastName.substring(0,3) + '...': f.lastName}</span>
+                                    </Typography>
+                                </div>
+                            </Link>
+                        </div>)}
+                </div>
                 </TabPanel>
             <TabPanel value={value} index={1}>
-                <div>
-                <div style={{display:'flex',color:'#bdbdbd',alignItems:'center',justifyContent:'space-between'}}>
+                <div style={{display:'flex',color:'#1a1a1a',alignItems:'center',justifyContent:'space-between'}}>
                     <Typography>
-                        followed
+                        <b>followed</b>
                         <span style={{color:'#bdbdbd',marginLeft:'0.5rem'}}>{profile.followingCount}</span>
                     </Typography>
-                    <Button onClick={handleAllFollowed}>All followed</Button>
+                    <Button onClick={()=>handleTabChange('',2)}>All followed</Button>
                 </div>
-                <div style={{display:'flex',justifyContent:'flax-start', flexWrap:'wrap', padding:'1rem',alignItems:'center'}}>
-                    {profile !==null && profile.following.map(f=><div key={f._id} style={{display:'flex',alignItems:'center',flexDirection:'column',marginTop:'0.5rem',marginRight:'1.2rem'}}>
-                        <Avatar variant="square"  src={f.photos ? f.photos.large : ''}
-                                sx={{bgcolor: 'pink', width: 100, height: 100, borderRadius:'1rem', cursor: 'pointer'}}/>
-                        <span>{f.name}</span>
+                <div style={{display:'grid', gridTemplateColumns:'repeat(auto-fill, 110px)',justifyContent:'space-between'}}>
+                    {profile.following.map(f=><div key={f._id}>
+                        <Link to={`/profile/${f._id}`} style={{textDecoration:'none'}}>
+                            <div style={{display:'flex',alignItems:'center',flexDirection:'column',marginTop:'0.5rem',marginRight:'0.5rem'}}>
+                                <Avatar variant="square"  src={f.photos ? f.photos.large : ''}
+                                        sx={{bgcolor: 'pink', width: 100, height: 100, borderRadius:'1rem', cursor: 'pointer'}}/>
+
+                                <Typography fontSize={16} sx={{mt:"5px",color:'#000000'}}>
+                                    <span>{f.firstName + ' '}</span>
+                                    {/*<span>{f.lastName}</span>*/}
+                                    <span>{f.lastName.length > 3 ? f.lastName.substring(0,3) + '...': f.lastName}</span>
+                                </Typography>
+                            </div>
+                        </Link>
                     </div>)}
-                </div>
                 </div>
             </TabPanel>
             </div>
-            }
         </>
-    );
+    )
 }

@@ -7,8 +7,9 @@ import Badge from "@mui/material/Badge";
 import EmailIcon from '@mui/icons-material/Email';
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 
-const User = ({user, follow, unfollow, token, handleSendMessage,ownerId,handleCloseAllFollowers}) => {
+import dateFormat from "dateformat";
 
+const User = ({user, follow, unfollow, token, handleSendMessage,ownerId,handleCloseAllFollowers}) => {
     const StyledBadge = styled(Badge)(({ theme }) => ({
         '& .MuiBadge-badge': {
             backgroundColor: '#44b700',
@@ -40,7 +41,7 @@ const User = ({user, follow, unfollow, token, handleSendMessage,ownerId,handleCl
 
     return (
             <Card sx={{display: 'flex', justifyContent: 'space-around', flexWrap: 'wrap', padding: '1rem'}}>
-                <Link to={`/profile/${user._id}`} onClick={()=> handleCloseAllFollowers && handleCloseAllFollowers()}>
+                <Link to={`/profile/${user._id}`} style={{textDecoration:'none'}} onClick={()=> handleCloseAllFollowers && handleCloseAllFollowers()}>
                     { user.isOnline
                         ? <StyledBadge
                         overlap="circular"
@@ -51,11 +52,17 @@ const User = ({user, follow, unfollow, token, handleSendMessage,ownerId,handleCl
                             src={user.photos ? user.photos.large : ''}
                             sx={{bgcolor: 'pink', width: 100 , height: 100, cursor: 'pointer'}}
                         />
+                        
                     </StyledBadge>
-                        : <Avatar
-                            src={user.photos ? user.photos.large : ''}
-                            sx={{bgcolor: 'pink', width: 100, height: 100, cursor: 'pointer'}}
-                        />
+                        : <div style={{display:"flex",alignItems:'center',flexDirection:'column'}}>
+                            <Avatar
+                                src={user.photos ? user.photos.large : ''}
+                                sx={{bgcolor: 'pink', width: 100, height: 100, cursor: 'pointer'}}
+                            />
+                            <Typography variant="body2" color="text.secondary">
+                                {dateFormat(user.updatedAt,'dd,mmm,hh:MM')}
+                            </Typography>
+                        </div>
                     }
                 </Link>
                 <div style={{
@@ -66,12 +73,13 @@ const User = ({user, follow, unfollow, token, handleSendMessage,ownerId,handleCl
                     flexDirection: 'column'
                 }}>
                     <Typography gutterBottom variant="h5" component="div">
-                        {user.name}
+                        {user.firstName + ' '}{user.lastName}
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
                         {user.email}
                     </Typography>
                     {token && <FollowButton user={user} follow={follow} unfollow={unfollow} token={token} ownerId={ownerId}/>}
+
                 </div>
                 {token &&
                     <div onClick={()=>ownerId !== user._id && handleSendMessage(user._id)} style={{cursor:'pointer'}}>

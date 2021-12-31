@@ -5,17 +5,13 @@ import User from "./User";
 import {Grid, Pagination} from "@mui/material";
 import {useHistory} from "react-router-dom";
 import {createNewConversation} from "../../Redux-middleware/initMessengerSocketMiddleware";
+import {setCurrentPage} from '../../State-management/AppSlice'
 
 const Users = () => {
 
     const dispatch = useDispatch()
     const history = useHistory()
-
-    const handleSendMessage = (userId) => {
-        dispatch(createNewConversation({ownerId,userId}))
-        history.push('/messenger')
-    }
-
+    
     const ownerId = useSelector(state => state.profile.ownerId)
     const users = useSelector(state => state.users.users)
     const totalUsersCount = useSelector(state => state.users.totalUsersCount)
@@ -25,7 +21,13 @@ const Users = () => {
         dispatch(getUsers({pageSize: 10, pageNumber: page}))
     }, [users])
 
+    const handleSendMessage = (userId) => {
+        dispatch(createNewConversation({ownerId,userId}))
+        history.push('/messenger')
+    }
+
     useEffect(() => {
+        dispatch(setCurrentPage(2))
         dispatch(getUsers({pageSize: 10, pageNumber: 1}))
     }, [])
 

@@ -9,7 +9,7 @@ module.exports = () => {
     winston.add(new winston.transports.File({filename: 'social-network-logs.log', level: 'error'}))
     //error darajadagi loglarni databasega yozamiz
     winston.add(new winston.transports.MongoDB({
-            db: "mongodb://localhost/virtualDars-logs", level: 'error', options: {useUnifiedTopology: true}
+            db: "mongodb://localhost/social-network-logs", level: 'error', options: {useUnifiedTopology: true}
         },
     ))
     //dasturimizdagi exeption xatolarini ilib olib consolega chiqaramiz va file tarzida loyihamiz papkasiga kiritamiz
@@ -21,6 +21,7 @@ module.exports = () => {
     process.on('unhandledRejection', ex => {
         throw ex
     })
+
     // process.on('uncaughtException', ex => {
     //     winston.error(('uncaughtException xatosi \n' + ex.message, ex))
     //     process.exit(1)

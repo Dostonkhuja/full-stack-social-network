@@ -1,19 +1,24 @@
-import React, {useEffect, useRef} from 'react';
-import {Avatar, Button, Grid, TextField} from "@mui/material";
+import React, {useEffect, useRef, useState} from 'react';
+import {Avatar, Button, Grid, TextField, Typography} from "@mui/material";
 import {useFormik} from "formik";
-import {newMessage} from "../../../Redux-middleware/initMessengerSocketMiddleware";
 import {useDispatch} from "react-redux";
 import styled from "@emotion/styled";
 import Badge from "@mui/material/Badge";
 import TimeAgo from 'timeago-react'
 import * as timeago from 'timeago.js'
 import vi from 'timeago.js/lib/lang/ru'
+import dateFormat from "dateformat";
+import EmojiEmotionsIcon from '@mui/icons-material/EmojiEmotions';
+import Picker , { SKIN_TONE_MEDIUM_DARK } from 'emoji-picker-react';
+import CheckIcon from '@mui/icons-material/Check';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
 timeago.register('vi', vi);
 
-const Dialogs = ({messages,ownerProfile,currentConversation }) => {
+const Dialogs = ({messages,ownerProfile,currentConversation,newMessage,setIsRead}) => {
 
     const dispatch = useDispatch()
+    const [openEmoji, setOpenEmoji] = useState(false);
 
     const formik = useFormik({
         initialValues: {
@@ -25,14 +30,24 @@ const Dialogs = ({messages,ownerProfile,currentConversation }) => {
                 sender:ownerProfile._id,
                 text:values.message
             }
-
             dispatch(newMessage(message))
-
             formik.values.message = ''
+            setOpenEmoji(false)
         }
-
-
     })
+
+    const handleTextChange = (e) => {
+        const {name, value} = e.target
+        formik.setFieldValue(name, value)
+    }
+
+    const onEmojiClick = (event, emojiObject) => {
+         formik.setFieldValue('message', formik.values.message + emojiObject.emoji)
+    }
+
+    const openEmojiHandle = () => {
+        setOpenEmoji(!openEmoji)
+    }
 
     const StyledBadge = styled(Badge)(({ theme }) => ({
         '& .MuiBadge-badge': {
@@ -63,82 +78,161 @@ const Dialogs = ({messages,ownerProfile,currentConversation }) => {
         },
     }));
 
-    return (<>
-            {<div style={{display:'flex',alignItems:'center',borderBottom:'1px solid'}}>
+    const isReadMyMessage = (messageId,sender)=>{
+        if(sender !== ownerProfile._id){
+             dispatch(setIsRead({messageId,isRead:true}))
+        }
+    }
 
-                { currentConversation && currentConversation.members[0].isOnline
-                    ? <div>
-                        <StyledBadge
-                            overlap="circular"
-                            anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-                            variant="dot"
-                        >
+
+    return (<div>
+        {currentConversation ?
+            <div>
+                {<div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    border: '2px solid #f3f3f3',
+                    height: '38px',
+                    padding: '5px'
+                }}>
+                    {currentConversation && currentConversation.members[0].isOnline
+                        ? <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', padding: '0.5rem'}}>
+                            <StyledBadge
+                                overlap="circular"
+                                anchorOrigin={{vertical: 'bottom', horizontal: 'right'}}
+                                variant="dot"
+                            >
+                                <Avatar
+                                    src={currentConversation && currentConversation.members[0].photos ? currentConversation.members[0].photos.large : ''}
+                                    sx={{
+                                        bgcolor: 'pink',
+                                        border: '3px solid white',
+                                        width: 35,
+                                        height: 35,
+                                        cursor: 'pointer'
+                                    }}
+                                />
+                            </StyledBadge>
+                            {currentConversation.members[0].firstName + ' ' + currentConversation.members[0].lastName}
+                        </div>
+                        : <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', padding: '0.5rem'}}>
                             <Avatar
-                                src={currentConversation && currentConversation.members[0].photos ?currentConversation.members[0].photos.large : ''}
-                                sx={{bgcolor: 'pink', border: '3px solid white', width: 55, height: 55, cursor: 'pointer'}}
+                                src={currentConversation && currentConversation.members[0].photos ? currentConversation.members[0].photos.large : ''}
+                                sx={{
+                                    bgcolor: 'pink',
+                                    border: '3px solid white',
+                                    width: 35,
+                                    height: 35,
+                                    cursor: 'pointer'
+                                }}
                             />
-                        </StyledBadge>
-                        {currentConversation && currentConversation.members[0].name}
-                    </div>
-                    :  <div>
-                        <Avatar
-                            src={currentConversation && currentConversation.members[0].photos ?currentConversation.members[0].photos.large : ''}
-                            sx={{bgcolor: 'pink', border: '3px solid white', width: 55, height: 55, cursor: 'pointer'}}
-                        />
-                        {currentConversation && currentConversation.members[0].name}
-                    </div>
-                }
-            </div>}
+                            {currentConversation &&
+                                <div>
+                                    {currentConversation.members[0].firstName + ' ' + currentConversation.members[0].lastName}
+                                    <Typography variant="body2" color="text.secondary" fontSize={'10px'}>
+                                        {dateFormat(currentConversation.members[0].updatedAt, 'mmmm,dddd,h:MM')}
+                                    </Typography>
+                                </div>
+                            }
+                        </div>
+                    }
+                </div>}
 
+                <div style={{minHeight: `${window.screen.height - 315}px`, maxHeight: '400px', overflowY: 'scroll'}}>
+                    {messages && <Message messages={messages} currentConversation={currentConversation}
+                                          ownerProfile={ownerProfile} isReadMyMessage={isReadMyMessage}/>}
+                </div>
 
-        <div style={{height:'450px',overflowY:'scroll'}}>
-            {messages && messages.map(m=><Message message={m} currentConversation={currentConversation} ownerProfile={ownerProfile} key={m._id}/>)}
-        </div>
-
-            <form onSubmit={formik.handleSubmit}>
-                <Grid container sx={{display: 'flex',justifyContent: 'center',mt:'1rem'}}>
-                    <Grid item xs={12} xl={11} lg={11} md={11} sm={12}>
-                        <TextField
-                            multiline rows={4} fullWidth id="message"
-                            onChange={formik.handleChange} value={formik.values.message}
-                            label="send message" variant="outlined"/>
-                    </Grid>
-                    <Grid item xs={12} xl={1} lg={1} md={1} sm={12}>
-                        <Button fullWidth sx={{height: '125px'}} variant="outlined" type="submit">send</Button>
-                    </Grid>
-                </Grid>
-            </form>
-        </>
-    )
+                <div>
+                    <form onSubmit={formik.handleSubmit}>
+                        <Grid container sx={{display: 'flex', justifyContent: 'center'}}>
+                            <Grid item xs={12} xl={10} lg={10} md={10} sm={12}>
+                            <textarea id="message" onChange={handleTextChange} name='message'
+                                      value={formik.values.message}
+                                      label="send message" variant="outlined" aria-label="empty textarea"
+                                      placeholder="write..." style={{
+                                backgroundColor: '#f0f2f5',
+                                width: '97%',
+                                resize: 'none',
+                                outline: 'none',
+                                borderRadius: '10px',
+                                border: 'none',
+                                boxSize: 'border-box',
+                                padding: '10px',
+                                overflowY: 'auto',
+                                fontSize: '18px'
+                            }}/>
+                            </Grid>
+                            <Grid item xs={12} xl={2} lg={2} md={2} sm={12} sx={{display: 'flex',alignItems:'center',justifyContent:'space-around',position:'relative'}}>
+                                {openEmoji && <div style={{position:'absolute',bottom:80,right:75}}>
+                                    <Picker onEmojiClick={onEmojiClick} skinTone={SKIN_TONE_MEDIUM_DARK}/>
+                                </div>}
+                                <EmojiEmotionsIcon onClick={openEmojiHandle} color='primary' sx={{cursor:'pointer'}}/>
+                                <div style={{
+                                    marginLeft: '1rem',
+                                    height: '100%',
+                                    display: 'flex',
+                                    justifyContent: 'end'
+                                }}>
+                                    <Button disabled={formik.values.message === '' ?true:false } fullWidth variant="outlined" type="submit">send</Button>
+                                </div>
+                            </Grid>
+                        </Grid>
+                    </form>
+                </div>
+            </div>
+            :<Typography variant="h2" color={'#bdbdbd'} style={{marginTop:'5rem',textAlign:'center'}}>
+                    choose who you would like to write...
+            </Typography>
+        }</div>)
 }
 
-function Message({message,currentConversation,ownerProfile}) {
+function Message({isReadMyMessage,messages,currentConversation,ownerProfile}) {
+    const dispatch = useDispatch()
     const scrollRef = useRef();
 
     useEffect(() => {
-        scrollRef.current?.scrollIntoView({ behavior: "smooth" });
-    }, [message]);
+         scrollRef.current?.scrollIntoView({block: "end"});
+    }, [messages])
 
-    return <div  ref={scrollRef}>
+    return <div ref={scrollRef}>
+        { messages.map(message=>{
+            
+            if(!message.isRead){
+                isReadMyMessage(message._id,message.sender)
+            }
 
-        <div style={message.sender === ownerProfile._id
-            ? {display: 'flex', justifyContent: 'flex-end', margin: '1rem'}
-            : {display: 'flex', justifyContent: 'flex-start',alignItems:'center'}}>
-
-            {message.sender !== ownerProfile._id &&
-            <Avatar
-                src={currentConversation && currentConversation.members[0].photos ?currentConversation.members[0].photos.large : ''}
-                sx={{bgcolor: 'pink', border: '3px solid white', width: 55, height: 55, cursor: 'pointer'}}
-            />}
-            <div>
-            <div style={message.sender === ownerProfile._id
-                ? {backgroundColor: '#0084ff', color: 'white', padding: '0.5rem',borderRadius:'10px'}
-                : {backgroundColor: '#e4e6eb', margin: '1rem',padding: '0.5rem',borderRadius:'10px'}}>
-                <p> {message.text}</p>
+            return <div key={message._id} style={message.sender === ownerProfile._id
+                ? {display: 'flex', justifyContent: 'flex-end', margin: '0.5rem'}
+                : {display: 'flex', justifyContent: 'flex-start'}}>
+                {message.sender !== ownerProfile._id &&
+                    <Avatar
+                        src={currentConversation && currentConversation.members[0].photos ?currentConversation.members[0].photos.large : ''}
+                        sx={{bgcolor: 'pink', border: '3px solid white', width: 55, height: 55, cursor: 'pointer'}}
+                    />}
+                <div>
+                    <div style={message.sender === ownerProfile._id
+                        ? {backgroundColor: '#0084ff', color: 'white',borderRadius:'10px',minWidth:'120px',padding:'0.5rem',margin:'0.5rem',justifyContent:'center'}
+                        : {backgroundColor: '#e4e6eb', color: 'black',padding:'1px',borderRadius:'10px',minWidth:'120px',padding:'0.5rem',margin:'0.5rem',justifyContent:'center'}}>
+                    
+                        <Typography variant="p" fontSize={'16px'}>
+                                {message.text}
+                         </Typography>
+    
+                        {message.sender === ownerProfile._id 
+                        ?<div style={{display:'flex',justifyContent:'end',padding:0}}>
+                            {
+                                message.isRead 
+                                ? <span><CheckCircleIcon color="#fff" fontSize="10px"/></span>
+                                :<span><CheckIcon color="#fff" fontSize="10px"/></span>
+                            }
+                        </div>
+                        :''}
+                    </div>
+                    <TimeAgo style={{color:'#777575'}} datetime={message.createdAt} locale='vi'/>
+                </div>
             </div>
-                <TimeAgo style={{color:'#777575'}} datetime={message.createdAt} locale='vi'/>
-            </div>
-        </div>
+        })}
     </div>
 }
 

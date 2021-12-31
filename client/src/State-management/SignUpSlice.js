@@ -3,7 +3,7 @@ import {authAPI} from "../api/authAPI";
 
 export const sendSignUp = createAsyncThunk(
     'signUp/sendSignUp', async (data,thunkAPI) => {
-        thunkAPI.dispatch(setSignInData({values:{email: data.email, password: data.password}}))
+        thunkAPI.dispatch(setSignInData({values:{lastName:data.lastName,firstName:data.firstName,email: data.email, password: data.password}}))
         return await authAPI.signUp(data)
     })
 

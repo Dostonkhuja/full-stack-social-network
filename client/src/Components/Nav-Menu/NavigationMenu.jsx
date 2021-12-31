@@ -7,20 +7,23 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import GroupWorkIcon from '@mui/icons-material/GroupWork';
 import WbSunnyIcon from '@mui/icons-material/WbSunny';
 import {NavLink} from "react-router-dom";
+import {setCurrentPage } from '../../State-management/AppSlice'
+import {useDispatch,useSelector} from 'react-redux'
 
 const NavigationMenu = () => {
+    const dispatch = useDispatch()
 
-    const [selectedIndex, setSelectedIndex] = React.useState(0)
+    const currentPage = useSelector(state=> state.app.currentPage)
 
     const handleListItemClick = (event, index) => {
-        setSelectedIndex(index);
+        dispatch(setCurrentPage(index))
     }
 
     return (
         <div>
             <List>
                 <NavLink to={'/profile'} style={{textDecoration:'none',color:'black'}}>
-                <ListItem button selected={selectedIndex === 0} onClick={(event) => handleListItemClick(event, 0)}>
+                <ListItem button selected={currentPage === 0} onClick={(event) => handleListItemClick(event, 0)}>
                     <ListItemIcon>
                         <PersonIcon/>
                     </ListItemIcon>
@@ -29,7 +32,7 @@ const NavigationMenu = () => {
                 </NavLink>
 
                 <NavLink to={'/users'} style={{textDecoration:'none',color:'black'}}>
-                <ListItem button selected={selectedIndex === 1} onClick={(event) => handleListItemClick(event, 1)}>
+                <ListItem button selected={currentPage === 2} onClick={(event) => handleListItemClick(event, 2)}>
                     <ListItemIcon>
                         <PeopleAltIcon/>
                     </ListItemIcon>
@@ -38,7 +41,7 @@ const NavigationMenu = () => {
                 </NavLink>
 
                 <NavLink to={'/messenger'} style={{textDecoration:'none',color:'black'}}>
-                <ListItem button selected={selectedIndex === 2} onClick={(event) => handleListItemClick(event, 2)}>
+                <ListItem button selected={currentPage === 3} onClick={(event) => handleListItemClick(event, 3)}>
                     <ListItemIcon>
                         <MailIcon/>
                     </ListItemIcon>
@@ -47,7 +50,7 @@ const NavigationMenu = () => {
                 </NavLink>
 
                 <NavLink to={'/guests'} style={{textDecoration:'none',color:'black'}}>
-                <ListItem button selected={selectedIndex === 3} onClick={(event) => handleListItemClick(event, 3)}>
+                <ListItem button selected={currentPage === 4} onClick={(event) => handleListItemClick(event, 4)}>
                     <ListItemIcon>
                         <VisibilityIcon/>
                     </ListItemIcon>
@@ -56,7 +59,7 @@ const NavigationMenu = () => {
                 </NavLink>
 
                 <NavLink to={'/groups'} style={{textDecoration:'none',color:'black'}}>
-                <ListItem button selected={selectedIndex === 4} onClick={(event) => handleListItemClick(event, 4)}>
+                <ListItem button selected={currentPage === 5} onClick={(event) => handleListItemClick(event, 5)}>
                     <ListItemIcon>
                         <GroupWorkIcon/>
                     </ListItemIcon>
@@ -65,7 +68,7 @@ const NavigationMenu = () => {
                 </NavLink>
 
                 <NavLink to={'/wather'} style={{textDecoration:'none',color:'black'}}>
-                <ListItem button selected={selectedIndex === 5} onClick={(event) => handleListItemClick(event, 5)}>
+                <ListItem button selected={currentPage === 6} onClick={(event) => handleListItemClick(event, 6)}>
                     <ListItemIcon>
                         <WbSunnyIcon/>
                     </ListItemIcon>
