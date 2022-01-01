@@ -7,6 +7,7 @@ module.exports = (app) => {
     app.use(express.urlencoded({limit: '50mb'}))
     app.use(express.json({limit: '50mb',extended:true}))
     app.use('/',require('../routes/main'))
+    app.use('/api/status',require('../routes/status'))
     app.use('/api/auth',require('../routes/auth'))
     app.use('/api/profile',require('../routes/profile'))
     app.use('/api/follow',require('../routes/follow'))

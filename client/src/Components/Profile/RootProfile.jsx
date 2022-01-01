@@ -13,6 +13,7 @@ import {
     updateMyAvatar,
     updateMyStatus,
     profileUnfollow,
+    newComment,
     updateMyProfile,
     updateMyCoverImage} from "../../State-management/ProfileSlice";
 import {defaultAllFollowers, getFollowed, getFollowers, isOwnerScope} from "../../State-management/AllFollowersSlice";
@@ -67,6 +68,7 @@ const RootProfile = () => {
                                  getFollowers={getFollowers}
                                  getFollowed={getFollowed}
                                  isOwnerScope={isOwnerScope}
+                                 newComment={newComment}
     />
 }
 

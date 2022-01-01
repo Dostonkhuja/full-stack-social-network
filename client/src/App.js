@@ -1,4 +1,5 @@
 import {Redirect, Route} from "react-router-dom";
+import Home from './Components/Home/Home'
 import SignIn from "./Components/SignIn/SignIn";
 import SignUp from "./Components/SignUp/SignUp";
 import Users from "./Components/Users/Users";
@@ -39,7 +40,7 @@ function App() {
                 </Grid>
             </Hidden>
             <Grid item xs={12} sm={12} md={12} lg={10} xl={12}>
-                <Route exact path='/' render={() => <h1>HOME PAGE</h1>}/>
+                <Route exact path='/' render={() => <Home/>}/>
                 <Route path='/profile/:userId?' render={() => <RootProfile/>}/>
                 <Route path='/users' render={() => <Users/>}/>
                 <Route path='/signIn' render={() => <SignIn/>}/>

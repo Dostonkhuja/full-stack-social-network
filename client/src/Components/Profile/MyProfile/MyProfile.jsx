@@ -62,7 +62,7 @@ const MyProfile = React.memo((props) => {
 
     const {
         getStatus, token, liked, disliked,
-        ownerId, profileFollow, profileUnfollow,
+        ownerId, profileFollow, profileUnfollow,newComment,
         showComments, isOwner, ownerPhoto, profile, updateMyStatus,
         updateMyProfile, updateMyAvatar, updateMyCoverImage,
         defaultAllFollowers,getFollowers, getFollowed, isOwnerScope
@@ -200,7 +200,7 @@ const MyProfile = React.memo((props) => {
                 </Grid>
                 {<Grid item xs={7}>
                     <Status isOwner={isOwner} showComments={showComments} ownerId={ownerId}  profileFollow={profileFollow}
-                            profileUnfollow={profileUnfollow} liked={liked} disliked={disliked} ownerPhoto={ownerPhoto}
+                            profileUnfollow={profileUnfollow} liked={liked} disliked={disliked} ownerPhoto={ownerPhoto} newComment={newComment}
                             token={token} profile={profile} updateMyStatus={updateMyStatus} getStatus={getStatus} handleCurrentImage={handleCurrentImage}
                             handleCloseAnythingNews={handleCloseAnythingNews} openAnythingNews={openAnythingNews} handleOpenAnythingNews={handleOpenAnythingNews}/>
                 </Grid>}

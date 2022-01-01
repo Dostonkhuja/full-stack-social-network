@@ -9,7 +9,7 @@ import {useDispatch} from "react-redux";
 import CircularProgress from '@mui/material/CircularProgress';
 import AnythingNews from "./anything-news/AnythingNews";
 
-const Status = ({handleOpenAnythingNews,handleCloseAnythingNews,openAnythingNews,handleCurrentImage,getStatus,token,liked,disliked,ownerId,profileUnfollow,profileFollow,showComments,isOwner,ownerPhoto, profile, updateMyStatus}) => {
+const Status = ({newComment,handleOpenAnythingNews,handleCloseAnythingNews,openAnythingNews,handleCurrentImage,getStatus,token,liked,disliked,ownerId,profileUnfollow,profileFollow,showComments,isOwner,ownerPhoto, profile, updateMyStatus}) => {
     const dispatch = useDispatch()
 
     const profileId = profile._id
@@ -39,7 +39,7 @@ const Status = ({handleOpenAnythingNews,handleCloseAnythingNews,openAnythingNews
                 >
                     {profile.status.map(s =>
                             <StatusMedia key={s._id} isOwner={isOwner} token={token} showComments={showComments} liked={liked}
-                                         disliked={disliked} profileFollow={profileFollow}
+                                         disliked={disliked} profileFollow={profileFollow} newComment={newComment}
                                          profileUnfollow={profileUnfollow} ownerId={ownerId} ownerPhoto={ownerPhoto}
                                          profile={profile} status={s} handleCurrentImage={handleCurrentImage}/>
                     )}
