@@ -17,9 +17,8 @@ const Messenger = () => {
     const ownerId = useSelector(state => state.profile.ownerId)
     const ownerProfile = useSelector(state => state.profile.ownerProfile)
     const messages = useSelector(state => state.messenger.messages)
+    const allMessagesCount = useSelector(state => state.messenger.allMessagesCount)
     const currentConversation = useSelector(state => state.messenger.currentConversation)
-
-   
 
     const [selectedIndex, setSelectedIndex] = React.useState(null);
 
@@ -50,7 +49,7 @@ const Messenger = () => {
     useLayoutEffect(() => {
         if (currentConversation) {
             setSelectedIndex(currentConversation._id)
-            dispatch(joinRoom(currentConversation._id))
+            // dispatch(joinRoom(currentConversation._id))
         }
         return ()=> dispatch(setSliceToDefoult())
     }, [currentConversation])
@@ -61,7 +60,7 @@ const Messenger = () => {
             {ownerConversations && ownerConversations.length !== 0
                 ? <div style={{display: 'flex', justifyContent: 'space-between'}}>
                     <div style={{width: '75%', maxHeight: '100vh'}}>
-                        <Dialogs messages={messages} ownerProfile={ownerProfile}
+                        <Dialogs messages={messages} ownerProfile={ownerProfile} joinRoom={joinRoom} allMessagesCount={allMessagesCount}
                                  currentConversation={currentConversation} newMessage={newMessage} setIsRead={setIsRead}/>
                     </div>
                     <div style={{width: '30%', maxHeight: '100vh'}}>

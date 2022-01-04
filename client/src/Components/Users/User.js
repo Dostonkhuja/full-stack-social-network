@@ -1,11 +1,10 @@
 import React from 'react';
-import {Avatar, Button, Card, Typography} from "@mui/material";
+import {Avatar, Card, Typography} from "@mui/material";
 import {Link} from "react-router-dom";
 import FollowButton from "./FollowButton";
 import styled from "@emotion/styled";
 import Badge from "@mui/material/Badge";
 import EmailIcon from '@mui/icons-material/Email';
-import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 
 import dateFormat from "dateformat";
 

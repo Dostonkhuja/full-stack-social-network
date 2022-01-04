@@ -58,7 +58,7 @@ const NavigationMenu = () => {
                 </ListItem>
                 </NavLink>
 
-                <NavLink to={'/groups'} style={{textDecoration:'none',color:'black'}}>
+                <NavLink to={'/chat'} style={{textDecoration:'none',color:'black'}}>
                 <ListItem button selected={currentPage === 5} onClick={(event) => handleListItemClick(event, 5)}>
                     <ListItemIcon>
                         <GroupWorkIcon/>

@@ -14,15 +14,12 @@ import AccountCircle from '@mui/icons-material/AccountCircle';
 import MailIcon from '@mui/icons-material/Mail';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {logout} from "../../State-management/SignInSlice";
-import {useHistory} from "react-router-dom";
+import {Link, useHistory} from "react-router-dom";
 import {logoutAuth} from "../../State-management/ProfileSlice";
 import {socketDisconnect} from "../../Redux-middleware/initOnlineSocketMiddleware";
-import Followers from "../Profile/Friends/Followers";
 import {signUpLogout} from "../../State-management/SignUpSlice";
-import {useSelector} from "react-redux";
-import {Link} from "react-router-dom";
 import HomeIcon from '@mui/icons-material/Home';
 import PeopleIcon from '@mui/icons-material/People';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
@@ -30,6 +27,10 @@ import GroupWorkOutlinedIcon from '@mui/icons-material/GroupWorkOutlined';
 import {Avatar} from "@mui/material";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
+import {setCurrentPage} from '../../State-management/AppSlice'
+import {setGuestsDefoult} from "../../State-management/GuestsSlice";
+import {guestsDisconnect} from "../../Redux-middleware/initGuestsMiddleware";
+import {messengerDisconnect} from "../../Redux-middleware/initMessengerSocketMiddleware";
 
 const Search = styled('div')(({theme}) => ({
     position: 'relative',
@@ -71,7 +72,7 @@ const StyledInputBase = styled(InputBase)(({theme}) => ({
     },
 }));
 
-function Navbar({setCurrentPage}) {
+function Navbar() {
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
 
@@ -83,19 +84,24 @@ function Navbar({setCurrentPage}) {
     const allNotReadingMessageCountNotification = useSelector(state => state.messenger.allNotReadingMessageCountNotification)
     const currentPage = useSelector(state=>state.app.currentPage)
     const ownerProfile = useSelector(state=>state.profile.ownerProfile)
+    const allNotSeenCount = useSelector(state=>state.guests.allNotSeenCount)
 
     const handleChange = (event, newValue) => {
       dispatch(setCurrentPage(Number(newValue)))
     };
 
     const handleLogout = () => {
+        dispatch(setCurrentPage(1))
         dispatch(socketDisconnect())
+        dispatch(setGuestsDefoult())
+        dispatch(guestsDisconnect(ownerProfile._id))
+        dispatch(messengerDisconnect(ownerProfile._id))
         dispatch(logoutAuth())
         dispatch(logout(false))
         dispatch(signUpLogout())
         history.push('/signIn')
-        setAnchorEl(null);
-        handleMobileMenuClose();
+        setAnchorEl(null)
+        handleMobileMenuClose()
     }
     //custom end
 
@@ -232,12 +238,14 @@ function Navbar({setCurrentPage}) {
                                         </Link> 
                                     } value="2" sx={{mr:'1rem'}}/>
                                     <Tab label={
-                                       <Link to="/">
-                                       <VisibilityOutlinedIcon sx={{fontSize:'30px'}}  color={currentPage === 4 ?'primary':'disabled'}/>
-                                       </Link>       
+                                        <Badge badgeContent={allNotSeenCount} color="error">
+                                            <Link to="/guests">
+                                                <VisibilityOutlinedIcon sx={{fontSize:'30px'}}  color={currentPage === 4 ?'primary':'disabled'}/>
+                                            </Link>
+                                        </Badge>
                                     } value="4" sx={{mr:'1rem'}}/>
                                     <Tab label={
-                                        <Link to="/">
+                                        <Link to="/chat">
                                         <GroupWorkOutlinedIcon sx={{fontSize:'25px'}}  color={currentPage === 5 ?'primary':'disabled'}/>
                                         </Link>      
                                     } value="5" sx={{mr:'1rem'}}/>

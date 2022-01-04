@@ -1,29 +1,38 @@
-import {configureStore} from '@reduxjs/toolkit'
+import AppSlice from './AppSlice'
+import HomeSlice from './HomeSlice'
+import ChatSlice from "./chatSlice"
+import usersSlice from './UsersSlice'
+import guestsSlice from "./GuestsSlice"
 import signInSlice from "./SignInSlice"
 import signUpSlice from "./SignUpSlice"
 import profileSlice from "./ProfileSlice"
-import usersSlice from './UsersSlice'
 import messengerSlice from './MessengerSlice'
-import AllFollowersSlice from "./AllFollowersSlice";
-import HomeSlice from './HomeSlice'
-import {OnlineSocketIoMiddleware} from "../Redux-middleware/initOnlineSocketMiddleware";
-import {messengerSocketIoMiddleware} from "../Redux-middleware/initMessengerSocketMiddleware";
-import AppSlice from './AppSlice'
+import {configureStore} from '@reduxjs/toolkit'
+import AllFollowersSlice from "./AllFollowersSlice"
+import {ChatSocketIoMiddleware} from "../Redux-middleware/initChatMiddleware"
+import {GuestsSocketIoMiddleware} from "../Redux-middleware/initGuestsMiddleware"
+import {OnlineSocketIoMiddleware} from "../Redux-middleware/initOnlineSocketMiddleware"
+import {messengerSocketIoMiddleware} from "../Redux-middleware/initMessengerSocketMiddleware"
 
 export const store = configureStore({
     reducer: {
+        app:AppSlice,
+        chat:ChatSlice,
         home:HomeSlice,
-        signIn: signInSlice,
-        signUp:signUpSlice,
-        profile:profileSlice,
-        allFollowers:AllFollowersSlice,
         users:usersSlice,
+        guests:guestsSlice,
+        signUp:signUpSlice,
+        signIn: signInSlice,
+        profile:profileSlice,
         messenger:messengerSlice,
-        app:AppSlice
+        allFollowers:AllFollowersSlice,
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({serializableCheck: false})
-            .concat(OnlineSocketIoMiddleware,messengerSocketIoMiddleware)
+            .concat(
+            GuestsSocketIoMiddleware,OnlineSocketIoMiddleware,
+            messengerSocketIoMiddleware,ChatSocketIoMiddleware
+            )
 })
 
 

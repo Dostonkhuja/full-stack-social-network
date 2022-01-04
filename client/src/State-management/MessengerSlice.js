@@ -7,6 +7,7 @@ const messengerSlice = createSlice({
         ownerConversations: null,
         currentConversation: null,
         messages:null,
+        allMessagesCount:0,
         allNotReadingMessageCountNotification:0,
     },
     reducers:{
@@ -22,11 +23,20 @@ const messengerSlice = createSlice({
             state.ownerConversations = action.conversation.sort(c=>c.isNotReadingCount>0 ? -1:0)
         },
         ['messenger/getRoomMessages']: (state, action) => {
-            state.messages = action.messages
+            if(action.allMessagesCount){
+                state.allMessagesCount = action.allMessagesCount
+            }
+            if(action.messages){
+                if(state.messages===null){
+                    state.messages = action.messages
+                }else{
+                    state.messages = [...state.messages,...action.messages]
+                }
+            }
         },
         ['messenger/newMessage']: (state, action) => {
             state.messages !== null
-                ? state.messages = [...state.messages,action.newMessage]
+                ? state.messages = [action.newMessage,...state.messages]
                 : state.messages = [action.newMessage]
         },
         ['messenger/notification']: (state, action) => {
@@ -47,23 +57,28 @@ const messengerSlice = createSlice({
            }
         },
         ['messenger/convNotification']: (state, action) => {
-             state.ownerConversations.unshift(action.conversation)
+            if(state.ownerConversations){
+                state.ownerConversations.unshift(action.conversation)
+            }else{
+                state.ownerConversations = action.conversation
+            }
          },
         ['messenger/newConversation']: (state, action) => {
             state.currentConversation = action.data
         },
         ['messenger/local/reconnected']: (state, action) => {
-            debugger
             state.currentConversation = action.data
         },
         ['messenger/isRead']: (state, action) => {
             if(action.payloadSender){
-            state.messages.map(m=>{
-                if(m._id === action.payloadSender.messageId){
-                    m.isRead = action.payloadSender.isRead
-                    return m
+                if(state.messages !==null){
+                    state.messages.map(m=>{
+                        if(m._id === action.payloadSender.messageId){
+                            m.isRead = action.payloadSender.isRead
+                            return m
+                        }
+                    })
                 }
-            })
         }
         if(action.payloadReceiver){
             state.allNotReadingMessageCountNotification = action.payloadReceiver.allNotReadingMessageCountNotification

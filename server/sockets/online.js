@@ -19,9 +19,9 @@ module.exports = (io) => {
         socket.on('disconnect', async () => {
             const user = users.find(u => u.socketId === socket.id)
             if(user){
-            await User.findByIdAndUpdate(user.userId,{isOnline:false})
-            users = users.filter(u => u.socketId !== socket.id)
-            io.emit('action', {type:'online', data:users});
+                await User.findByIdAndUpdate(user.userId,{isOnline:false})
+                users = users.filter(u => u.socketId !== socket.id)
+                // io.emit('action', {type:'online', data:users})
             }
         })
     })

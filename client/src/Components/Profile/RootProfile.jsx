@@ -15,15 +15,17 @@ import {
     profileUnfollow,
     newComment,
     updateMyProfile,
-    updateMyCoverImage} from "../../State-management/ProfileSlice";
+    updateMyCoverImage, setProfileToOwner
+} from "../../State-management/ProfileSlice";
 import {defaultAllFollowers, getFollowed, getFollowers, isOwnerScope} from "../../State-management/AllFollowersSlice";
 import {setCurrentPage} from '../../State-management/AppSlice'
+import {guesting} from "../../Redux-middleware/initGuestsMiddleware";
 
 const RootProfile = () => {
     console.log('Root Profile')
 
     const dispatch = useDispatch()
-    const history = useHistory()
+
 
     const {userId} = useParams()
     const token = localStorage.getItem('x-auth-token')
@@ -36,13 +38,17 @@ const RootProfile = () => {
         dispatch(setCurrentPage(0))
         if (userId) {
             if (ownerId) {
+                dispatch(guesting({hostId:userId,guest:ownerId}))
                 dispatch(getProfileById({userId, ownerId}))
                  window.scrollTo(0, 0)
             } else {
                 dispatch(getProfileById(userId))
             }
-        } else {
-            token ? dispatch(getAuthMe()) : history.push('/signIn')
+        }
+         else {
+            if(profile && profile._id!== ownerId) {
+                dispatch(setProfileToOwner())
+            }
         }
     }, [token, userId])
 

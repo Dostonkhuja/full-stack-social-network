@@ -1,22 +1,18 @@
-import React, {useEffect, useRef, useState} from 'react';
-import {Avatar, Button, Grid, TextField, Typography} from "@mui/material";
+import React, {useState} from 'react';
+import {Avatar, Button, Grid, Typography} from "@mui/material";
 import {useFormik} from "formik";
 import {useDispatch} from "react-redux";
 import styled from "@emotion/styled";
 import Badge from "@mui/material/Badge";
-import TimeAgo from 'timeago-react'
 import * as timeago from 'timeago.js'
 import vi from 'timeago.js/lib/lang/ru'
 import dateFormat from "dateformat";
 import EmojiEmotionsIcon from '@mui/icons-material/EmojiEmotions';
-import Picker , { SKIN_TONE_MEDIUM_DARK } from 'emoji-picker-react';
-import CheckIcon from '@mui/icons-material/Check';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-
+import Picker, {SKIN_TONE_MEDIUM_DARK} from 'emoji-picker-react';
+import Message from "./Message";
 timeago.register('vi', vi);
 
-const Dialogs = ({messages,ownerProfile,currentConversation,newMessage,setIsRead}) => {
-
+const Dialogs = ({allMessagesCount,joinRoom,messages,ownerProfile,currentConversation,newMessage,setIsRead}) => {
     const dispatch = useDispatch()
     const [openEmoji, setOpenEmoji] = useState(false);
 
@@ -78,12 +74,11 @@ const Dialogs = ({messages,ownerProfile,currentConversation,newMessage,setIsRead
         },
     }));
 
-    const isReadMyMessage = (messageId,sender)=>{
+    const isReadMyMessage = (messageId,sender)=> {
         if(sender !== ownerProfile._id){
              dispatch(setIsRead({messageId,isRead:true}))
         }
     }
-
 
     return (<div>
         {currentConversation ?
@@ -138,10 +133,11 @@ const Dialogs = ({messages,ownerProfile,currentConversation,newMessage,setIsRead
                     }
                 </div>}
 
-                <div style={{minHeight: `${window.screen.height - 315}px`, maxHeight: '400px', overflowY: 'scroll'}}>
-                    {messages && <Message messages={messages} currentConversation={currentConversation}
+                {/*<div style={{minHeight: `${window.screen.height - 315}px`, maxHeight: '400px', overflowY: 'scroll'}}>*/}
+                    {/*messages &&*/}
+                    { <Message messages={messages} allMessagesCount={allMessagesCount} currentConversation={currentConversation} joinRoom={joinRoom}
                                           ownerProfile={ownerProfile} isReadMyMessage={isReadMyMessage}/>}
-                </div>
+                {/*</div>*/}
 
                 <div>
                     <form onSubmit={formik.handleSubmit}>
@@ -187,53 +183,5 @@ const Dialogs = ({messages,ownerProfile,currentConversation,newMessage,setIsRead
         }</div>)
 }
 
-function Message({isReadMyMessage,messages,currentConversation,ownerProfile}) {
-    const dispatch = useDispatch()
-    const scrollRef = useRef();
+export default Dialogs
 
-    useEffect(() => {
-         scrollRef.current?.scrollIntoView({block: "end"});
-    }, [messages])
-
-    return <div ref={scrollRef}>
-        { messages.map(message=>{
-            
-            if(!message.isRead){
-                isReadMyMessage(message._id,message.sender)
-            }
-
-            return <div key={message._id} style={message.sender === ownerProfile._id
-                ? {display: 'flex', justifyContent: 'flex-end', margin: '0.5rem'}
-                : {display: 'flex', justifyContent: 'flex-start'}}>
-                {message.sender !== ownerProfile._id &&
-                    <Avatar
-                        src={currentConversation && currentConversation.members[0].photos ?currentConversation.members[0].photos.large : ''}
-                        sx={{bgcolor: 'pink', border: '3px solid white', width: 55, height: 55, cursor: 'pointer'}}
-                    />}
-                <div>
-                    <div style={message.sender === ownerProfile._id
-                        ? {backgroundColor: '#0084ff', color: 'white',borderRadius:'10px',minWidth:'120px',padding:'0.5rem',margin:'0.5rem',justifyContent:'center'}
-                        : {backgroundColor: '#e4e6eb', color: 'black',padding:'1px',borderRadius:'10px',minWidth:'120px',padding:'0.5rem',margin:'0.5rem',justifyContent:'center'}}>
-                    
-                        <Typography variant="p" fontSize={'16px'}>
-                                {message.text}
-                         </Typography>
-    
-                        {message.sender === ownerProfile._id 
-                        ?<div style={{display:'flex',justifyContent:'end',padding:0}}>
-                            {
-                                message.isRead 
-                                ? <span><CheckCircleIcon color="#fff" fontSize="10px"/></span>
-                                :<span><CheckIcon color="#fff" fontSize="10px"/></span>
-                            }
-                        </div>
-                        :''}
-                    </div>
-                    <TimeAgo style={{color:'#777575'}} datetime={message.createdAt} locale='vi'/>
-                </div>
-            </div>
-        })}
-    </div>
-}
-
-export default Dialogs;

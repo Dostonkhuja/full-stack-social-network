@@ -11,7 +11,7 @@ const SignIn = () => {
     const isAuth = useSelector(state => state.signIn.isAuth)
 
     if (isAuth){
-        return <Redirect to='/profile' />
+        return <Redirect to='/' />
     }
 
     return <Container component="main" maxWidth="xs">

@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 
 const statusSchema = new mongoose.Schema({
-    userId:{type:mongoose.Schema.Types.ObjectId},
+    user:{type:mongoose.Schema.Types.ObjectId,ref:'user'},
     text: {type: String, default: ''},
     photoFile: {type: Object, default: null},
     video: {type: String, default: null},

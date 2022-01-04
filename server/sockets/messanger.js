@@ -1,8 +1,10 @@
 const Conversation = require("../models/conversation");
 const Message = require("../models/messages");
 const mongoose = require('mongoose')
+const Guests = require("../models/guests");
 
 module.exports = (io) => {
+    let connections = []
     io.on('connection', function (socket) {
         socket.on('action', async (action) => {
             // yozishma honasi ochish
@@ -68,9 +70,18 @@ module.exports = (io) => {
 
             //yozishmalar kanaliga kirish va messagelarni olish
             if (action.type === 'messenger/joinRoom') {
-                socket.join(action.conversationId)
-                const messages = await Message.find({conversationId: action.conversationId})
-                io.to(action.conversationId).emit('action', {type: 'messenger/getRoomMessages', messages})
+                if(action.data.pageNumber===1) {
+                    socket.join(action.data.conversationId)
+                    const allMessagesCount = await Message.find().countDocuments({conversationId: action.data.conversationId})
+                    io.to(action.data.conversationId).emit('action', {type: 'messenger/getRoomMessages', allMessagesCount})
+                }
+                const messages = await Message
+                    .find({conversationId: action.data.conversationId})
+                    .sort({createdAt:-1})
+                    .skip((action.data.pageNumber-1) * action.data.pageSize)
+                    .limit(action.data.pageSize)
+
+                io.to(action.data.conversationId).emit('action', {type: 'messenger/getRoomMessages', messages})
             }
             
             //yozishmalar kanalidan chiqib ketish
@@ -84,14 +95,10 @@ module.exports = (io) => {
                     $set:{'isRead':action.data.isRead}
                 },{new: true})
 
-
-               
-
                 let conversation = await Conversation
                     .findById({_id:message.conversationId})
                     .select({__v: 0})
                     const receiverId = conversation.members.find(m => String(m) !== message.sender)
-
 
                  let reciveredConversation = await Conversation.find({members: {$in: [receiverId]}}).select({__v: 0})
                  let allNotReadingCount=0
@@ -101,7 +108,6 @@ module.exports = (io) => {
                              ).countDocuments()
                               allNotReadingCount += reciveredConversation[index].isNotReadingCount
                     }
-               
                 
                 io.to(message.sender).emit('action', {type:'messenger/isRead',payloadSender:{messageId:message._id,isRead:message.isRead}})
                 io.to(receiverId).emit('action', {type:'messenger/isRead',
@@ -116,14 +122,17 @@ module.exports = (io) => {
                 const newMessage = new Message(action.message)
                 await newMessage.save()
                 io.to(action.message.conversationId).emit('action', {type: 'messenger/newMessage', newMessage})
-               
+
                 //qabul qiluvchining notification message kanaliga ulanib habar borganligini bildirish
                 let conversation = await Conversation
                     .findById({_id:newMessage.conversationId})
                     .select({__v: 0})
                     const receiverId = conversation.members.find(m => String(m) !== action.message.sender)
+
+                const connection = connections.find(c=>c.ownerId === receiverId)
+                if(connection){
                     io.to(receiverId).emit('action',{type:'messenger/notification',conversationId:newMessage.conversationId})
-                   
+                }
 
                 // message jo'natilgandan so'ng reciveredni ro'yxatning boshiga olib o'tish
                      conversation = await Conversation
@@ -138,7 +147,6 @@ module.exports = (io) => {
                             
                             conversation[index].members = conversation[index].members.find(m => String(m._id) !== action.message.sender) 
                    }
-
                     conversation = conversation.sort((a) => {
                         if (String(a._id) === action.message.conversationId) {
                             return -1
@@ -147,12 +155,16 @@ module.exports = (io) => {
                         }
                     })
 
-                socket.emit('action', {type: 'messenger/conversation', conversation})
+                io.to(action.message.sender).emit('action', {type: 'messenger/conversation', conversation})
+                if(connection){
+                    io.to(receiverId).emit('action', {type: 'messenger/conversation', conversation})
+                }
             }
             
             // notificationlar olish uchun owner Id nomiga kanal ochish
             if (action.type === 'messenger/notificationSubscribe') {
                  socket.join(action.ownerId)
+                connections.push({ownerId:action.ownerId,socketId:socket.id})
 
                  let conversation = await Conversation.find({members: {$in: [action.ownerId]}}).select({__v: 0})
                 
@@ -166,36 +178,19 @@ module.exports = (io) => {
 
                     io.to(action.ownerId).emit('action', {type: 'messenger/notification', allNotReadingCount})
             }
-        }),
-        socket.on('user-reconnected',()=>{
-            console.log(socket.connected)
-            // /socket.join(ownerId)
+
+            if(action.type === 'messenger/forceDisconnect') {
+                socket.leave(action.ownerId)
+                connections = connections.filter(c=>c.ownerId !== action.ownerId)
+            }
         })
-        io.on('disconnect',()=>{
-            
+        socket.on('disconnect',() => {
+            console.log('MSG socket disconnected')
+            const connection = connections.find(c=>c.socketId === socket.id)
+            if(connection){
+                socket.leave(connection.ownerId)
+                connections = connections.filter(c=>c.socketId !== socket.id)
+            }
         })
     })
 }
-
-
-
-
-
-
-
-
-
-
-// let conversation = await Conversation.find({members: {$in: [message.sender]}}).select({__v: 0})
-//                  let allNotReadingCount=0
-//                     for(let index in conversation){
-//                          conversation[index].isNotReadingCount = await Message.find(
-//                              {conversationId:conversation[index]._id,sender:{$ne:message.sender},isRead:false}
-//                              ).countDocuments()
-//                               allNotReadingCount += conversation[index].isNotReadingCount
-//                     }
-
-//                 action.data.allNotReadingMessageCountNotification = allNotReadingCount
-
-//                 conversation = conversation.find(c=>String(c._id) === message.conversationId) 
-//                 const receiverId = conversation.members.find(m => String(m) !== message.sender)

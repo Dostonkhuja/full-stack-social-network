@@ -85,6 +85,10 @@ const profileSlice = createSlice({
         },
         myPhotosScope: (state, action) => {
             state.myPhotos = []
+        },
+        setProfileToOwner: (state, action) => {
+            state.profile = state.ownerProfile
+            debugger
         }
     },
     extraReducers: {
@@ -153,7 +157,6 @@ const profileSlice = createSlice({
                 state.profile.status.unshift(action.payload.data.newStatus)
                 state.profile.statusCount = action.payload.data.statusCount
                 if(action.payload.data.newStatus.photoFile !==null){
-                    debugger
                     state.profile.myPhotos = [...state.profile.myPhotos,{_id:Math.random(),photo:action.payload.data.newStatus.photoFile}]
                     // state.profile.myPhotosCount = state.profile.myPhotosCount + 1
                 }
@@ -314,4 +317,4 @@ const profileSlice = createSlice({
 })
 
 export default profileSlice.reducer
-export const {logoutAuth,setFollowId,myPhotosScope} = profileSlice.actions
+export const {logoutAuth,setFollowId,myPhotosScope,setProfileToOwner} = profileSlice.actions

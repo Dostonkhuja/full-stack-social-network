@@ -110,8 +110,6 @@ const MyProfile = React.memo((props) => {
 
         <div style={{marginTop: '1rem', display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column',}}>
             <Grid item sx={{
-                // backgroundImage: `url(${profile.photos ?profile.photos.coverImage ? profile.photos.coverImage : profile.photos.large:''})`,
-                // backgroundPosition: 'center', backgroundRepeat: 'no-repeat', backgroundSize: 'cover', cursor:'pointer',
                 borderRadius: '30px', width: '100%', height: '16rem', position: 'relative', backgroundColor:'#a0a0a0'}}
             >
                 <Box width={'1pp%'} height={'100%'} sx={{

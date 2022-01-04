@@ -25,11 +25,11 @@ function AnythingNews ({open,handleCloseAnythingNews,profile,isOwner,updateMySta
         <DialogContent>
             <Box>
                 <Box sx={{display: 'flex', alignItems: 'center'}}>
-                    <Avatar src={profile.photos ? profile.photos.large : ''}
+                    <Avatar src={profile.photos !==null? profile.photos.large : ''}
                             sx={{bgcolor: 'pink', border: '3px solid white', width: 36, height: 36}}/>
                     <Typography variant="h6" component="h6"> {profile.firstName + ' '}{profile.lastName} </Typography>
                 </Box>
-                {isOwner && <StatusForm setIsOpenInput={setIsOpenInput} isOpenInput={isOpenInput} updateMyStatus={updateMyStatus} handleCloseAnythingNews={handleCloseAnythingNews}/>}
+                {profile && <StatusForm setIsOpenInput={setIsOpenInput} isOpenInput={isOpenInput} updateMyStatus={updateMyStatus} handleCloseAnythingNews={handleCloseAnythingNews}/>}
             </Box>
         </DialogContent>
     </Dialog>

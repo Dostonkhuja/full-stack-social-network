@@ -125,8 +125,8 @@ router.post('/status', auth, async (req, res) => {
         user.myPhotosCount = user.myPhotos.length
     }
 
-    req.body.userId = req.user._id
-    const newStatus = new Status(req.body)
+    req.body.user = req.user._id
+    let newStatus = new Status(req.body)
     await newStatus.save()
 
     user.status.push(newStatus._id)
@@ -134,6 +134,11 @@ router.post('/status', auth, async (req, res) => {
     await user.save()
 
     const statusCount = user.statusCount
+
+     newStatus = await Status
+     .findById(newStatus._id)
+    .populate({path:'user', select:{lastName:1,firstName:1,photos:1}})        
+
     res.status(200).json({newStatus,statusCount})
 })
 
