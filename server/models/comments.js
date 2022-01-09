@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const Joi = require('joi')
 
 const commentsShema = new mongoose.Schema({
     user:{type:mongoose.Schema.Types.ObjectId,ref:'user'},
@@ -8,4 +9,11 @@ const commentsShema = new mongoose.Schema({
 
 const Comments = mongoose.model('comments', commentsShema)
 
+const commentsValidate = Joi.object({
+    user:mongoose.Schema.Types.ObjectId,
+    comment:Joi.string(),
+    statusId:mongoose.Schema.Types.ObjectId
+})
+
 module.exports.Comments =  Comments
+module.exports.commentsValidate = commentsValidate

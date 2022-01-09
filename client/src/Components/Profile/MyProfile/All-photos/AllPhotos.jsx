@@ -3,8 +3,7 @@ import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import InfiniteScroll from "react-infinite-scroll-component";
 import CircularProgress from "@mui/material/CircularProgress";
-import {Grid} from "@mui/material";
-import {getMyPhotos, myPhotosScope} from "../../../State-management/ProfileSlice";
+import {getMyPhotos, myPhotosScope} from "../../../../State-management/ProfileSlice";
 import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
 
@@ -24,7 +23,6 @@ const AllPhotos = ({userId,handleCurrentImage,myPhotosCount}) => {
     let pageSize = 10
 
     let myPhotos = useSelector(state=> state.profile.myPhotos)
-    console.log(myPhotos)
 
     const fetchMoreData = () => {
         if (pageNumber > 1){

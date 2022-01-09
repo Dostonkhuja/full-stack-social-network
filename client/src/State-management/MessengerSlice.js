@@ -16,6 +16,9 @@ const messengerSlice = createSlice({
         },
         setSliceToDefoult: (state) => {
             state.messages = null
+        },
+        setCurrentConversationToDefoult: (state) => {
+            state.currentConversation = null
         }
     },
     extraReducers: {
@@ -101,4 +104,4 @@ const messengerSlice = createSlice({
 })
 
 export default messengerSlice.reducer
-export const {getCurrentConversation,setSliceToDefoult} = messengerSlice.actions
+export const {getCurrentConversation,setSliceToDefoult,setCurrentConversationToDefoult} = messengerSlice.actions

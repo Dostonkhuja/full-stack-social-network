@@ -1,4 +1,5 @@
 const mongoose = require("mongoose")
+const Joi = require('joi')
 
 const GuestsSchema = new mongoose.Schema(
     {
@@ -8,4 +9,11 @@ const GuestsSchema = new mongoose.Schema(
     }, { timestamps: true }
 )
 
+const guestsValidate = Joi.object({
+    hostId:mongoose.Schema.Types.ObjectId,
+    guest:mongoose.Schema.Types.ObjectId,
+    wasSeen: Joi.boolean()
+})
+
 module.exports = mongoose.model("Guests", GuestsSchema)
+module.exports.guestsValidate = guestsValidate

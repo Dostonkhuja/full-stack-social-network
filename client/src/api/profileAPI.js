@@ -1,11 +1,10 @@
 import instance from "./api";
-import {aboutMe} from "../State-management/ProfileSlice";
 
 export const profileAPI = {
     photo(photo) {
         const formData = new FormData();
         formData.append('avatar', photo);
-        return instance.post('/profile/photo',formData)
+        return instance.put('/profile/photo',formData)
             .then((res) => {return res})
             .catch(e => {
                 if (e.response && e.response.data)
@@ -15,7 +14,7 @@ export const profileAPI = {
     coverImage(coverImage) {
         const formData = new FormData();
         formData.append('coverImage', coverImage);
-        return instance.post('/profile/coverImage',formData)
+        return instance.put('/profile/coverImage',formData)
             .then((res) => {return res})
             .catch(e => {
                 if (e.response && e.response.data)
@@ -34,76 +33,41 @@ export const profileAPI = {
     },
     getStatus(data){
             return instance.get(`/profile/status/${data.profileId}?ownerId=${data.ownerId}&pageNumber=${data.pageNumber}`)
-                .then((res) => {
-                    return res
-                })
-                .catch(e => {
-                    if (e.response && e.response.data)
-                        return e.response
-                })
+                .then((res) => {return res})
+                .catch(e => {if (e.response && e.response.data) return e.response})
     },
     comment(comment){
             return instance.post(`/profile/comment/${comment.statusId}`,comment)
-                .then((res) => {
-                    return res
-                })
-                .catch(e => {
-                    if (e.response && e.response.data)
-                        return e.response
-                })
+                .then((res) => {return res})
+                .catch(e => {if (e.response && e.response.data) return e.response})
     },
     liked(statusId){
-        return instance.get(`/profile/liked/${statusId}`)
-            .then((res) => {
-                return res
-            })
-            .catch(e => {
-                if (e.response && e.response.data)
-                    return e.response
-            })
+        return instance.post(`/profile/liked/${statusId}`)
+            .then((res) => {return res})
+            .catch(e => {if (e.response && e.response.data) return e.response})
     },
     disLiked(statusId){
-        return instance.get(`/profile/disLiked/${statusId}`)
-            .then((res) => {
-                return res
-            })
-            .catch(e => {
-                if (e.response && e.response.data)
-                    return e.response
-            })
+        return instance.post(`/profile/disLiked/${statusId}`)
+            .then((res) => {return res})
+            .catch(e => {if (e.response && e.response.data) return e.response})
     },
     showComments({statusId, count}){
             return instance.get(`/profile/comment/${statusId}?count=${count}`)
-                .then((res) => {
-                    return res
-                })
-                .catch(e => {
-                    if (e.response && e.response.data)
-                        return e.response
-                })
+                .then((res) => {return res})
+                .catch(e => {if (e.response && e.response.data) return e.response})
     },
     profile(data){
-        return instance.post('/profile',data)
+        return instance.put('/profile',data)
             .then((res) => {return res})
-            .catch(e => {
-                if (e.response && e.response.data)
-                    return e.response
-            })
+            .catch(e => {if (e.response && e.response.data) return e.response})
     },
     aboutMe(data){
         return instance.post('/profile/aboutme',data)
             .then((res) => {return res})
-            .catch(e => {
-                if (e.response && e.response.data)
-                    return e.response
-            })
+            .catch(e => {if (e.response && e.response.data) return e.response})
     },
     profileById(data){
         return instance.get(`/profile/${data.userId ? data.userId:data}?ownerId=${data.ownerId ? data.ownerId:''}`)
-            .then((res) => {return res})
-            .catch(e => {
-                if (e.response && e.response.data)
-                    return e.response
-            })
+            .then((res) => {return res}).catch(e => {if (e.response && e.response.data) return e.response})
     }
 }

@@ -5,10 +5,9 @@ import PersonIcon from '@mui/icons-material/Person';
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import GroupWorkIcon from '@mui/icons-material/GroupWork';
-import WbSunnyIcon from '@mui/icons-material/WbSunny';
 import {NavLink} from "react-router-dom";
-import {setCurrentPage } from '../../State-management/AppSlice'
-import {useDispatch,useSelector} from 'react-redux'
+import {setCurrentPage} from '../../State-management/AppSlice'
+import {useDispatch, useSelector} from 'react-redux'
 
 const NavigationMenu = () => {
     const dispatch = useDispatch()
@@ -64,15 +63,6 @@ const NavigationMenu = () => {
                         <GroupWorkIcon/>
                     </ListItemIcon>
                     <ListItemText primary={'groups'}/>
-                </ListItem>
-                </NavLink>
-
-                <NavLink to={'/wather'} style={{textDecoration:'none',color:'black'}}>
-                <ListItem button selected={currentPage === 6} onClick={(event) => handleListItemClick(event, 6)}>
-                    <ListItemIcon>
-                        <WbSunnyIcon/>
-                    </ListItemIcon>
-                    <ListItemText primary={'the weather'}/>
                 </ListItem>
                 </NavLink>
             </List>

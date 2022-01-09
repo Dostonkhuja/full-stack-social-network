@@ -31,6 +31,7 @@ import {setCurrentPage} from '../../State-management/AppSlice'
 import {setGuestsDefoult} from "../../State-management/GuestsSlice";
 import {guestsDisconnect} from "../../Redux-middleware/initGuestsMiddleware";
 import {messengerDisconnect} from "../../Redux-middleware/initMessengerSocketMiddleware";
+import PersonIcon from "@mui/icons-material/Person";
 
 const Search = styled('div')(({theme}) => ({
     position: 'relative',
@@ -43,8 +44,8 @@ const Search = styled('div')(({theme}) => ({
     marginLeft: 0,
     width: '100%',
     [theme.breakpoints.up('sm')]: {
-        marginLeft: theme.spacing(3),
-        width: 'auto',
+        marginLeft: theme.spacing(1),
+        width: '14%',
     },
 }));
 
@@ -88,7 +89,7 @@ function Navbar() {
 
     const handleChange = (event, newValue) => {
       dispatch(setCurrentPage(Number(newValue)))
-    };
+    }
 
     const handleLogout = () => {
         dispatch(setCurrentPage(1))
@@ -224,30 +225,27 @@ function Navbar() {
                             </Search>
 
                             <Box sx={{display: {xs: 'none', md: 'flex'}}}>
-                            
-                                <Box  sx={{ml:'4rem'}}>
+                                <Box>
                                 <Tabs onChange={handleChange} value={String(currentPage)}>
-                                    <Tab label={
-                                        <Link to="/">
+                                    <Tab onClick={()=> history.push('/')} label={
                                         <HomeIcon sx={{fontSize:'28px'}} color={currentPage === 1 ?'primary':'disabled'}/>
-                                        </Link>
                                     } value="1" sx={{mr:'1rem'}}/>
-                                    <Tab label={
-                                        <Link to="/users">
+                                    <Tab onClick={()=> history.push('/profile')} label={
+                                        <PersonIcon sx={{fontSize:'28px'}} color={currentPage === 0 ?'primary':'disabled'}/>
+                                    } value="0" sx={{mr:'1rem'}}/>
+                                    <Tab  onClick={()=> history.push('/users')} label={
                                         <PeopleIcon sx={{fontSize:'28px'}}  color={currentPage === 2 ?'primary':'disabled'}/>
-                                        </Link> 
                                     } value="2" sx={{mr:'1rem'}}/>
-                                    <Tab label={
+                                    <Tab onClick={()=> history.push('/guests')} label={
                                         <Badge badgeContent={allNotSeenCount} color="error">
-                                            <Link to="/guests">
                                                 <VisibilityOutlinedIcon sx={{fontSize:'30px'}}  color={currentPage === 4 ?'primary':'disabled'}/>
-                                            </Link>
                                         </Badge>
                                     } value="4" sx={{mr:'1rem'}}/>
-                                    <Tab label={
-                                        <Link to="/chat">
+                                    <Tab onClick={()=> history.push('/messenger')} label={
+                                        <MailIcon sx={{fontSize:'28px'}} color={currentPage === 3 ?'primary':'disabled'}/>
+                                    } value="3" sx={{mr:'1rem'}}/>
+                                    <Tab onClick={()=> history.push('/chat')} label={
                                         <GroupWorkOutlinedIcon sx={{fontSize:'25px'}}  color={currentPage === 5 ?'primary':'disabled'}/>
-                                        </Link>      
                                     } value="5" sx={{mr:'1rem'}}/>
                                 </Tabs>
                                 </Box>   
@@ -267,10 +265,10 @@ function Navbar() {
                                     aria-label="show 17 new notifications"
                                     color="inherit"
                                 >
-                                    <Badge badgeContent={1} color="error">
-                                    <Link to="/">
-                                    <NotificationsIcon sx={{fontSize:'25px'}} color="primary"/>
-                                    </Link>  
+                                    <Badge badgeContent={0} color="error">
+                                    <div>
+                                     <NotificationsIcon sx={{fontSize:'25px'}} color="primary"/>
+                                    </div>
                                     </Badge>
                                 </IconButton>
                                 <IconButton

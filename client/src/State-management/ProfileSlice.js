@@ -87,17 +87,17 @@ const profileSlice = createSlice({
             state.myPhotos = []
         },
         setProfileToOwner: (state, action) => {
+            state.isOwner = true
             state.profile = state.ownerProfile
-            debugger
         }
     },
     extraReducers: {
-        // [getAuthMe.rejected]: (state, action) => {
-        //     state.errorMessage = action.data
-        // },
-        // [updateMyAvatar.rejected]: (state, action) => {
-        //     state.photosUploadErrorMessage = action.data
-        // },
+        [getAuthMe.rejected]: (state, action) => {
+            state.errorMessage = action.data
+        },
+        [updateMyAvatar.rejected]: (state, action) => {
+            state.photosUploadErrorMessage = action.data
+        },
         [getAuthMe.fulfilled]: (state, action) => {
             if (action.payload.status === 200) {
                 state.ownerProfile = action.payload.data
@@ -158,7 +158,6 @@ const profileSlice = createSlice({
                 state.profile.statusCount = action.payload.data.statusCount
                 if(action.payload.data.newStatus.photoFile !==null){
                     state.profile.myPhotos = [...state.profile.myPhotos,{_id:Math.random(),photo:action.payload.data.newStatus.photoFile}]
-                    // state.profile.myPhotosCount = state.profile.myPhotosCount + 1
                 }
             } else {
                 state.statusErrorMessage = action.payload.data
@@ -166,7 +165,6 @@ const profileSlice = createSlice({
         },
         [getStatus.fulfilled]: (state, action) => {
             if (action.payload.status === 200) {
-                // state.profile.status.push(action.payload.data)
                 state.profile.status = [...state.profile.status,...action.payload.data]
             } else {
                 state.statusErrorMessage = action.payload.data

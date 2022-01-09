@@ -1,31 +1,18 @@
-import React, {useEffect, useLayoutEffect} from "react";
+import React, {useLayoutEffect} from "react";
+import {useParams} from "react-router-dom";
 import MyProfile from "./MyProfile/MyProfile";
 import {useDispatch, useSelector} from "react-redux";
-import {useHistory, useParams} from "react-router-dom";
-import {
-    liked,
-    disliked,
-    getAuthMe,
-    getStatus,
-    showComments,
-    profileFollow,
-    getProfileById,
-    updateMyAvatar,
-    updateMyStatus,
-    profileUnfollow,
-    newComment,
-    updateMyProfile,
-    updateMyCoverImage, setProfileToOwner
-} from "../../State-management/ProfileSlice";
-import {defaultAllFollowers, getFollowed, getFollowers, isOwnerScope} from "../../State-management/AllFollowersSlice";
 import {setCurrentPage} from '../../State-management/AppSlice'
 import {guesting} from "../../Redux-middleware/initGuestsMiddleware";
+import {defaultAllFollowers, getFollowed, getFollowers, isOwnerScope} from "../../State-management/AllFollowersSlice";
+import {disliked, getProfileById, getStatus, liked, newComment, profileFollow, profileUnfollow, setProfileToOwner,
+    showComments, updateMyAvatar, updateMyCoverImage, updateMyProfile,
+    updateMyStatus} from "../../State-management/ProfileSlice";
 
 const RootProfile = () => {
     console.log('Root Profile')
 
     const dispatch = useDispatch()
-
 
     const {userId} = useParams()
     const token = localStorage.getItem('x-auth-token')
@@ -46,7 +33,7 @@ const RootProfile = () => {
             }
         }
          else {
-            if(profile && profile._id!== ownerId) {
+            if(profile && profile._id !== ownerId) {
                 dispatch(setProfileToOwner())
             }
         }
@@ -55,27 +42,27 @@ const RootProfile = () => {
     if (!profile)
         return <></>
 
-    return profile && <MyProfile profile={profile}
-                                 token={token}
-                                 showComments={showComments}
-                                 liked={liked}
-                                 getStatus={getStatus}
-                                 disliked={disliked}
-                                 profileFollow={profileFollow}
-                                 profileUnfollow={profileUnfollow}
-                                 isOwner={isOwner}
-                                 ownerPhoto={ownerPhoto}
-                                 ownerId={ownerId}
-                                 updateMyAvatar={updateMyAvatar}
-                                 updateMyProfile={updateMyProfile}
-                                 updateMyStatus={updateMyStatus}
-                                 updateMyCoverImage={updateMyCoverImage}
-                                 defaultAllFollowers={defaultAllFollowers}
-                                 getFollowers={getFollowers}
-                                 getFollowed={getFollowed}
-                                 isOwnerScope={isOwnerScope}
-                                 newComment={newComment}
-    />
-}
+return profile && <MyProfile
+                             token={token}
+                             liked={liked}
+                             profile={profile}
+                             ownerId={ownerId}
+                             isOwner={isOwner}
+                             disliked={disliked}
+                             getStatus={getStatus}
+                             ownerPhoto={ownerPhoto}
+                             newComment={newComment}
+                             getFollowed={getFollowed}
+                             showComments={showComments}
+                             getFollowers={getFollowers}
+                             isOwnerScope={isOwnerScope}
+                             profileFollow={profileFollow}
+                             updateMyAvatar={updateMyAvatar}
+                             updateMyStatus={updateMyStatus}
+                             profileUnfollow={profileUnfollow}
+                             updateMyProfile={updateMyProfile}
+                             updateMyCoverImage={updateMyCoverImage}
+                             defaultAllFollowers={defaultAllFollowers} />
+    }
 
 export default RootProfile

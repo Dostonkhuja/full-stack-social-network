@@ -1,7 +1,5 @@
 const Conversation = require("../models/conversation");
 const Message = require("../models/messages");
-const mongoose = require('mongoose')
-const Guests = require("../models/guests");
 
 module.exports = (io) => {
     let connections = []
@@ -156,9 +154,6 @@ module.exports = (io) => {
                     })
 
                 io.to(action.message.sender).emit('action', {type: 'messenger/conversation', conversation})
-                if(connection){
-                    io.to(receiverId).emit('action', {type: 'messenger/conversation', conversation})
-                }
             }
             
             // notificationlar olish uchun owner Id nomiga kanal ochish

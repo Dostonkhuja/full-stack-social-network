@@ -8,14 +8,11 @@ const instance = axios.create({
 instance.interceptors.request.use(
     (config) => {
         const token = localStorage.getItem('x-auth-token');
-        if (token) {
-            config.headers['x-auth-token'] = token;
-        }
+        if (token) {config.headers['x-auth-token'] = token;}
         return config;
     },
-    (error) => Promise.reject(error),
+    (error) => Promise.reject(error)
 )
-
 
 export default instance
 

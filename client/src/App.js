@@ -19,7 +19,6 @@ import {getAuthMe} from "./State-management/ProfileSlice";
 import Chat from "./Components/Chat/Chat";
 
 function App() {
-
     const dispatch = useDispatch()
     const history = useHistory()
 
@@ -37,7 +36,6 @@ function App() {
     }, [ownerId,token])
 
     return (<>
-        {/* <Redirect to={'/profile'}/> */}
         <div style={{position: 'sticky',top:'0',zIndex:'20'}}>
             <Navbar />
         </div>

@@ -71,7 +71,7 @@ router.get('/followers/:id',decoded,async (req, res) => {
 
     const user = await User.findById(req.params.id)
         .select({followed:1})
-        .populate({path:'followed',options:{limit:pageSize,skip:(pageNumber - 1) * pageSize,sort: {date:-1}},select:{password: 0, __v: 0}})
+        .populate({path:'followed',options:{skip:(pageNumber - 1) * pageSize,limit:pageSize,sort: {date:-1}},select:{firstName:1,lastName:1,photos:{large:1},followed:1,email:1}})
 
     if (req.user)
         user.followed.forEach(u => u.isFollow = u.followed.includes(req.user._id))
@@ -90,11 +90,10 @@ router.get('/followed/:id',decoded,async (req, res) => {
 
     const user = await User.findById(req.params.id)
         .select({following:1})
-        .populate({path:'following followed',options:{skip:(pageNumber - 1) * pageSize,limit:pageSize,sort: {date:-1}},select:{password: 0, __v: 0}})
+        .populate({path:'following followed',options:{skip:(pageNumber - 1) * pageSize,limit:pageSize,sort: {date:-1}},select:{firstName:1,lastName:1,photos:{large:1},following:1,email:1,followed:1}})
 
     if (req.user)
         user.following.forEach(u => u.isFollow = u.followed.includes(req.user._id))
-
 
     res.send(user.following)
 })

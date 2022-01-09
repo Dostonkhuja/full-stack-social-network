@@ -1,8 +1,8 @@
 import * as React from 'react'
 import {useEffect, useRef, useState} from 'react'
-import Commenty from "./comments/Comment"
+import Commenty from "../comments/Comment"
 import Card from '@mui/material/Card'
-import SendComment from "./comments/SendComment"
+import SendComment from "../comments/SendComment"
 import Avatar from '@mui/material/Avatar'
 import CardMedia from '@mui/material/CardMedia'
 import CardHeader from '@mui/material/CardHeader'
@@ -19,7 +19,7 @@ import {Button, Dialog, DialogActions, DialogContent, DialogTitle} from "@mui/ma
 import {useDispatch} from "react-redux";
 import CancelIcon from "@mui/icons-material/Cancel";
 import Box from "@mui/material/Box";
-import FollowButton from "../../../Users/FollowButton";
+import FollowButton from "../../../../Users/FollowButton";
 
 
 import TimeAgo from 'timeago-react'

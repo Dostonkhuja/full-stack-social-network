@@ -21,6 +21,8 @@ router.post('/', ownerPhoto.single('myPhoto'), auth, async (req, res) => {
         await user.save()
 
         res.status(200).send(newMyPhoto)
+    }else{
+        res.status(400).send('photo file yuboring')
     }
 })
 

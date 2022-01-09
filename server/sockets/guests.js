@@ -31,12 +31,11 @@ module.exports = (io) => {
                     }
 
                     io.to(action.data.ownerId).emit('action', {type:'guests/guests', payload:{guests,wasSeenCount}})
-                    wasSeenCount=0
+                        wasSeenCount=0
                 }
             }
             if(action.type === 'guests/guesting' && action.guesting.hostId !== action.guesting.guest){
                 if(action.guesting){
-                    // guest = await Guests.findById(guest._id).select({guest:1,createdAt:1}).populate('guest',{firstName:1,lastName:1,photos:1})
                     let guest = new Guests(action.guesting)
                     await guest.save()
                     const connection = connections.find(c=>c.ownerId === action.guesting.hostId)

@@ -5,9 +5,9 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import CircularProgress from "@mui/material/CircularProgress";
 import {useHistory} from "react-router-dom";
 import {Grid} from "@mui/material";
-import User from "../../Users/User";
-import {follow, unfollow} from "../../../State-management/UsersSlice";
-import {createNewConversation} from "../../../Redux-middleware/initMessengerSocketMiddleware";
+import User from "../../../Users/User";
+import {follow, unfollow} from "../../../../State-management/UsersSlice";
+import {createNewConversation} from "../../../../Redux-middleware/initMessengerSocketMiddleware";
 
 const AllFollowed = ({defaultAllFollowers, getFollowed, isOwnerScope,ownerId,token,userId,followingCount,handleCloseAllFollowers}) => {
     const dispatch = useDispatch()

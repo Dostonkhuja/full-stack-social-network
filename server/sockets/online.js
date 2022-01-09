@@ -8,7 +8,6 @@ module.exports = (io) => {
                 if(action.data.userId){
                      await User.findByIdAndUpdate(action.data.userId,{isOnline:true})
                     users.push({socketId:socket.id,userId: action.data.userId})
-                    // io.emit('action', {type:'online', data:users});
                 }
             }
 
@@ -21,7 +20,6 @@ module.exports = (io) => {
             if(user){
                 await User.findByIdAndUpdate(user.userId,{isOnline:false})
                 users = users.filter(u => u.socketId !== socket.id)
-                // io.emit('action', {type:'online', data:users})
             }
         })
     })

@@ -8,8 +8,7 @@ const ChatSlice = createSlice({
     },
     extraReducers: {
         ['chat/getChatMessages']:(state,action)=> {
-            debugger
-            state.messages = [...action.chatMessages,...state.messages]
+            state.messages = [...state.messages,...action.chatMessages]
         },
         ['chat/getNewMessage']:(state,action)=> {
                 state.messages = [action.newMessage,...state.messages]

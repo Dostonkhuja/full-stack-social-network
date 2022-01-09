@@ -2,7 +2,7 @@ import React from "react";
 import {useFormik} from "formik";
 import {useDispatch} from "react-redux";
 import {Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid,} from "@mui/material";
-import {aboutMe} from "../../../State-management/ProfileSlice";
+import {aboutMe} from "../../../../State-management/ProfileSlice";
 
 const AboutMe = React.memo(({profile}) => {
     console.log('updatestatus rendered')

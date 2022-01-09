@@ -39,7 +39,6 @@ const UpdateProfile = React.memo(({profile, updateMyProfile}) => {
     const handleClose = () => {setOpen(false)}
     const handleMaxWidthChange = (event) => {
         setMaxWidth(
-            // @ts-expect-error autofill of arbitrary value is not handled.
             event.target.value,
         );
     };

@@ -1,19 +1,18 @@
 const router = require('express').Router()
 const mongoose = require('mongoose')
-const auth = require('../middleware/auth')
-const {User, contactsValidate, validate} = require('../models/users')
-const {Status} = require('../models/status')
-const {Comments} = require('../models/comments')
 const _ = require('lodash')
-const Joi = require("joi")
-const {userPhotos,coverImage,statusPhotos} = require('../middleware/uploadImage')
+const auth = require('../middleware/auth')
+const {Comments} = require('../models/comments')
 const {MyPhotos} = require("../models/myPhotos");
+const {User, validate} = require('../models/users')
+const {Status, statusValidate} = require('../models/status')
+const {userPhotos,coverImage,statusPhotos} = require('../middleware/uploadImage')
 
 //update myProfile
-router.post('/', auth, async (req, res) => {
-    // const {error} = userProfileValidate.validate(req.body)
-    // if (error)
-    //     return res.status(400).send(error.details[0].message)
+router.put('/', auth, async (req, res) => {
+    const {error} = validate.validate(req.body)
+    if (error)
+        return res.status(400).send(error.details[0].message)
 
     const user = await User.findByIdAndUpdate(req.user._id, _.pick(req.body, ['firstName', 'lastName', 'city','workPlace','maritalStatus','email','contacts']), {new: true})
     if (!user)
@@ -24,9 +23,9 @@ router.post('/', auth, async (req, res) => {
 
 //update aboutMe
 router.post('/aboutme', auth, async (req, res) => {
-    // const {error} = userProfileValidate.validate(req.body)
-    // if (error)
-    //     return res.status(400).send(error.details[0].message)
+    const {error} = validate.validate(req.body)
+    if (error)
+        return res.status(400).send(error.details[0].message)
 
     const user = await User.findByIdAndUpdate(req.user._id, _.pick(req.body, ['aboutMe']), {new: true})
     if (!user)
@@ -71,7 +70,7 @@ router.get('/:id',async (req, res) => {
 })
 
 //Update Photo
-router.post('/photo', userPhotos.single('avatar'), auth, async (req, res) => {
+router.put('/photo', userPhotos.single('avatar'), auth, async (req, res) => {
     if (req.file) {
         const user = await User.findByIdAndUpdate(req.user._id, {
             $set:{'photos.large':req.file.url,'photos.small':req.file.eager[0].url}
@@ -89,9 +88,8 @@ router.post('/photo', userPhotos.single('avatar'), auth, async (req, res) => {
 })
 
 //Update Photo Cover
-router.post('/coverImage', coverImage.single('coverImage'), auth, async (req, res) => {
+router.put('/coverImage', coverImage.single('coverImage'), auth, async (req, res) => {
     if (req.file) {
-
         const user = await User.findByIdAndUpdate(req.user._id, {
             $set:{'photos.coverImage':req.file.url}
         },{new: true})
@@ -113,8 +111,14 @@ router.post('/coverImage', coverImage.single('coverImage'), auth, async (req, re
 
 // new status
 router.post('/status', auth, async (req, res) => {
+    const {error} = statusValidate.validate(req.body)
+    if (error)
+        return res.status(400).send(error.details[0].message)
 
     const user = await User.findById(req.user._id)
+
+    if (!user)
+        return res.status(404).send('mavjud bo\'lmagan foydalanuvchi')
 
     if(req.body.photoFile !==null ){
         const uploadResult  = await statusPhotos.upload(req.body.photoFile, {upload_preset:'ml_default',folder: 'social-network-status-images'})
@@ -142,7 +146,7 @@ router.post('/status', auth, async (req, res) => {
     res.status(200).json({newStatus,statusCount})
 })
 
-//get status
+//get status by id
 router.get('/status/:id',async (req, res) => {
     const ownerId = req.query.ownerId
     const pageNumber = req.query.pageNumber
@@ -178,6 +182,10 @@ router.get('/status/:id',async (req, res) => {
 
 //send comment
 router.post('/comment/:statusId', auth, async (req, res) => {
+    const isValidId = mongoose.Types.ObjectId.isValid(req.params.statusId)
+    if (!isValidId)
+        return res.status(400).send('ID tasdiqlangan standart objectId emas')
+
     req.body.user = req.user._id
     let newComment = new Comments(req.body)
     await newComment.save()
@@ -200,6 +208,10 @@ router.get('/comment/:statusId', async (req, res) => {
     const commentSize = 10
     const count = req.query.count
 
+    const isValidId = mongoose.Types.ObjectId.isValid(req.params.statusId)
+    if (!isValidId)
+        return res.status(400).send('ID tasdiqlangan standart objectId emas')
+
     const comments = await Status.findById(req.params.statusId).select({comments: 1})
         .populate({
             path: 'comments',
@@ -210,8 +222,12 @@ router.get('/comment/:statusId', async (req, res) => {
     res.status(200).json(comments)
 })
 
-//send like
-router.get('/liked/:statusId', auth, async (req, res) => {
+//liked
+router.post('/liked/:statusId', auth, async (req, res) => {
+    const isValidId = mongoose.Types.ObjectId.isValid(req.params.statusId)
+    if (!isValidId)
+        return res.status(400).send('ID tasdiqlangan standart objectId emas')
+
     let status = await Status.findById(req.params.statusId)
     const isLiked = status.liked.some(l=> String(l) === String(req.user._id))
         if(isLiked){
@@ -233,8 +249,12 @@ router.get('/liked/:statusId', auth, async (req, res) => {
     res.status(200).json(likedAndLikenCountAfter)
 })
 
-//dis like
-router.get('/disLiked/:statusId', auth, async (req, res) => {
+//disliked
+router.post('/disLiked/:statusId', auth, async (req, res) => {
+    const isValidId = mongoose.Types.ObjectId.isValid(req.params.statusId)
+    if (!isValidId)
+        return res.status(400).send('ID tasdiqlangan standart objectId emas')
+
     let status = await Status.findById(req.params.statusId)
     const isLiked = status.liked.some(l=> String(l) === String(req.user._id))
     if (isLiked) {
@@ -250,24 +270,5 @@ router.get('/disLiked/:statusId', auth, async (req, res) => {
         res.status(200).json(likedAndLikenCountAfter)
     }
 })
-
-//get status by id
-// router.get('/status/:id', auth, async (req, res) => {
-//     const isValidId = mongoose.Types.ObjectId.isValid(req.params.id)
-//     if (!isValidId)
-//         return res.status(400).send('ID tasdiqlangan standart objectId emas')
-//
-//     const user = await User.findById(req.params.id).select({status: 1})
-//     if (!user)
-//         return res.status(404).send('bunday foydalanuvchi mavjud emas')
-//
-//     res.send(user.status)
-// })
-
-// const userProfileValidate = Joi.object({
-//     firstName: Joi.string().min(3).max(50),
-//     lastName: Joi.string().min(3).max(50),
-//     contacts: contactsValidate
-// })
 
 module.exports = router

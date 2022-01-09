@@ -1,15 +1,15 @@
 import React, {useState} from 'react';
-import {Avatar, Button, Grid, Typography} from "@mui/material";
+import Message from "./Message";
 import {useFormik} from "formik";
-import {useDispatch} from "react-redux";
 import styled from "@emotion/styled";
 import Badge from "@mui/material/Badge";
-import * as timeago from 'timeago.js'
-import vi from 'timeago.js/lib/lang/ru'
-import dateFormat from "dateformat";
+import {useDispatch} from "react-redux";
+import {Avatar, Button, Grid, Typography} from "@mui/material";
 import EmojiEmotionsIcon from '@mui/icons-material/EmojiEmotions';
 import Picker, {SKIN_TONE_MEDIUM_DARK} from 'emoji-picker-react';
-import Message from "./Message";
+import dateFormat from "dateformat";
+import * as timeago from 'timeago.js'
+import vi from 'timeago.js/lib/lang/ru'
 timeago.register('vi', vi);
 
 const Dialogs = ({allMessagesCount,joinRoom,messages,ownerProfile,currentConversation,newMessage,setIsRead}) => {
@@ -133,11 +133,8 @@ const Dialogs = ({allMessagesCount,joinRoom,messages,ownerProfile,currentConvers
                     }
                 </div>}
 
-                {/*<div style={{minHeight: `${window.screen.height - 315}px`, maxHeight: '400px', overflowY: 'scroll'}}>*/}
-                    {/*messages &&*/}
                     { <Message messages={messages} allMessagesCount={allMessagesCount} currentConversation={currentConversation} joinRoom={joinRoom}
                                           ownerProfile={ownerProfile} isReadMyMessage={isReadMyMessage}/>}
-                {/*</div>*/}
 
                 <div>
                     <form onSubmit={formik.handleSubmit}>

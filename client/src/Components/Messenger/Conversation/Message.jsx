@@ -15,9 +15,7 @@ function Message({allMessagesCount,joinRoom,isReadMyMessage,messages,currentConv
     const [pageNumber,setPageNubmer] = useState(1)
     const pageSize = 10
 
-
     const fetchMoreData = () => {
-        debugger
         if (pageNumber > 1){
             setPageNubmer(pageNumber + 1)
             dispatch(joinRoom({conversationId:currentConversation._id,pageSize,pageNumber}))
@@ -29,23 +27,16 @@ function Message({allMessagesCount,joinRoom,isReadMyMessage,messages,currentConv
     }, [currentConversation])
 
     useEffect(()=> {
-        debugger
         if(pageNumber === 2){
             scrollRef.current?.scrollIntoView({block: "end"});
         }
-
         if (messages===null){
             setPageNubmer(pageNumber + 1)
             dispatch(joinRoom({conversationId:currentConversation._id,pageSize,pageNumber}))
         }
-
-        return ()=> {
-            // setPageNubmer(1)
-            // dispatch(setSliceToDefoult())
-        }
     },[messages])
 
-    return <div ref={scrollRef}  id="scrollableDiv" style={{minHeight: `${window.screen.height - 315}px`, maxHeight: '400px',overflowY: 'scroll', display: 'flex', flexDirection: 'column-reverse',}}>
+    return <div ref={scrollRef}  id="scrollableDiv" style={{minHeight: `${window.screen.height - 315}px`, maxHeight: '400px',overflowY: 'scroll', display: 'flex', flexDirection: 'column-reverse'}}>
         {messages !==null && messages.length !==0 &&
             <InfiniteScroll
             dataLength={messages.length}

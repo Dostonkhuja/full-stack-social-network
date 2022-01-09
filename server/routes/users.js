@@ -1,6 +1,7 @@
 const router = require('express').Router()
 const {User} = require('../models/users')
 const decoded = require('../middleware/decoded')
+const mongoose = require("mongoose");
 
 //barcha userlarni uzatish
 router.get('/', decoded, async (req, res) => {
@@ -25,6 +26,10 @@ router.get('/', decoded, async (req, res) => {
 
 // id bo'yicha yuzerni uzatish
 router.get('/:id', async (req,res) => {
+    const isValidId = mongoose.Types.ObjectId.isValid(req.params.id)
+    if (!isValidId)
+        return res.status(400).send('ID tasdiqlangan standart objectId emas')
+
     const user = await User.findById(req.params.id).select({password:0,__v:0})
     if(!user)
         res.status(404).send('bunday foydalanuvchi mavjud emas')

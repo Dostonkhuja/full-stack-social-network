@@ -1,7 +1,7 @@
 import React, {forwardRef, useImperativeHandle, useRef, useState} from "react";
 import Box from "@mui/material/Box";
 import StatusForm from "./anything-news/StatusForm";
-import StatusMedia from './StatusMedia'
+import StatusMedia from './Status-media/StatusMedia'
 import CancelIcon from '@mui/icons-material/Cancel';
 import {Avatar, Button, Card, Dialog, DialogActions, DialogContent, DialogTitle, Typography} from "@mui/material";
 import InfiniteScroll from "react-infinite-scroll-component";

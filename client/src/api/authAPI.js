@@ -26,7 +26,7 @@ export const authAPI = {
             })
     },
     logout() {
-        return instance.get('auth/logout')
+        return instance.delete('auth/logout',{ headers: {"x-auth-token": localStorage.getItem('x-auth-token')}})
             .then((res) => res)
             .catch((e) => {
                 if (e.response && e.response.data)

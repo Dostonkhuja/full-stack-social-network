@@ -21,7 +21,6 @@ module.exports = () => {
     process.on('unhandledRejection', ex => {
         throw ex
     })
-
     // process.on('uncaughtException', ex => {
     //     winston.error(('uncaughtException xatosi \n' + ex.message, ex))
     //     process.exit(1)

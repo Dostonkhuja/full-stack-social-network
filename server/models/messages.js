@@ -1,4 +1,5 @@
 const mongoose = require("mongoose")
+const Joi = require('joi')
 
 const MessageSchema = new mongoose.Schema(
     {
@@ -10,4 +11,12 @@ const MessageSchema = new mongoose.Schema(
     { timestamps: true }
 )
 
+const messageValidate = Joi.object({
+    conversationId:Joi.string(),
+    sender:Joi.string(),
+    text:Joi.string(),
+    isRead:Joi.boolean()
+})
+
 module.exports = mongoose.model("Message", MessageSchema)
+module.exports.messageValidate = messageValidate
