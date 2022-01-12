@@ -29,6 +29,10 @@ const Users = () => {
     useEffect(() => {
         dispatch(setCurrentPage(2))
         dispatch(getUsers({pageSize: 10, pageNumber: 1}))
+        if(!token){
+            history.push('/signIn')
+        }
+
     }, [])
 
     return <>

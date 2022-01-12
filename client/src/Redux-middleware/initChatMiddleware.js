@@ -6,20 +6,16 @@ let socket = io('http://localhost:5000/chat',{autoConnect:false,reconnection: tr
 export const ChatSocketIoMiddleware = createSocketIoMiddleware(socket, "chat/")
 
 //server dispatch
-export const chatMessages = createAsyncThunk('chatMessages',(data, thunkAPI) => {
+export const chatMessages = createAsyncThunk('chatMessages',(payload, thunkAPI) => {
     socket.connect()
-    const _dispatchChatMsg =()=>  thunkAPI.dispatch({type:'chat/messages', data})
+    const _dispatchChatMsg =()=>  thunkAPI.dispatch({type:'chat/messages', payload})
     _dispatchChatMsg()
     socket.io.on('reconnect', function () {_dispatchChatMsg()})
 })
 
 export const chatNewMessage = createAsyncThunk('chatNewMessages',(message, thunkAPI) => {
-    debugger
     thunkAPI.dispatch({type:'chat/newMessage', message})
 })
 
-export const chatDisconnect = createAsyncThunk('chatDisconnect',(undefined, thunkAPI) => {
-   // socket.disconnect()
-   //  thunkAPI.dispatch(setChatToDefoult())
-})
+
 

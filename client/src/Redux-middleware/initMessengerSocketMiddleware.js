@@ -14,7 +14,7 @@ export const getNotificationMsg = createAsyncThunk('notificationMsg',(ownerId, t
 })
 
 export const getOwnerConversation = createAsyncThunk('init',(data, thunkAPI) => {
-     const getOC= ()=> thunkAPI.dispatch({type:'messenger/getOwnerConversation', data:data})
+     const getOC= ()=> thunkAPI.dispatch({type:'messenger/getOwnerConversation', data})
        socket.on("connect", () => {getOC()});
        getOC()
 })

@@ -26,27 +26,16 @@ const SignUp = React.memo(() => {
         return <Redirect to='/profile'/>
     }
 
-    return <Container component="main" maxWidth="xs">
+    return <Grid item xs={12} component="main" maxWidth="xs">
                 <CssBaseline/>
-                <Box
-                    sx={{
-                        marginTop: 8,
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                    }}
-                >
-                    <Avatar  sx={{m: 1, backgroundColor: '#a7e05b'}}>
+                <Box sx={{pl:25,marginTop: 8, display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+                    <Avatar  sx={{m: 1, backgroundColor: '#1976d2'}}>
                         <LockOutlinedIcon />
                     </Avatar>
-                    <Typography component="h1" variant="h5">
-                        Sign up
-                    </Typography>
-
+                    <Typography component="h1" variant="h5">Sign up</Typography>
                   <SignUpForm errorMessage={errorMessage}/>
-
                 </Box>
-                <Typography variant="body2" color="text.secondary" align="center" sx={{mt: 8, mb: 4}}>
+                <Typography variant="body2" color="text.secondary" align="center" sx={{mt: 8, mb: 4,pl:20}}>
                     {'Copyright © '}
                     <Link color="inherit" href="/signIn">
                         Doston Sheraliyev social-network app
@@ -54,7 +43,7 @@ const SignUp = React.memo(() => {
                     {new Date().getFullYear()}
                     {'.'}
                 </Typography>
-            </Container>
+            </Grid>
 })
 
 export default SignUp

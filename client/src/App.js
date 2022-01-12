@@ -36,16 +36,18 @@ function App() {
     }, [ownerId,token])
 
     return (<>
-        <div style={{position: 'sticky',top:'0',zIndex:'20'}}>
+        <div style={{position: 'sticky',top:'0',zIndex:'20',marginTop:'-1rem'}}>
             <Navbar />
         </div>
         <Grid container spacing={1}>
             <Hidden only={['xs', 'sm', 'md']}>
-                <Grid item xs={2}>
-                    <NavigationMenu />
-                </Grid>
+                {token && <Grid item xs={2} xl={2}>
+                    <div style={{position: 'sticky',top:55,zIndex:'300'}}>
+                    <NavigationMenu/>
+                    </div>
+                </Grid>}
             </Hidden>
-            <Grid item xs={12} sm={12} md={12} lg={10} xl={12}>
+            <Grid item xs={12} sm={12} md={12} lg={10} xl={10}>
                 <Route exact path='/' render={() => <Home/>}/>
                 <Route path='/profile/:userId?' render={() => <RootProfile/>}/>
                 <Route path='/users' render={() => <Users/>}/>

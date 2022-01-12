@@ -49,7 +49,7 @@ const UpdateProfile = React.memo(({profile, updateMyProfile}) => {
     return <>
         <Grid item xs={12} sx={{display: 'flex', justifyContent: 'flex-end'}}>
             <Button variant='contained' sx={{height:'35px',my:'0.5rem'}} size='small' startIcon={<Settings/>} onClick={handleClickOpen}>
-                change profile
+                set profile
             </Button>
             <Dialog fullWidth={fullWidth} maxWidth={maxWidth} open={open} onClose={handleClose}>
                 <DialogTitle>Profile settings</DialogTitle>

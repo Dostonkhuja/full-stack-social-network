@@ -18,6 +18,7 @@ const Messenger = () => {
     const allMessagesCount = useSelector(state => state.messenger.allMessagesCount)
     const ownerConversations = useSelector(state => state.messenger.ownerConversations)
     const currentConversation = useSelector(state => state.messenger.currentConversation)
+    const token = localStorage.getItem('x-auth-token')
 
     useLayoutEffect(() => {
         dispatch(setCurrentPage(3))
@@ -28,6 +29,11 @@ const Messenger = () => {
         }else{
             history.push('/profile')
         }
+
+        if(!token){
+            history.push('/signIn')
+        }
+
         return ()=> dispatch(setCurrentConversationToDefoult())
     }, [ownerId])
 

@@ -33,10 +33,9 @@ const AllPhotos = ({userId,handleCurrentImage,myPhotosCount}) => {
 
 
     useEffect(()=> {
-        // if (myPhotos.length === 0){
             dispatch(getMyPhotos({userId,pageSize,pageNumber}))
             setPageNumber(pageNumber + 1)
-        // }
+
         return ()=>{
             setPageNumber(1)
             dispatch(myPhotosScope())

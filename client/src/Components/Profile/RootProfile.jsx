@@ -8,6 +8,7 @@ import {defaultAllFollowers, getFollowed, getFollowers, isOwnerScope} from "../.
 import {disliked, getProfileById, getStatus, liked, newComment, profileFollow, profileUnfollow, setProfileToOwner,
     showComments, updateMyAvatar, updateMyCoverImage, updateMyProfile,
     updateMyStatus} from "../../State-management/ProfileSlice";
+import {createNewConversation} from "../../Redux-middleware/initMessengerSocketMiddleware";
 
 const RootProfile = () => {
     console.log('Root Profile')
@@ -62,6 +63,7 @@ return profile && <MyProfile
                              profileUnfollow={profileUnfollow}
                              updateMyProfile={updateMyProfile}
                              updateMyCoverImage={updateMyCoverImage}
+                             createNewConversation={createNewConversation}
                              defaultAllFollowers={defaultAllFollowers} />
     }
 

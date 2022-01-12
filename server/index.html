@@ -7,12 +7,12 @@
 </head>
 <body>
 <!--body-->
-    <div class="container" >
-        <div class="row">
-            <div class="col-10">
+    <div class="container">
+        <div class="row d-flex justify-content-center">
+            <div class="col-9">
                 <div class="row">
                     <div class="col-12 mt-3">
-                        <h2 class="text-center">Documentation of Doston Sheraliyev's social-network backend program</h2>
+                        <h2 class="text-center">API Documentation of Doston Sheraliyev's social-network backend program</h2>
                         <h6 class="text-secondary text-center">version 1.0.0</h6>
                         <h6><b>base url:</b>  www.falonchi.com </h6>
                     </div>
@@ -144,10 +144,521 @@
                             </div>
                         </div>
                     </div>
+                    <div class="col-12 mt-3">
+                        <div class="border mt-3 border">
+                            <div class="col-12  bg-secondary text-white p-2">
+                                <h6>/follow</h6>
+                            </div>
+                            <div class="col-12 bg-light p-2">
+                                <div class="mt-2 d-flex justify-content-between align-items-center">
+                                    <h6 class="px-5"><span class="text-secondary">/follow</span><span>/followers</span><span>/{userId}</span></h6>
+                                    <button type="button" data-toggle="modal" data-target=".follow-followers-get" class="btn btn-primary mx-5" style="width: 70px">GET</button>
+                                </div>
+                            </div>
+                            <div class="col-12 bg-light p-2">
+                                <div class="mt-2 d-flex justify-content-between align-items-center">
+                                    <h6 class="px-5"><span class="text-secondary">/follow</span><span>/followed</span><span>/{userId}</span></h6>
+                                    <button type="button" data-toggle="modal" data-target=".follow-followed-get" class="btn btn-primary mx-5" style="width: 70px">GET</button>
+                                </div>
+                            </div>
+                            <div class="col-12 bg-light p-2">
+                                <div class="mt-2 d-flex justify-content-between align-items-center">
+                                    <h6 class="px-5"><span class="text-secondary">/follow</span><span>/{userId}</span> <i class="text-danger">(token)</i></h6>
+                                    <div class="mx-5">
+                                        <button type="button" data-toggle="modal" data-target=".follow-post" class="btn btn-success" style="width: 70px">POST</button>
+                                        <button type="button" data-toggle="modal" data-target=".unfollow-delete" class="btn btn-danger" style="width: 70px">DELETE</button>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="col-2 border">
-                anchor
+        </div>
+        <div class="row d-flex justify-content-center">
+            <div class="col-9">
+                <div class="d-flex justify-content-center flex-column align-items-center py-2">
+                        <h3>Socket Io</h3>
+                    <h4 class="text-secondary">(redux middleware)</h4>
+                </div>
+                <div class="border p-2 bg-info text-white">
+                    /
+                </div>
+                <div class="bg-light">
+                   <div  class="m-3 text-info">
+                       <h6><i>notify the server that the user has visited the site</i></h6>
+                   </div>
+                    <ul class="nav nav-tabs" id="myTab25" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="socket-io-connect" data-toggle="tab" href="#socket-io-connect-tab" role="tab" aria-selected="true">request</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content" id="myTabContent25">
+                    <div class="tab-pane fade show active" id="socket-io-connect-tab" role="tabpanel">
+                        <div class="p-3">
+                            <p>Connect to server</p>
+                            <ul>
+                                <li><b>connection adress</b>:  <i class="text-info">(base url)</i></li>
+                                <li><b>autoConnect</b>: <i>false</i>  <i class="text-danger">(required)</i></li>
+                                <li><b>reconnect</b>: <i>true</i>  <i class="text-danger">(required)</i></li>
+                                <li><b>transports</b>: <i>web-socket</i>  <i class="text-danger">(required)</i></li>
+                                <li><b>route</b>: <i>server/</i></li>
+                            </ul>
+
+                            <p>dispatch connection action</p>
+                            <ul>
+                                <li><b>type</b>: 'server/init' <i class="text-danger">(required)</i></li>
+                                <li>
+                                    <b>payload</b> <i class="text-danger">(required)</i> <i>(object)</i>
+                                    <ul>
+                                        <li><b>userId</b> <i class="text-danger">(required)</i> <i>(string)</i></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                            <p>dispatch disconnection action</p>
+                            <ul>
+                                <li><b>type</b>: 'server/forceDisconnect' <i class="text-danger">(required)</i></li>
+                            </ul>
+                            <div class="text-info pb-4">
+                            <i>when reconnect, 'server/init' action must be dispatched to the server again</i>
+                            </div>
+                            <p><b>Example:</b></p>
+                            <div class="bg-secondary text-white">
+                                <pre>
+                                    <code>
+    <b>Middleware:</b>
+                import createSocketIoMiddleware from 'redux-socket.io';
+                import io from 'socket.io-client';
+
+                let socket = io('http://localhost:5000/',{autoConnect:false,reconnection: true,transports: ["websocket"]});
+                export const OnlineSocketIoMiddleware = createSocketIoMiddleware(socket, "server/");
+                socket.connect()
+    <b>redux store:</b>
+                 import { createStore, applyMiddleware } from 'redux';
+                 import {OnlineSocketIoMiddleware} from "../Redux-middleware/initOnlineSocketMiddleware"
+
+                  let store = applyMiddleware(OnlineSocketIoMiddleware)(createStore)(reducer);
+    <b>dispatch:</b>
+                 const userId="1232asdf23523rasf23422asdfaww"
+                 dispatch({type:'server/init', payload:{userId}})
+                                    </code>
+                                </pre>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+            <div class="col-9">
+
+                <div class="border p-2 bg-info text-white">
+                    /chat
+                </div>
+                <div class="bg-light">
+                   <div  class="m-3 text-info">
+                       <h6><i>common chat</i></h6>
+                   </div>
+                    <ul class="nav nav-tabs" id="myTab26" role="tablist">
+                        <li class="nav-item d-flex">
+                            <a class="nav-link active" id="chat" data-toggle="tab" href="#chat-tab" role="tab" aria-selected="true">request</a>
+                            <a class="nav-link" id="chat-response" data-toggle="tab" href="#chat-response-tab" role="tab" aria-selected="true">response</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content" id="myTabContent26">
+                    <div class="tab-pane fade show active" id="chat-tab" role="tabpanel">
+                        <div class="p-3">
+                            <p>Connect to chat</p>
+                            <ul>
+                                <li><b>connection adress</b>: <i class="text-secondary">(base url)</i> <i>/chat</i> </li>
+                                <li><b>autoConnect</b>: <i>false</i>  <i class="text-danger">(required)</i></li>
+                                <li><b>reconnect</b>: <i>true</i>  <i class="text-danger">(required)</i></li>
+                                <li><b>transports</b>: <i>web-socket</i>  <i class="text-danger">(required)</i></li>
+                                <li><b>route</b>: <i>chat/</i></li>
+                            </ul>
+
+                            <p>dispatch action for get messages</p>
+                            <ul>
+                                <li><b>type</b>: 'chat/messages' <i class="text-danger">(required)</i></li>
+                                <li>
+                                    <b>payload</b> <i class="text-danger">(required)</i> <i>(object)</i>
+                                    <ul>
+                                        <li><b>pageNumber</b> <i class="text-danger">(required)</i> <i>(integer)</i></li>
+                                        <li><b>pageSize</b> <i class="text-danger">(required)</i> <i>(integer)</i></li>
+                                    </ul>
+                                </li>
+                            </ul>
+
+                            <p>dispatch action for send new messages</p>
+                            <ul>
+                                <li><b>type</b>: 'chat/newMessage' <i class="text-danger">(required)</i></li>
+                                <li>
+                                    <b>payload</b> <i class="text-danger">(required)</i> <i>(object)</i>
+                                    <ul>
+                                        <li><b>sender</b> <i class="text-secondary">(ownerId)</i> <i class="text-danger">(required)</i> <i>(string)</i></li>
+                                        <li><b>text</b> <i class="text-danger">(required)</i> <i>(string)</i></li>
+                                    </ul>
+                                </li>
+                            </ul>
+
+                            <div class="text-info pb-4">
+                                <i>when reconnect, 'chat/messages' action must be dispatched to the server again</i>
+                            </div>
+
+                            <p><b>Example:</b></p>
+                            <div class="bg-secondary text-white">
+                                <pre>
+                                    <code>
+    <b>Middleware:</b>
+                import createSocketIoMiddleware from 'redux-socket.io';
+                import io from 'socket.io-client';
+
+                let socket = io('http://localhost:5000/chat',{autoConnect:false,reconnection: true,transports: ["websocket"]})
+                export const ChatSocketIoMiddleware = createSocketIoMiddleware(socket, "chat/")
+                socket.connect()
+    <b>redux store:</b>
+                 import { createStore, applyMiddleware } from 'redux';
+                 import {ChatSocketIoMiddleware} from "../Redux-middleware/initChatMiddleware"
+
+                  let store = applyMiddleware(ChatSocketIoMiddleware)(createStore)(reducer);
+    <b>dispatch:</b>
+                 dispatch({type:'chat/messages', payload})
+                 dispatch({type:'chat/newMessage', message})
+                                    </code>
+                                </pre>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="tab-pane fade show" id="chat-response-tab" role="tabpanel">
+                        <div class="p-3">
+                            <p>action for get all messages</p>
+                            <ul>
+                                <li><b>type</b>: 'chat/getChatMessages' <i class="text-danger">(required)</i></li>
+                                <li>
+                                    <b>chatMessages</b> <i class="text-danger">(required)</i> <i>(array)</i>
+
+                                </li>
+                            </ul>
+
+                            <p>action for get new messages</p>
+                            <ul>
+                                <li><b>type</b>: 'chat/getNewMessage' <i class="text-danger">(required)</i></li>
+                                <li>
+                                    <b>newMessage</b> <i class="text-danger">(required)</i> <i>(object)</i>
+                                    <ul>
+                                        <li><b>sender</b> <i class="text-danger">(required)</i> <i>(object)</i></li>
+                                        <li><b>text</b> <i class="text-danger">(required)</i> <i>(string)</i></li>
+                                        <li><b>createdAt</b> <i class="text-danger">(required)</i> <i>(string)</i></li>
+                                    </ul>
+                                </li>
+                            </ul>
+
+
+                            <p><b>Example:</b></p>
+                            <div class="bg-secondary text-white">
+                                <pre>
+                                    <code>
+    extraReducers: {
+        ['chat/getChatMessages']:(state,action)=> {
+            state.messages = [...state.messages,...action.chatMessages]
+        },
+        ['chat/getNewMessage']:(state,action)=> {
+                state.messages = [action.newMessage,...state.messages]
+        }
+    }
+                                    </code>
+                                </pre>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+            <div class="col-9">
+                <div class="border p-2 bg-info text-white">
+                    /guests
+                </div>
+                <div class="bg-light">
+                    <ul class="nav nav-tabs" id="myTab27" role="tablist">
+                        <li class="nav-item d-flex">
+                            <a class="nav-link active" id="guest" data-toggle="tab" href="#guest-request-tab" role="tab" aria-selected="true">request</a>
+                            <a class="nav-link" id="guest-response" data-toggle="tab" href="#guest-response-tab" role="tab" aria-selected="true">response</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content" id="myTabContent27">
+                    <div class="tab-pane fade show active" id="guest-request-tab" role="tabpanel">
+                        <div class="p-3">
+                            <p>Connect to guests</p>
+                            <ul>
+                                <li><b>connection adress</b>: <i class="text-secondary">(base url)</i> <i>/guests</i> </li>
+                                <li><b>autoConnect</b>: <i>false</i>  <i class="text-danger">(required)</i></li>
+                                <li><b>reconnect</b>: <i>true</i>  <i class="text-danger">(required)</i></li>
+                                <li><b>transports</b>: <i>web-socket</i>  <i class="text-danger">(required)</i></li>
+                                <li><b>route</b>: <i>guests/</i></li>
+                            </ul>
+
+                            <p>dispatch action for subscribe notification</p>
+                            <ul>
+                                <li><b>type</b>: 'guests/guestNotificationSubscribe' <i class="text-danger">(required)</i></li>
+                                <li><b>ownerId</b> <i class="text-danger">(required)</i> <i>(string)</i></li>
+                            </ul>
+                            <p>dispatch action for get guests</p>
+                            <ul>
+                                <li><b>type</b>: 'guests/sendOwnerIdForGetGuests' <i class="text-danger">(required)</i></li>
+                                <li>
+                                    <b>payload</b>:<i class="text-danger">(required)</i> <i>(object)</i>
+                                    <ul>
+                                        <li><b>ownerId</b> <i class="text-danger">(required)</i> <i>(string)</i></li>
+                                        <li><b>pageNumber</b> <i class="text-danger">(required)</i> <i>(integer)</i></li>
+                                        <li><b>pageSize</b> <i class="text-danger">(required)</i> <i>(integer)</i></li>
+                                    </ul>
+                                </li>
+                            </ul>
+
+                            <p>dispatch action for guesting</p>
+                            <ul>
+                                <li><b>type</b>: "guests/guesting" <i class="text-danger">(required)</i></li>
+                                <li>
+                                    <b>guesting</b> <i class="text-danger">(required)</i> <i>(object)</i>
+                                    <ul>
+                                        <li><b>hostId</b> <i class="text-secondary">(userId)</i> <i class="text-danger">(required)</i> <i>(string)</i></li>
+                                        <li><b>guest</b> <i class="text-secondary">(ownerId)</i> <i class="text-danger">(required)</i> <i>(string)</i></li>
+                                    </ul>
+                                </li>
+                            </ul>
+
+                            <p>dispatch action for disconnect</p>
+                            <ul>
+                                <li><b>type</b>: "guests/forceDisconnect"<i class="text-danger">(required)</i></li>
+                                <li>
+                                    <b>ownerId</b> <i class="text-danger">(required)</i> <i>(string)</i>
+                                </li>
+                            </ul>
+
+                            <div class="text-info pb-4">
+                                <i>when reconnect, 'guests/guestNotificationSubscribe' action must be dispatched to the server again</i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade show" id="guest-response-tab" role="tabpanel">
+                        <div class="p-3">
+                            <p>action for notification</p>
+                            <ul>
+                                <li><b>type</b>: 'guest/guestNotification' <i class="text-danger">(required)</i></li>
+                                <li>
+                                    <b>payload</b> <i class="text-danger">(required)</i> <i>(object)</i>
+                                    <ul>
+                                        <li> <b>allNotSeenCount</b> <i class="text-danger">(required)</i> <i>(integer)</i></li>
+                                        <li> <b>allGuestCount</b> <i class="text-danger">(required)</i> <i>(integer)</i></li>
+                                    </ul>
+                                </li>
+                            </ul>
+
+                            <p>action for guests</p>
+                            <ul>
+                                <li><b>type</b>: 'guests/guests' <i class="text-danger">(required)</i></li>
+                                <li>
+                                    <b>payload</b> <i class="text-danger">(required)</i> <i>(object)</i>
+                                    <ul>
+                                        <li><b>guests</b> <i class="text-danger">(required)</i> <i>(array)</i></li>
+                                        <li><b>wasSeenCount</b> <i class="text-danger">(required)</i> <i>(integer)</i></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                            <p>action for new guests</p>
+                            <ul>
+                                <li><b>type</b>: 'guests/NewGuest' <i class="text-danger">(required)</i></li>
+                                <li>
+                                    <b>payload</b> <i class="text-danger">(required)</i> <i>(object)</i>
+                                    <ul>
+                                        <li><b>allNotSeenCount</b> <i class="text-danger">(required)</i> <i>(integer)</i></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+            <div class="col-9">
+                <div class="border p-2 bg-info text-white">
+                    /messenger
+                </div>
+                <div class="bg-light">
+                    <ul class="nav nav-tabs" id="myTab28" role="tablist">
+                        <li class="nav-item d-flex">
+                            <a class="nav-link active" id="messenger" data-toggle="tab" href="#messenger-request-tab" role="tab" aria-selected="true">request</a>
+                            <a class="nav-link" id="messenger-response" data-toggle="tab" href="#messenger-response-tab" role="tab" aria-selected="true">response</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content" id="myTabContent28">
+                    <div class="tab-pane fade show active" id="messenger-request-tab" role="tabpanel">
+                        <div class="p-3">
+                            <p>Connect to messenger</p>
+                            <ul>
+                                <li><b>connection adress</b>: <i class="text-secondary">(base url)</i> <i>/messenger</i> </li>
+                                <li><b>autoConnect</b>: <i>false</i>  <i class="text-danger">(required)</i></li>
+                                <li><b>reconnect</b>: <i>true</i>  <i class="text-danger">(required)</i></li>
+                                <li><b>transports</b>: <i>web-socket</i>  <i class="text-danger">(required)</i></li>
+                                <li><b>route</b>: <i>messenger/</i></li>
+                            </ul>
+
+                            <p>dispatch action for subscribe messenger</p>
+                            <ul>
+                                <li><b>type</b>:'messenger/notificationSubscribe' <i class="text-danger">(required)</i></li>
+                                <li><b>ownerId</b> <i class="text-danger">(required)</i> <i>(string)</i></li>
+                            </ul>
+                            <p>dispatch action for get conversation</p>
+                            <ul>
+                                <li><b>type</b>: 'messenger/getOwnerConversation' <i class="text-danger">(required)</i></li>
+                                <li>
+                                    <b>data</b>:<i class="text-danger">(required)</i> <i>(object)</i>
+                                    <ul>
+                                        <li><b>ownerId</b> <i class="text-danger">(required)</i> <i>(string)</i></li>
+                                        <li><b>currentConversationId</b> <i>(string)</i></li>
+                                    </ul>
+                                </li>
+                            </ul>
+
+                            <p>dispatch action for create conversation</p>
+                            <ul>
+                                <li><b>type</b>: 'messenger/createConversation' <i class="text-danger">(required)</i></li>
+                                <li>
+                                    <b>data</b>:<i class="text-danger">(required)</i> <i>(object)</i>
+                                    <ul>
+                                        <li><b>ownerId</b> <i class="text-danger">(required)</i> <i>(string)</i></li>
+                                        <li><b>userId</b>  <i class="text-danger">(required)</i> <i>(string)</i></li>
+                                    </ul>
+                                </li>
+                            </ul>
+
+                            <p>dispatch action for join room</p>
+                            <ul>
+                                <li><b>type</b>: 'messenger/joinRoom' <i class="text-danger">(required)</i></li>
+                                <li>
+                                    <b>data</b>:<i class="text-danger">(required)</i> <i>(object)</i>
+                                    <ul>
+                                        <li><b>conversationId</b>  <i class="text-danger">(required)</i> <i>(string)</i></li>
+                                        <li><b>pageNumber</b>  <i class="text-danger">(required)</i> <i>(string)</i></li>
+                                        <li><b>pageSize</b>  <i class="text-danger">(required)</i> <i>(string)</i></li>
+                                    </ul>
+                                </li>
+                            </ul>
+
+                            <p>dispatch action for leave room</p>
+                            <ul>
+                                <li><b>type</b>: 'messenger/leaveChatRoom'<i class="text-danger">(required)</i></li>
+                                <li><b>conversationId</b>  <i class="text-danger">(required)</i> <i>(string)</i></li>
+                            </ul>
+
+                            <p>dispatch action for read message notification</p>
+                            <ul>
+                                <li><b>type</b>: 'messenger/setIsRead' <i class="text-danger">(required)</i></li>
+                                <li>
+                                    <b>data</b>:<i class="text-danger">(required)</i> <i>(object)</i>
+                                    <ul>
+                                        <li><b>messageId</b>  <i class="text-danger">(required)</i> <i>(string)</i></li>
+                                        <li><b>isRead</b>  <i class="text-danger">(required)</i> <i>(boolean)</i></li>
+                                    </ul>
+                                </li>
+                            </ul>
+
+                            <p>dispatch action for new message</p>
+                            <ul>
+                                <li><b>type</b>: 'messenger/sendNewMessage'<i class="text-danger">(required)</i></li>
+                                <li>
+                                    <b>message</b>:<i class="text-danger">(required)</i> <i>(object)</i>
+                                    <ul>
+                                        <li><b>conversationId</b>  <i class="text-danger">(required)</i> <i>(string)</i></li>
+                                        <li><b>sender</b>  <i class="text-danger">(required)</i> <i>(string)</i></li>
+                                        <li><b>text</b>  <i class="text-danger">(required)</i> <i>(string)</i></li>
+                                    </ul>
+                                </li>
+                            </ul>
+
+                            <p>dispatch action for disconnect</p>
+                            <ul>
+                                <li><b>type</b>: 'messenger/forceDisconnect'<i class="text-danger">(required)</i></li>
+                                <li>
+                                    <b>ownerId</b> <i class="text-danger">(required)</i> <i>(string)</i>
+                                </li>
+                            </ul>
+
+                            <div class="text-info pb-4">
+                                <i>when reconnect, 'messenger/notificationSubscribe' action must be dispatched to the server again</i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade show" id="messenger-response-tab" role="tabpanel">
+                        <div class="p-3">
+                            <p>action for subscribe messenger notification</p>
+                            <ul>
+                                <li><b>type</b>: 'messenger/notification' <i class="text-danger">(required)</i></li>
+                                <li>
+                                    <b>allNotReadingCount</b> <i class="text-danger">(required)</i> <i>(integer)</i>
+                                </li>
+                            </ul>
+
+                            <p>action for message notification new message</p>
+                            <ul>
+                                <li><b>type</b>: 'messenger/notification' <i class="text-danger">(required)</i></li>
+                                <li>
+                                    <b>conversationId</b> <i class="text-danger">(required)</i> <i>(string)</i>
+                                </li>
+                            </ul>
+
+                            <p>action for new conversation</p>
+                            <ul>
+                                <li><b>type</b>: 'messenger/newConversation' <i class="text-danger">(required)</i></li>
+                                <li>
+                                    <b>data</b> <i class="text-danger">(required)</i> <i>(object)</i>
+                                    <ul>
+                                        <li> <b>_id</b> <i class="text-danger">(required)</i> <i>(string)</i></li>
+                                        <li> <b>createdAt</b> <i class="text-danger">(required)</i> <i>(string)</i></li>
+                                        <li> <b>updatedAt</b> <i class="text-danger">(required)</i> <i>(string)</i></li>
+                                        <li> <b>members</b> <i class="text-danger">(required)</i> <i>(array)</i></li>
+                                        <li> <b>isNotReadingCount</b> <i class="text-danger">(required)</i> <i>(integer)</i></li>
+                                    </ul>
+                                </li>
+                            </ul>
+
+                            <p>action for conversation</p>
+                            <ul>
+                                <li><b>type</b>: 'messenger/conversation' <i class="text-danger">(required)</i></li>
+                                <li>
+                                    <b>conversation</b> <i class="text-danger">(required)</i> <i>(array)</i>
+                                </li>
+                            </ul>
+
+                            <p>action for join room and get messages</p>
+                            <ul>
+                                <li><b>type</b>: 'messenger/getRoomMessages' <i class="text-danger">(required)</i></li>
+                                <li>
+                                    <b>messages</b> <i class="text-danger">(required)</i> <i>(array)</i>
+                                </li>
+                            </ul>
+
+                            <p>action for read messages</p>
+                            <ul>
+                                <li><b>type</b>: 'messenger/isRead' <i class="text-danger">(required)</i></li>
+                                <li>
+                                    <b>payloadSender || payloadReceiver</b> <i class="text-danger">(required)</i> <i>(array)</i>
+                                    <ul>
+                                        <li> <b>messageId</b> <i class="text-danger">(required)</i> <i>(string)</i></li>
+                                        <li> <b>isRead</b> <i class="text-danger">(required)</i> <i>(boolean)</i></li>
+                                        <li> <b>conversationId</b> <i class="text-danger">(required)</i> <i>(string)</i></li>
+                                        <li> <b>allNotReadingMessageCountNotification</b> <i class="text-danger">(required)</i> <i>(integer)</i></li>
+                                    </ul>
+                                </li>
+                            </ul>
+
+                        </div>
+                    </div>
+                </div>
+                </div>
             </div>
         </div>
     </div>
@@ -187,7 +698,7 @@
                                         <li><b>first name</b> <i class="text-danger">required</i> <i>(string)</i><p>max:16 min:2</p> </li>
                                         <li><b>last Name</b>  <i class="text-danger">required</i> <i>(string)</i><p>max:16 min:2</p></li>
                                         <li><b>email</b> <i class="text-danger">required</i> <i>(string)</i> <p>an email address that is not available on the site</p></li>
-                                        <li><b>pasword</b> <i class="text-danger">required</i> <i>(string)</i> <p>password for access with properties such as min: 6, max: 50 lowerCase: 1 upperCase: 1 symbol: 1 requirementCount: 1 numeric: 1</p></li>
+                                        <li><b>password</b> <i class="text-danger">required</i> <i>(string)</i> <p>password for access with properties such as min: 6, max: 50 lowerCase: 1 upperCase: 1 symbol: 1 requirementCount: 1 numeric: 1</p></li>
                                     </ul>
                                 </div>
                             </div>
@@ -1467,7 +1978,7 @@
         <div class="modal fade myPhotos-post" id="myPhotos-post" tabindex="-1" role="dialog" aria-labelledby="myPhotos-post" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-header bg-white">
-                    <h5 class="modal-title"><span class="bg-primary text-white p-2 rounded">POST</span> <span>/myPhotos</span></h5>
+                    <h5 class="modal-title"><span class="bg-success text-white p-2 rounded">POST</span> <span>/myPhotos</span></h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -1520,7 +2031,237 @@
                 </div>
         </div>
     </div>
+        <!--        follow-->
+        <div class="modal fade follow-followers-get" id="follow-followers-get" tabindex="-1" role="dialog" aria-labelledby="follow-followers-get" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-header bg-white">
+                    <h5 class="modal-title"><span class="bg-primary text-white p-2 rounded">GET</span> <span class="text-secondary">/follow</span><span>/followers</span>/{userId}</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="bg-info p-3">
+                    <h6 class="text-white">get followers by id</h6>
+                </div>
+                <div class="modal-content">
+                        <ul class="nav nav-tabs" id="myTab21" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" id="follow-followers-get-request-tab" data-toggle="tab" href="#follow-followers-get-request" role="tab" aria-controls="request" aria-selected="true">Request</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="follow-followers-get-response-tab" data-toggle="tab" href="#follow-followers-get-response" role="tab" aria-controls="follow-followers-get-statusId" aria-selected="false">Response</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content" id="myTabContent21">
+                            <div class="tab-pane fade show active p-3" id="follow-followers-get-request" role="tabpanel">
+                                <div>
+                                    <div>
+                                        <p class="text-warning">Headers</p>
+                                        <div> <b>Media Type</b>: <i>Access-Control-Expose-Headers</i> </div>
+                                        <b>Properties</b>:
+                                        <ul>
+                                            <li><b>x-auth-token</b><i>(string)</i></li>
+                                        </ul>
+                                        <p><b>URI parameteres</b> :</p>
+                                        <ul>
+                                            <li>userId <i class="text-danger">(required)</i> <i>(string)</i></li>
+                                        </ul>
 
+                                        <p><b>query parameteres</b> :</p>
+                                        <ul>
+                                            <li>pageSize<i>(string)</i></li>
+                                            <li>pageNumber<i>(string)</i></li>
+                                        </ul>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="follow-followers-get-response" role="tabpanel">
+                                <div class="border p-4">
+                                    HTTP status code <span class="text-primary">200</span>
+                                </div>
+                                <div class="p-4">
+                                    <p>Headers</p>
+                                    <ul>
+                                        <li><b>Content-Type</b ><i class="text-danger"> (required)</i> <i>(aplication/Json)</i></li>
+                                    </ul>
+                                    <p>Body</p>
+                                    <div> <b>Media Type</b>: <i>aplication/json</i> </div>
+                                    <div> <b>Type</b>: <i>Array</i> </div>
+                                </div>
+                            </div>
+                        </div>
+                </div>
+        </div>
+    </div>
+        <div class="modal fade follow-followed-get" id="follow-followed-get" tabindex="-1" role="dialog" aria-labelledby="follow-followed-get" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-header bg-white">
+                    <h5 class="modal-title"><span class="bg-primary text-white p-2 rounded">GET</span> <span class="text-secondary">/follow</span><span>/followed</span>/{userId}</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="bg-info p-3">
+                    <h6 class="text-white">get followed by id</h6>
+                </div>
+                <div class="modal-content">
+                        <ul class="nav nav-tabs" id="myTab22" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" id="follow-followed-get-request-tab" data-toggle="tab" href="#follow-followed-get-request" role="tab" aria-controls="request" aria-selected="true">Request</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="follow-followed-get-response-tab" data-toggle="tab" href="#follow-followed-get-response" role="tab" aria-controls="follow-followed-get-statusId" aria-selected="false">Response</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content" id="myTabContent22">
+                            <div class="tab-pane fade show active p-3" id="follow-followed-get-request" role="tabpanel">
+                                <div>
+                                    <div>
+                                        <p class="text-warning">Headers</p>
+                                        <div> <b>Media Type</b>: <i>Access-Control-Expose-Headers</i> </div>
+                                        <b>Properties</b>:
+                                        <ul>
+                                            <li><b>x-auth-token</b><i>(string)</i></li>
+                                        </ul>
+                                        <p><b>URI parameteres</b> :</p>
+                                        <ul>
+                                            <li>userId <i class="text-danger">(required)</i> <i>(string)</i></li>
+                                        </ul>
+
+                                        <p><b>query parameteres</b> :</p>
+                                        <ul>
+                                            <li>pageSize<i>(string)</i></li>
+                                            <li>pageNumber<i>(string)</i></li>
+                                        </ul>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="follow-followed-get-response" role="tabpanel">
+                                <div class="border p-4">
+                                    HTTP status code <span class="text-primary">200</span>
+                                </div>
+                                <div class="p-4">
+                                    <p>Headers</p>
+                                    <ul>
+                                        <li><b>Content-Type</b ><i class="text-danger"> (required)</i> <i>(aplication/Json)</i></li>
+                                    </ul>
+                                    <p>Body</p>
+                                    <div> <b>Media Type</b>: <i>aplication/json</i> </div>
+                                    <div> <b>Type</b>: <i>Array</i> </div>
+                                </div>
+                            </div>
+                        </div>
+                </div>
+        </div>
+    </div>
+        <div class="modal fade follow-post" id="follow-post" tabindex="-1" role="dialog" aria-labelledby="follow-post" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-header bg-white">
+                    <h5 class="modal-title"><span class="bg-success text-white p-2 rounded">POST</span> <span class="text-secondary">/follow</span>/{userId}</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="bg-info p-3">
+                    <h6 class="text-white">follow</h6>
+                </div>
+                <div class="modal-content">
+                        <ul class="nav nav-tabs" id="myTab23" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" id="follow-post-request-tab" data-toggle="tab" href="#follow-post-request" role="tab" aria-controls="request" aria-selected="true">Request</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="follow-post-response-tab" data-toggle="tab" href="#follow-post-response" role="tab" aria-controls="follow-post-statusId" aria-selected="false">Response</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content" id="myTabContent23">
+                            <div class="tab-pane fade show active p-3" id="follow-post-request" role="tabpanel">
+                                <div>
+                                    <div>
+                                        <p><b>URI parameteres</b> :</p>
+                                        <ul>
+                                            <li>userId <i class="text-danger">(required)</i> <i>(string)</i></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="follow-post-response" role="tabpanel">
+                                <div class="border p-4">
+                                    HTTP status code <span class="text-primary">200</span>
+                                </div>
+                                <div class="p-4">
+                                    <p>Headers</p>
+                                    <ul>
+                                        <li><b>Content-Type</b ><i class="text-danger"> (required)</i> <i>(aplication/Json)</i></li>
+                                    </ul>
+                                    <p>Body</p>
+                                    <div> <b>Media Type</b>: <i>aplication/json</i> </div>
+                                    <div> <b>Type</b>: <i>Object</i> </div>
+                                    <b>Properties</b>:
+                                    <ul>
+                                        <li><b>follow</b><i class="text-danger">(required)</i><i>(boolean)</i></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                </div>
+        </div>
+    </div>
+        <div class="modal fade unfollow-delete" id="unfollow-delete" tabindex="-1" role="dialog" aria-labelledby="unfollow-delete" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-header bg-white">
+                    <h5 class="modal-title"><span class="bg-danger text-white p-2 rounded">DELETE</span> <span class="text-secondary">/follow</span>/{userId}</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="bg-info p-3">
+                    <h6 class="text-white">unfollow</h6>
+                </div>
+                <div class="modal-content">
+                        <ul class="nav nav-tabs" id="myTab24" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" id="unfollow-delete-request-tab" data-toggle="tab" href="#unfollow-delete-request" role="tab" aria-controls="request" aria-selected="true">Request</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="unfollow-delete-response-tab" data-toggle="tab" href="#unfollow-delete-response" role="tab" aria-controls="unfollow-delete-statusId" aria-selected="false">Response</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content" id="myTabContent24">
+                            <div class="tab-pane fade show active p-3" id="unfollow-delete-request" role="tabpanel">
+                                <div>
+                                    <div>
+                                        <p><b>URI parameteres</b> :</p>
+                                        <ul>
+                                            <li>userId <i class="text-danger">(required)</i> <i>(string)</i></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="unfollow-delete-response" role="tabpanel">
+                                <div class="border p-4">
+                                    HTTP status code <span class="text-primary">200</span>
+                                </div>
+                                <div class="p-4">
+                                    <p>Headers</p>
+                                    <ul>
+                                        <li><b>Content-Type</b ><i class="text-danger"> (required)</i> <i>(aplication/Json)</i></li>
+                                    </ul>
+                                    <p>Body</p>
+                                    <div> <b>Media Type</b>: <i>aplication/json</i> </div>
+                                    <div> <b>Type</b>: <i>Object</i> </div>
+                                    <b>Properties</b>:
+                                    <ul>
+                                        <li><b>follow</b><i class="text-danger">(required)</i><i>(boolean)</i></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                </div>
+        </div>
+    </div>
     </div>>
 <!--scripts-->
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
@@ -1534,21 +2275,66 @@
 
 
 
+<!--<div class="col-9">-->
+<!--    <div class="d-flex justify-content-center flex-column align-items-center py-2">-->
+<!--        <h3>Socket Io</h3>-->
+<!--        <h4 class="text-secondary">(redux middleware)</h4>-->
+<!--    </div>-->
+<!--    <div class="border p-2 bg-info text-white">-->
+<!--        User online-->
+<!--    </div>-->
+<!--    <div>-->
+<!--        <div  class="m-3 text-info">-->
+<!--            <h6><i>notify the user that the site has been visited</i></h6>-->
+<!--        </div>-->
+<!--        <ul class="nav nav-tabs" id="myTab25" role="tablist">-->
+<!--            <li class="nav-item">-->
+<!--                <a class="nav-link active" id="socket-io-connect" data-toggle="tab" href="#socket-io-connect-tab" role="tab" aria-selected="true">connect</a>-->
+<!--            </li>-->
+<!--            <li class="nav-item">-->
+<!--                <a class="nav-link" id="messages-connect" data-toggle="tab" href="#messages-connect-tab" role="tab"aria-selected="false">socketIo</a>-->
+<!--            </li>-->
+<!--        </ul>-->
+<!--        <div class="tab-content" id="myTabContent25">-->
+<!--            <div class="tab-pane fade show active p-3" id="socket-io-connect-tab" role="tabpanel">-->
+<!--                <div>-->
+<!--                    connect-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="tab-pane fade p-3" id="messages-connect-tab" role="tabpanel">-->
+<!--                <div>-->
+<!--                    socket-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
 
 
-<!--                                <div class="mt-2 d-flex justify-content-between align-items-center">-->
-<!--                                    <h6 class="px-5"><span class="text-secondary">/auth</span><span>/photos</span></h6>-->
-<!--                                    <div class="mx-5">-->
-<!--                                        <button type="button" class="btn btn-primary" style="width: 70px">GET</button>-->
-<!--                                        <button type="button" class="btn btn-success" style="width: 70px">POST</button>-->
-<!--                                    </div>-->
-<!--                                </div>-->
 
-<!--                                <div class="mt-2 d-flex justify-content-between align-items-center">-->
-<!--                                    <h6 class="px-5"><span class="text-secondary">/auth</span><span>/id</span></h6>-->
-<!--                                    <div class="mx-5">-->
-<!--                                        <button type="button" class="btn btn-primary" style="width: 70px">GET</button>-->
-<!--                                        <button type="button" class="btn btn-success" style="width: 70px">POST</button>-->
-<!--                                        <button type="button" class="btn btn-danger" style="width: 70px">DELETE</button>-->
-<!--                                    </div>-->
-<!--                                </div>-->
+
+
+
+
+
+
+
+
+
+
+
+
+<!--<p>action</p>-->
+<!--<ul>-->
+<!--    <li><b>type</b>: 'server/init' <i class="text-danger">(required)</i></li>-->
+<!--    <li>-->
+<!--        <b>payload</b> <i class="text-danger">(required)</i> <i>(object)</i>-->
+<!--        <ul>-->
+<!--            <li><b>userId</b> <i class="text-danger">(required)</i> <i>(string)</i></li>-->
+<!--        </ul>-->
+<!--    </li>-->
+<!--</ul>-->
+<!--<div class="text-info">-->
+<!--    <i>this action will automatically come to your store.-->
+<!--        enter the action type into any reducer and have a payload</i>-->
+<!--</div>-->

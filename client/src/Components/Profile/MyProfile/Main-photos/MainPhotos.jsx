@@ -13,11 +13,11 @@ const MainPhotos = ({profile,handleCurrentImage,setOpenAnythingNews,openAnything
     }
 
     return <Grid container>
-        <Box fullWidth={true} sx={{display:'flex',justifyContent:'space-between',flexDirection:'row'}}>
+        <Box fullWidth sx={{display:'flex',justifyContent:'space-between',flexDirection:'row',width:"100%"}}>
             <Typography>
                 <b>Photos</b>
             </Typography>
-            <Button onClick={handleAddPhoto}>add photo</Button>
+            {isOwner && <Button onClick={handleAddPhoto} sx={{mr:'3.2rem'}}>add photo</Button>}
         </Box>
         <AllPhotos userId={profile._id} myPhotosCount={profile.myPhotosCount} handleCurrentImage={handleCurrentImage} />
 

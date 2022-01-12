@@ -13,8 +13,8 @@ export const guestNotificationSubscribe = createAsyncThunk('guestNotification',(
     socket.io.on('reconnect', function () {_dispatchGuestNtf()})
 })
 
-export const getGuests = createAsyncThunk('getGuests',(data, thunkAPI) => {
-    thunkAPI.dispatch({type:'guests/sendOwnerIdForGetGuests', data})
+export const getGuests = createAsyncThunk('getGuests',(payload, thunkAPI) => {
+    thunkAPI.dispatch({type:'guests/sendOwnerIdForGetGuests', payload})
 })
 
 export const guesting = createAsyncThunk('guesting',(guesting, thunkAPI) => {

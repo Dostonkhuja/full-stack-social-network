@@ -15,6 +15,9 @@ import Followers from "./Friends/Followers";
 import {Grid, Typography} from "@mui/material";
 import MainPhotos from "./Main-photos/MainPhotos";
 import BriefInformation from "./Brief-information/BriefInformation";
+import EmailIcon from "@mui/icons-material/Email";
+import {useDispatch} from "react-redux";
+import {useHistory} from "react-router-dom";
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -43,13 +46,15 @@ TabPanel.propTypes = {
 
 const MyProfile = React.memo((props) => {
     console.log('my profile rendered')
+    const dispatch = useDispatch()
+    const history = useHistory()
 
     const [currentImage, setCurrentImage] = React.useState(false)
     const [isOpen, setIsOpen] = React.useState(false)
     const [value, setValue] = React.useState(0);
 
     const {
-        getStatus, token, liked, disliked,
+        createNewConversation,getStatus, token, liked, disliked,
         ownerId, profileFollow, profileUnfollow,newComment,
         showComments, isOwner, ownerPhoto, profile, updateMyStatus,
         updateMyProfile, updateMyAvatar, updateMyCoverImage,
@@ -73,6 +78,12 @@ const MyProfile = React.memo((props) => {
             setIsOpen(true)
         }
     }
+
+    const handleSendMessage = () => {
+        dispatch(createNewConversation({ownerId,userId:profile._id}))
+        history.push('/messenger')
+    }
+
     const handleTabChange = (event, newValue) => {setValue(newValue)}
 
     const [openAnythingNews, setOpenAnythingNews] = React.useState(false)
@@ -85,14 +96,23 @@ const MyProfile = React.memo((props) => {
         <MainPart handleCurrentImage={handleCurrentImage} profile={profile} updateMyAvatar={updateMyAvatar}
                   updateMyCoverImage={updateMyCoverImage} isOwner={isOwner}/>
 
-        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+        <Box sx={{ borderBottom: 1, borderColor: 'divider',display:'flex',justifyContent:'space-around' }}>
             <Tabs value={value} onChange={handleTabChange}>
                 <Tab label="Publications"/>
                 <Tab label={"Followers " + profile.followedCount}/>
                 <Tab label={"Followed " + profile.followingCount}/>
                 <Tab label="Photos"/>
-                {isOwner && <UpdateProfile profile={profile} updateMyProfile={updateMyProfile}/>}
             </Tabs>
+            <div>
+                {!isOwner && token &&
+                    <div onClick={handleSendMessage} style={{cursor:'pointer',marginTop:"0.7rem",width:'100%'}}>
+                        <EmailIcon color={ 'primary'}/>
+                    </div>}
+
+                {isOwner &&<div style={{display:'fex',justifyContent:'space-around',width:'100%',marginRight:'5.2rem'}}>
+                    <UpdateProfile profile={profile} updateMyProfile={updateMyProfile}/>
+                </div>}
+            </div>
         </Box>
 
         <TabPanel value={value} index={0}>

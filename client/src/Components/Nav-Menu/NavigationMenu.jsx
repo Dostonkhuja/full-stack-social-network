@@ -8,6 +8,13 @@ import GroupWorkIcon from '@mui/icons-material/GroupWork';
 import {NavLink} from "react-router-dom";
 import {setCurrentPage} from '../../State-management/AppSlice'
 import {useDispatch, useSelector} from 'react-redux'
+import AlarmOnIcon from '@mui/icons-material/AlarmOn';
+import BookmarkIcon from '@mui/icons-material/Bookmark';
+import CoronavirusIcon from '@mui/icons-material/Coronavirus';
+import LiveTvIcon from '@mui/icons-material/LiveTv';
+import WorkIcon from '@mui/icons-material/Work';
+import ExtensionIcon from '@mui/icons-material/Extension';
+import StarIcon from '@mui/icons-material/Star';
 
 const NavigationMenu = () => {
     const dispatch = useDispatch()
@@ -65,6 +72,55 @@ const NavigationMenu = () => {
                     <ListItemText primary={'groups'}/>
                 </ListItem>
                 </NavLink>
+
+                <ListItem button disabled={true}>
+                    <ListItemIcon>
+                        <AlarmOnIcon/>
+                    </ListItemIcon>
+                    <ListItemText primary={'memories'}/>
+                </ListItem>
+
+                <ListItem button disabled={true}>
+                    <ListItemIcon>
+                        <BookmarkIcon/>
+                    </ListItemIcon>
+                    <ListItemText primary={'saved'}/>
+                </ListItem>
+
+                <ListItem button disabled={true}>
+                    <ListItemIcon>
+                        <CoronavirusIcon/>
+                    </ListItemIcon>
+                    <ListItemText primary={'COVID-19'}/>
+                </ListItem>
+
+                <ListItem button disabled={true}>
+                    <ListItemIcon>
+                        <LiveTvIcon/>
+                    </ListItemIcon>
+                    <ListItemText primary={'watch'}/>
+                </ListItem>
+
+                <ListItem button disabled={true}>
+                    <ListItemIcon>
+                        <WorkIcon/>
+                    </ListItemIcon>
+                    <ListItemText primary={'vacansies'}/>
+                </ListItem>
+
+                <ListItem button disabled={true}>
+                    <ListItemIcon>
+                        <ExtensionIcon/>
+                    </ListItemIcon>
+                    <ListItemText primary={'games'}/>
+                </ListItem>
+
+                <ListItem button disabled={true}>
+                    <ListItemIcon>
+                        <StarIcon/>
+                    </ListItemIcon>
+                    <ListItemText primary={'favorites'}/>
+                </ListItem>
             </List>
         </div>
     );

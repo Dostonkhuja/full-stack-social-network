@@ -201,16 +201,15 @@ function Navbar() {
         </Menu>
     );
 
-    // color='green'
     return (<>
-            <Box sx={{flexGrow: 1}}>
+            {token && <Box sx={{flexGrow: 1}}>
                     <AppBar position="static" color='inherit'>
                         <Toolbar>
                             <Typography
                                 variant="h6"
                                 noWrap
                                 component="div"
-                                sx={{display: {xs: 'none', sm: 'block'}}}
+                                sx={{color:'#0a0246',display: {xs: 'none', sm: 'block'}}}
                             >
                                 Social Network
                             </Typography>
@@ -317,7 +316,7 @@ function Navbar() {
                     </AppBar>
                     {renderMobileMenu}
                     {renderMenu}
-            </Box>
+            </Box>}
         </>
     );
 }

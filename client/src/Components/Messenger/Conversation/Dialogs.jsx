@@ -88,7 +88,8 @@ const Dialogs = ({allMessagesCount,joinRoom,messages,ownerProfile,currentConvers
                     alignItems: 'center',
                     border: '2px solid #f3f3f3',
                     height: '38px',
-                    padding: '5px'
+                    padding: '10px',
+                    marginTop:'1rem'
                 }}>
                     {currentConversation && currentConversation.members[0].isOnline
                         ? <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', padding: '0.5rem'}}>

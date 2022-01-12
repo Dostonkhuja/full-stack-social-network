@@ -6,9 +6,11 @@ import {getGuests} from "../../Redux-middleware/initGuestsMiddleware";
 import {setGuestsDefoult} from "../../State-management/GuestsSlice";
 import {Grid} from "@mui/material";
 import Guest from "./Guest";
+import {useHistory} from "react-router-dom";
 
 const Guests = () => {
     const dispatch = useDispatch()
+    const history = useHistory()
 
     const [pageNumber,setPageNubmer] = useState(1)
     const pageSize=10
@@ -16,6 +18,7 @@ const Guests = () => {
     const guests = useSelector(state=> state.guests.guests)
     const allGuestCount = useSelector(state=> state.guests.allGuestCount)
     const ownerId = useSelector(state => state.profile.ownerProfile ? state.profile.ownerProfile._id : '')
+    const token = localStorage.getItem('x-auth-token')
 
     const fetchMoreData = () => {
         if (pageNumber > 1){
@@ -29,13 +32,18 @@ const Guests = () => {
             setPageNubmer(pageNumber + 1)
             dispatch(getGuests({ownerId,pageNumber,pageSize}))
         }
+
+        if(!token){
+            history.push('/signIn')
+        }
+
         return ()=> {
             setPageNubmer(1)
             dispatch(setGuestsDefoult())
         }
     },[ownerId,allGuestCount])
 
-    return (
+    return (<Grid item xs={12}>
         <InfiniteScroll
             dataLength={guests.length}
             next={fetchMoreData}
@@ -52,7 +60,7 @@ const Guests = () => {
                 </Grid>
             </Grid>
         </InfiniteScroll>
-    )
+    </Grid>)
 }
 
 export default Guests

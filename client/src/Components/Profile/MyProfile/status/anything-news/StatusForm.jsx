@@ -73,7 +73,7 @@ const StatusForm = ({updateMyStatus,handleCloseAnythingNews,isOpenInput,setIsOpe
             <IconButton color="primary"  component="span">
                 <AddPhotoAlternateIcon fontSize='large'/>
             </IconButton>
-            <h1>add photo</h1>
+            <h1 style={{color:'#858585'}}><i>add photo</i></h1>
             <input style={{display: 'none'}} ref={inputRef} type="file" id='photoFile' name="photoFile"   onChange={handleChange}/>
         </label>}
             {preview !== null &&
