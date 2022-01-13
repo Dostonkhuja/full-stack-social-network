@@ -2,7 +2,7 @@ import {createAsyncThunk} from "@reduxjs/toolkit";
 import createSocketIoMiddleware from 'redux-socket.io';
 import io from 'socket.io-client';
 
-let socket = io('http://localhost:5000/chat',{autoConnect:false,reconnection: true,transports: ["websocket"]})
+let socket = io('https://social-beatles.herokuapp.com/chat',{autoConnect:false,reconnection: true,transports: ["websocket"]})
 export const ChatSocketIoMiddleware = createSocketIoMiddleware(socket, "chat/")
 
 //server dispatch
