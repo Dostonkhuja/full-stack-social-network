@@ -3,6 +3,7 @@ const server = require('http').createServer(app)
 const winston = require('winston')
 require('dotenv').config()
 
+require('./startUp/prod')(app)
 require('./startUp/io')(server)
 require('./startUp/routes')(app)
 require('./startUp/db')()
