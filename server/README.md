@@ -1,4 +1,4 @@
-# ijtimoiy tarmoq frontend 
+# ijtimoiy tarmoq backend
 Doston Sheraliyev
 
 ushbu sayt foydalanuvchilar aro muloqot qilish, statuslarni ommaga e'lon qilish
@@ -6,7 +6,7 @@ muhokamalar uyushtirish,like tugmalarini bosish,shaxsiy yozishmalar yozish
 va boshqa bir qator hususiyatlarni o'z ichiga oladi.
 ushbu qismda loyihaning backend qismi bilan tanishib chiqish mumkin.
 
-saytga o'tish uchun: https://www.com/
+saytga o'tish uchun: https://social-beatles.herokuapp.com
  
 Loyihaning backend qismi node js run time muhitida express kutibxonasidan foydalanilgan holatda ishlab chiqilgan.
 
