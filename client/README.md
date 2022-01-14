@@ -6,7 +6,7 @@ muhokamalar uyushtirish,like tugmalarini bosish,shaxsiy yozishmalar yozish
 va boshqa bir qator hususiyatlarni o'z ichiga oladi.
 ushbu qismda loyihaning frontend ya'ni clinet qismi bilan tanishib chiqish mumkin.
 
-saytga o'tish uchun: https://www.com/
+saytga o'tish uchun: https://social-beatles.netlify.app/
  
 loyihaning client qismi to'liq SOLID tamoillari asosida ishlab chiqilgan.
 Loyihada ushbu tamoillarga muvofiq UI,BIZNES,DAL qismlarga ajratilgan. React js kutibxonasidan foydalanilgan.
