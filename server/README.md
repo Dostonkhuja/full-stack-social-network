@@ -9,6 +9,7 @@ ushbu qismda loyihaning backend qismi bilan tanishib chiqish mumkin.
 saytga o'tish uchun: https://social-beatles.herokuapp.com
  
 Loyihaning backend qismi node js run time muhitida express kutibxonasidan foydalanilgan holatda ishlab chiqilgan.
+malumotlar bazasi mongoDB
 
 ## bartaraf etilishi ko'zda tutilgan qismlar
 
