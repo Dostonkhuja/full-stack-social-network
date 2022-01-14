@@ -6,7 +6,13 @@ import ChatRooms from "./chat-rooms/ChatRooms"
 import {useDispatch, useSelector} from "react-redux";
 import {setCurrentPage} from '../../State-management/AppSlice'
 import {getCurrentConversation, setCurrentConversationToDefoult} from "../../State-management/MessengerSlice"
-import {getOwnerConversation, joinRoom, leaveRoom, newMessage, setIsRead} from "../../Redux-middleware/initMessengerSocketMiddleware"
+import {
+    getOwnerConversation,
+    joinRoom,
+    leaveRoom,
+    newMessage,
+    setIsRead
+} from "../../Redux-middleware/initMessengerSocketMiddleware"
 
 const Messenger = () => {
     const dispatch = useDispatch()

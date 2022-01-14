@@ -10,6 +10,7 @@ import Picker, {SKIN_TONE_MEDIUM_DARK} from 'emoji-picker-react';
 import dateFormat from "dateformat";
 import * as timeago from 'timeago.js'
 import vi from 'timeago.js/lib/lang/ru'
+
 timeago.register('vi', vi);
 
 const Dialogs = ({allMessagesCount,joinRoom,messages,ownerProfile,currentConversation,newMessage,setIsRead}) => {

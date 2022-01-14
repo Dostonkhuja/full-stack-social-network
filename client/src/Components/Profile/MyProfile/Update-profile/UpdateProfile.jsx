@@ -2,11 +2,9 @@ import React from "react";
 import {useFormik} from "formik";
 import {useDispatch} from "react-redux";
 import {Settings} from "@mui/icons-material";
-import {Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, Modal, TextField, Typography,} from "@mui/material";
+import {Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, TextField,} from "@mui/material";
 
 const UpdateProfile = React.memo(({profile, updateMyProfile}) => {
-    console.log('updatestatus rendered')
-
     const [open, setOpen] = React.useState(false)
     const [maxWidth, setMaxWidth] = React.useState('sm')
     const [fullWidth, setFullWidth] = React.useState(true)

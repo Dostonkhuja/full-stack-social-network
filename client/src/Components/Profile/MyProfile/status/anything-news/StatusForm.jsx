@@ -1,7 +1,7 @@
-import React, {forwardRef, memo, useEffect, useImperativeHandle, useRef, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {useDispatch} from "react-redux";
 import {useFormik} from "formik";
-import {Button, Grid, TextareaAutosize} from "@mui/material";
+import {Button, Grid} from "@mui/material";
 import PreviewImage from "./PreviewImage";
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import IconButton from "@mui/material/IconButton";

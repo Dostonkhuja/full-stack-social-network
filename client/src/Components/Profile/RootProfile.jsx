@@ -5,14 +5,24 @@ import {useDispatch, useSelector} from "react-redux";
 import {setCurrentPage} from '../../State-management/AppSlice'
 import {guesting} from "../../Redux-middleware/initGuestsMiddleware";
 import {defaultAllFollowers, getFollowed, getFollowers, isOwnerScope} from "../../State-management/AllFollowersSlice";
-import {disliked, getProfileById, getStatus, liked, newComment, profileFollow, profileUnfollow, setProfileToOwner,
-    showComments, updateMyAvatar, updateMyCoverImage, updateMyProfile,
-    updateMyStatus} from "../../State-management/ProfileSlice";
+import {
+    disliked,
+    getProfileById,
+    getStatus,
+    liked,
+    newComment,
+    profileFollow,
+    profileUnfollow,
+    setProfileToOwner,
+    showComments,
+    updateMyAvatar,
+    updateMyCoverImage,
+    updateMyProfile,
+    updateMyStatus
+} from "../../State-management/ProfileSlice";
 import {createNewConversation} from "../../Redux-middleware/initMessengerSocketMiddleware";
 
 const RootProfile = () => {
-    console.log('Root Profile')
-
     const dispatch = useDispatch()
 
     const {userId} = useParams()

@@ -1,7 +1,11 @@
-const app = require('express')()
+const express = require('express')
+const app = express()
 const server = require('http').createServer(app)
 const winston = require('winston')
+const path = require("path");
 require('dotenv').config()
+
+app.use(express.static(path.join(__dirname, 'public')))
 
 require('./startUp/prod')(app)
 require('./startUp/io')(server)

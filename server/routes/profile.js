@@ -72,12 +72,13 @@ router.get('/:id',async (req, res) => {
 //Update Photo
 router.put('/photo', userPhotos.single('avatar'), auth, async (req, res) => {
     if (req.file) {
+        console.log(req.file)
         const user = await User.findByIdAndUpdate(req.user._id, {
-            $set:{'photos.large':req.file.url,'photos.small':req.file.eager[0].url}
+            $set:{'photos.large':req.file.secure_url,'photos.small':req.file.eager[0].secure_url}
         },{new: true})
 
         const userMyPhotos = await User.findById(req.user._id,'myPhotos myPhotosCount')
-        const newMyPhoto = new MyPhotos({user:req.user._id, photo:req.file.url})
+        const newMyPhoto = new MyPhotos({user:req.user._id, photo:req.file.secure_url})
         await newMyPhoto.save()
         userMyPhotos.myPhotos.push(newMyPhoto._id)
         userMyPhotos.myPhotosCount = userMyPhotos.myPhotos.length
@@ -91,13 +92,13 @@ router.put('/photo', userPhotos.single('avatar'), auth, async (req, res) => {
 router.put('/coverImage', coverImage.single('coverImage'), auth, async (req, res) => {
     if (req.file) {
         const user = await User.findByIdAndUpdate(req.user._id, {
-            $set:{'photos.coverImage':req.file.url}
+            $set:{'photos.coverImage':req.file.secure_url}
         },{new: true})
 
         if (!user)
             return res.status(404).send('mavjud bo\'lmagan foydalanuvchi')
 
-        const newMyPhoto = new MyPhotos({user:req.user._id, photo:req.file.url})
+        const newMyPhoto = new MyPhotos({user:req.user._id, photo:req.file.secure_url})
         await newMyPhoto.save()
 
         const userMyPhotos = await User.findById(req.user._id,'myPhotos')
@@ -122,8 +123,8 @@ router.post('/status', auth, async (req, res) => {
 
     if(req.body.photoFile !==null ){
         const uploadResult  = await statusPhotos.upload(req.body.photoFile, {upload_preset:'ml_default',folder: 'social-network-status-images'})
-        req.body.photoFile = uploadResult.url
-        const newMyPhoto = new MyPhotos({user:req.user._id,photo:uploadResult.url})
+        req.body.photoFile = uploadResult.secure_url
+        const newMyPhoto = new MyPhotos({user:req.user._id,photo:uploadResult.secure_url})
         await newMyPhoto.save()
         user.myPhotos.push(newMyPhoto._id)
         user.myPhotosCount = user.myPhotos.length

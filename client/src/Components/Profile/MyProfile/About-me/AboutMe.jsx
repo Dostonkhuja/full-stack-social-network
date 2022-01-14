@@ -5,8 +5,6 @@ import {Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid,} from "
 import {aboutMe} from "../../../../State-management/ProfileSlice";
 
 const AboutMe = React.memo(({profile}) => {
-    console.log('updatestatus rendered')
-
     const [open, setOpen] = React.useState(false)
     const [maxWidth, setMaxWidth] = React.useState('sm')
     const [fullWidth, setFullWidth] = React.useState(true)

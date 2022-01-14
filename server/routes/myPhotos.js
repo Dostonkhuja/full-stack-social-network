@@ -13,7 +13,7 @@ router.post('/', ownerPhoto.single('myPhoto'), auth, async (req, res) => {
         if (!user)
             return res.status(404).send('mavjud bo\'lmagan foydalanuvchi')
 
-        const newMyPhoto = await MyPhotos({user:req.user._id, photo:req.file.url})
+        const newMyPhoto = await MyPhotos({user:req.user._id, photo:req.file.secure_url})
         await newMyPhoto.save()
 
         user.myPhotos.push(newMyPhoto._id)

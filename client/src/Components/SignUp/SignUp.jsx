@@ -1,15 +1,13 @@
 import * as React from 'react';
-import {useEffect} from "react";
+import {useEffect} from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import {CssBaseline, Container, Typography, Box, Grid, Link, TextField, Button, Avatar} from '@mui/material'
+import {Avatar, Box, CssBaseline, Grid, Link, Typography} from '@mui/material'
 import {Redirect} from "react-router-dom";
 import {sendSIgnIn} from "../../State-management/SignInSlice";
 import SignUpForm from "./SignUpForm";
 
 const SignUp = React.memo(() => {
-    console.log('signUp rendered')
-
     const dispatch = useDispatch()
     const errorMessage = useSelector(state => state.signUp.errorMessage)
     const user = useSelector(state => state.signUp.user)

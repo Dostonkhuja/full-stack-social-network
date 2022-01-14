@@ -30,8 +30,6 @@ import {Link} from "react-router-dom";
 timeago.register('vi', vi);
 
 export default function StatusMedia({newComment,handleCurrentImage,token,showComments,profileFollow,profileUnfollow,ownerId,liked,disliked,profile,ownerPhoto,status}) {
-    console.log(status) 
-
     const dispatch = useDispatch()
 
     const [open, setOpen] = React.useState(false)

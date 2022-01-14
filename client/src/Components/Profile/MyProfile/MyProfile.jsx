@@ -45,7 +45,6 @@ TabPanel.propTypes = {
 };
 
 const MyProfile = React.memo((props) => {
-    console.log('my profile rendered')
     const dispatch = useDispatch()
     const history = useHistory()
 

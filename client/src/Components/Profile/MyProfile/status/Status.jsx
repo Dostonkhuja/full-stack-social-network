@@ -1,9 +1,6 @@
-import React, {forwardRef, useImperativeHandle, useRef, useState} from "react";
-import Box from "@mui/material/Box";
-import StatusForm from "./anything-news/StatusForm";
+import React, {useState} from "react";
 import StatusMedia from './Status-media/StatusMedia'
-import CancelIcon from '@mui/icons-material/Cancel';
-import {Avatar, Button, Card, Dialog, DialogActions, DialogContent, DialogTitle, Typography} from "@mui/material";
+import {Avatar, Button, Card, Typography} from "@mui/material";
 import InfiniteScroll from "react-infinite-scroll-component";
 import {useDispatch} from "react-redux";
 import CircularProgress from '@mui/material/CircularProgress';

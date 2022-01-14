@@ -21,7 +21,6 @@ const storagePhoto = new cloudinaryStorage({
     uploadOptions: {folder:'social-network-owner-photos'}
 })
 
-
 module.exports.userPhotos = multer({storage: storageUserPhoto})
 module.exports.coverImage = multer({storage: storageCover})
 module.exports.ownerPhoto = multer({storage: storagePhoto})

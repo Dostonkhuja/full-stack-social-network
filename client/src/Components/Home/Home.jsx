@@ -1,7 +1,17 @@
-import { useEffect,useState } from 'react'
-import {useSelector,useDispatch,} from 'react-redux' 
+import {useEffect, useState} from 'react'
+import {useDispatch, useSelector,} from 'react-redux'
 import {useHistory} from "react-router-dom";
-import {getStatusForHome,showCommentsHomeStatus,updateMyStatusHome,newCommentHomeStatus,setStatusToNull,likedHomePage,dislikedHomePage,homeFollow,homeUnfollow} from '../../State-management/HomeSlice'
+import {
+    dislikedHomePage,
+    getStatusForHome,
+    homeFollow,
+    homeUnfollow,
+    likedHomePage,
+    newCommentHomeStatus,
+    setStatusToNull,
+    showCommentsHomeStatus,
+    updateMyStatusHome
+} from '../../State-management/HomeSlice'
 import InfiniteScroll from "react-infinite-scroll-component";
 import Lightbox from 'react-image-lightbox';
 import CircularProgress from '@mui/material/CircularProgress';

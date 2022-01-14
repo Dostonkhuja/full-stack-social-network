@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+import {createAsyncThunk, createSlice} from '@reduxjs/toolkit'
 import {homeAPI} from '../api/homeAPI'
 import {profileAPI} from '../api/profileAPI'
 import {usersAPI} from '../api/usersAPI'

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import {Avatar, Box, Container, Grid, Link, Typography} from '@mui/material'
+import {Avatar, Box, Grid, Link, Typography} from '@mui/material'
 import SignInForm from "./SignInForm";
 import {Redirect} from "react-router-dom";
 import {useSelector} from "react-redux";

@@ -9,8 +9,6 @@ import {Box, Button, Grid, TextField, Typography} from '@mui/material'
 const SignUpForm = React.memo(({errorMessage}) => {
     const dispatch = useDispatch()
 
-    console.log('signUpForm rendered')
-
     const [mouseErrorEmail, setMouseErrorEmail] = useState(false)
     const [mouseErrorPassword, setMouseErrorPassword] = useState(false)
     const [mouseErrorlastName, setMouseErrorlastName] = useState(false)

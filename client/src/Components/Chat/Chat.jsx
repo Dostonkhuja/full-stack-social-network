@@ -2,7 +2,7 @@ import React, {useEffect, useRef, useState} from 'react';
 import InfiniteScroll from "react-infinite-scroll-component";
 import {useDispatch, useSelector} from "react-redux";
 import {chatMessages, chatNewMessage} from "../../Redux-middleware/initChatMiddleware";
-import {Grid, Typography} from "@mui/material";
+import {Grid} from "@mui/material";
 import {setChatToDefoult} from "../../State-management/chatSlice";
 import ChatMessage from "./ChatMessage";
 import ChatMessageForm from "./ChatMessageForm";
