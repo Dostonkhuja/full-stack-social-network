@@ -25,6 +25,7 @@ const usersSlice = createSlice({
         totalUsersCount: 0,
         followId: '',
         errorMessage: null,
+        isPendingUsers:false,
     },
     reducers: {
         setFollowId: (state, action) => {
@@ -33,6 +34,7 @@ const usersSlice = createSlice({
     },
     extraReducers: {
         [getUsers.fulfilled]: (state, action) => {
+            state.isPendingUsers=false
             if (action.payload.status === 200) {
                 state.users = action.payload.data.users
                 state.totalUsersCount = action.payload.data.totalUsersCount
@@ -42,6 +44,9 @@ const usersSlice = createSlice({
         },
         [getUsers.rejected]: (state, action) => {
             state.errorMessage = action.payload.data
+        },
+        [getUsers.pending]: (state) => {
+            state.isPendingUsers = true
         },
         [follow.fulfilled]: (state, action) => {
             if (action.payload.status === 200) {

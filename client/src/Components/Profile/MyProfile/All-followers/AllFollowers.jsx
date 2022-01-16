@@ -37,6 +37,9 @@ const AllFollowers = ({defaultAllFollowers,getFollowers,userId,followedCount,own
         return ()=> dispatch(defaultAllFollowers())
     },[])
 
+    if(followers.length === 0)
+        return <div style={{ height: "100%", overflow:"hidden", display:'flex',justifyContent:'center',alignItems:'center',marginTop:'0.5rem'}}> <CircularProgress/> </div>
+
     return (
         <div>
             <InfiniteScroll

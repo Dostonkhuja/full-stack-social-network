@@ -54,9 +54,9 @@ const MyProfile = React.memo((props) => {
 
     const {
         createNewConversation,getStatus, token, liked, disliked,
-        ownerId, profileFollow, profileUnfollow,newComment,
+        ownerId, profileFollow, profileUnfollow,newComment,myPhotos,
         showComments, isOwner, ownerPhoto, profile, updateMyStatus,
-        updateMyProfile, updateMyAvatar, updateMyCoverImage,
+        updateMyProfile, updateMyAvatar, updateMyCoverImage,newStatusIsPending,
         defaultAllFollowers,getFollowers, getFollowed, isOwnerScope} = props
 
     const handleCurrentImage = (key,statusPhoto,myPhoto) => {
@@ -127,7 +127,7 @@ const MyProfile = React.memo((props) => {
                     </div>
                 </Grid>
                 {<Grid item xs={7}>
-                    <Status isOwner={isOwner} showComments={showComments} ownerId={ownerId}  profileFollow={profileFollow}
+                    <Status isOwner={isOwner} showComments={showComments} ownerId={ownerId}  profileFollow={profileFollow} newStatusIsPending={newStatusIsPending}
                             profileUnfollow={profileUnfollow} liked={liked} disliked={disliked} ownerPhoto={ownerPhoto} newComment={newComment}
                             token={token} profile={profile} updateMyStatus={updateMyStatus} getStatus={getStatus} handleCurrentImage={handleCurrentImage}
                             handleCloseAnythingNews={handleCloseAnythingNews} openAnythingNews={openAnythingNews} handleOpenAnythingNews={handleOpenAnythingNews}/>
@@ -143,7 +143,7 @@ const MyProfile = React.memo((props) => {
                           getFollowed={getFollowed} isOwnerScope={isOwnerScope} />
         </TabPanel>
         <TabPanel value={value} index={3}>
-            <MainPhotos profile={profile} setOpenAnythingNews={setOpenAnythingNews}
+            <MainPhotos profile={profile} myPhotos={myPhotos} setOpenAnythingNews={setOpenAnythingNews}
                         handleCurrentImage={handleCurrentImage} openAnythingNews={openAnythingNews}
                         handleCloseAnythingNews={handleCloseAnythingNews} isOwner={isOwner}
                         updateMyStatus={updateMyStatus}/>

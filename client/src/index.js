@@ -5,7 +5,7 @@ import {Provider} from 'react-redux'
 import {createTheme} from "@mui/material";
 import {ThemeProvider} from "@emotion/react";
 import {store} from './State-management/store'
-import {BrowserRouter as Router, Switch} from "react-router-dom";
+import {HashRouter as Router, Switch} from "react-router-dom";
 
 const theme = createTheme({
     palette: {

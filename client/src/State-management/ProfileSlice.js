@@ -68,6 +68,7 @@ const profileSlice = createSlice({
         profile: null,
         myPhotos: null,
         followId:'',
+        newStatusIsPending:false,
         errorMessage: null,
         photosUploadErrorMessage: null,
         statusErrorMessage: null,
@@ -153,6 +154,7 @@ const profileSlice = createSlice({
             }
         },
         [updateMyStatus.fulfilled]: (state, action) => {
+            state.newStatusIsPending = false
             if (action.payload.status === 200) {
                 state.profile.status.unshift(action.payload.data.newStatus)
                 state.profile.statusCount = action.payload.data.statusCount
@@ -162,6 +164,9 @@ const profileSlice = createSlice({
             } else {
                 state.statusErrorMessage = action.payload.data
             }
+        },
+        [updateMyStatus.pending]: (state, action) => {
+            state.newStatusIsPending = true
         },
         [getStatus.fulfilled]: (state, action) => {
             if (action.payload.status === 200) {

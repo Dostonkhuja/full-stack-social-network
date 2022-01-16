@@ -34,12 +34,14 @@ const Home = ()=> {
     const handleCloseAnythingNews = () => {setOpenAnythingNews(false)}
 
     const status = useSelector(state=> state.home.status)
+    const isStatusLoading = useSelector(state=> state.home.isStatusLoading)
+    const isStatusSending = useSelector((state) => state.home.isStatusSending)
     const token = localStorage.getItem('x-auth-token')
     const isOwner = useSelector(state => state.profile.isOwner)
     const ownerPorifle = useSelector((state) => state.profile.ownerProfile)
     const ownerId = useSelector(state => state.profile.ownerProfile ? state.profile.ownerProfile._id : '')
     const ownerPhoto = useSelector(state => state.profile.ownerProfile ? state.profile.ownerProfile.photos.large : null)
-    
+
     const fetchMoreData = () => {
         if (pageNumber > 1){
             setPageNubmer(pageNumber + 1)
@@ -76,7 +78,9 @@ const Home = ()=> {
         }
     },[ownerId,status])
     
-  
+    if (isStatusLoading && status===null)
+        return <div style={{ height: "100%", overflow:"hidden", display:'flex',justifyContent:'center',alignItems:'center',marginTop:'0.5rem'}}> <CircularProgress/> </div>
+
     return <>
     {isOpen && (<Lightbox mainSrc={currentImage} onCloseRequest={() => setIsOpen(false)}/>)}
     <Grid item xs={11} sx={{display:'flex',justifyContent:'center',flexWrap:'wrap',pr:'3rem'}}>
@@ -86,13 +90,13 @@ const Home = ()=> {
                             sx={{bgcolor: 'pink', border: '3px solid white', width: 36, height: 36}}/>
                         <Button  sx={{bgcolor: '#e7e7e7',borderRadius:'20px'}} onClick={handleOpenAnythingNews} fullWidth variant={'string'}>Anything news?</Button>
                     </Card>}
+            {isStatusSending ===true && <div style={{overflow:"hidden", display:'flex',justifyContent:'center',alignItems:'center',marginTop:'0.5rem'}}> <CircularProgress/> </div>}
         </Grid>
     </Grid>
 
     {ownerPorifle && <AnythingNews open={openAnythingNews} handleCloseAnythingNews={handleCloseAnythingNews} profile={ownerPorifle} isOwner={isOwner} updateMyStatus={updateMyStatusHome}/>}
-          
-           {status && 
-            <div>
+            {status &&
+                <div>
                 <InfiniteScroll
                     dataLength={status.length}
                     next={fetchMoreData}

@@ -42,6 +42,9 @@ const AllFollowed = ({defaultAllFollowers, getFollowed, isOwnerScope,ownerId,tok
         }
     },[])
 
+    if(followed.length === 0)
+        return <div style={{ height: "100%", overflow:"hidden", display:'flex',justifyContent:'center',alignItems:'center',marginTop:'0.5rem'}}> <CircularProgress/> </div>
+
     return (
         <div>
             <InfiniteScroll

@@ -41,7 +41,9 @@ const HomeSlice = createSlice({
     initialState: {
         status:null,
         statusErrorMessage:null,
-        followId:''
+        followId:'',
+        isStatusLoading:true,
+        isStatusSending:false
     },
     reducers: {
         setStatusToNull:(state)=>{
@@ -52,7 +54,11 @@ const HomeSlice = createSlice({
         }
     },
     extraReducers: {
+        [getStatusForHome.pending]:(state,action)=>{
+            state.isStatusLoading = true
+        },
         [getStatusForHome.fulfilled]:(state,action)=>{
+            state.isStatusLoading = false
            if(state.status === null){
             state.status = action.payload.data
            }else{
@@ -150,7 +156,11 @@ const HomeSlice = createSlice({
                 state.errorMessage = action.payload.data
             }
         },
+        [updateMyStatusHome.pending]: (state, action) => {
+            state.isStatusSending = true
+        },
         [updateMyStatusHome.fulfilled]: (state, action) => {
+            state.isStatusSending = false
             if (action.payload.status === 200) {
                 state.status.unshift(action.payload.data.newStatus)
             } else {

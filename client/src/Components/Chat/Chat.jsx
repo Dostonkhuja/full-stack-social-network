@@ -7,6 +7,7 @@ import {setChatToDefoult} from "../../State-management/chatSlice";
 import ChatMessage from "./ChatMessage";
 import ChatMessageForm from "./ChatMessageForm";
 import {useHistory} from "react-router-dom";
+import CircularProgress from "@mui/material/CircularProgress";
 
 const Chat = () => {
     const dispatch = useDispatch()
@@ -40,6 +41,9 @@ const Chat = () => {
             dispatch(setChatToDefoult())
         }
     },[ownerId])
+
+    if(messages.length === 0)
+        return <div style={{ height: "100%", overflow:"hidden", display:'flex',justifyContent:'center',alignItems:'center',marginTop:'0.5rem'}}> <CircularProgress/> </div>
 
     return (<>
         <div style={{overflow: 'hidden', maxHeight: `${window.screen.height - 195}px`}}>

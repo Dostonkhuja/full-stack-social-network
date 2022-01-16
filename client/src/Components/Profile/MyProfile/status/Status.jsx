@@ -6,7 +6,7 @@ import {useDispatch} from "react-redux";
 import CircularProgress from '@mui/material/CircularProgress';
 import AnythingNews from "./anything-news/AnythingNews";
 
-const Status = ({newComment,handleOpenAnythingNews,handleCloseAnythingNews,openAnythingNews,handleCurrentImage,getStatus,token,liked,disliked,ownerId,profileUnfollow,profileFollow,showComments,isOwner,ownerPhoto, profile, updateMyStatus}) => {
+const Status = ({newStatusIsPending,newComment,handleOpenAnythingNews,handleCloseAnythingNews,openAnythingNews,handleCurrentImage,getStatus,token,liked,disliked,ownerId,profileUnfollow,profileFollow,showComments,isOwner,ownerPhoto, profile, updateMyStatus}) => {
     const dispatch = useDispatch()
 
     const profileId = profile._id
@@ -34,6 +34,8 @@ const Status = ({newComment,handleOpenAnythingNews,handleCloseAnythingNews,openA
                     hasMore={profile.status.length < profile.statusCount}
                     loader={<div style={{ height: "100%", overflow:"hidden", display:'flex',justifyContent:'center',marginTop:'0.5rem'}}> <CircularProgress/> </div>}
                 >
+                    {newStatusIsPending && <div style={{overflow:"hidden", display:'flex',justifyContent:'center',alignItems:'center',marginTop:'0.5rem'}}> <CircularProgress/> </div>}
+
                     {profile.status.map(s =>
                             <StatusMedia key={s._id} isOwner={isOwner} token={token} showComments={showComments} liked={liked}
                                          disliked={disliked} profileFollow={profileFollow} newComment={newComment}

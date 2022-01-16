@@ -43,6 +43,9 @@ const Guests = () => {
         }
     },[ownerId,allGuestCount])
 
+    if(guests.length === 0)
+        return <div style={{ height: "100%", overflow:"hidden", display:'flex',justifyContent:'center',alignItems:'center',marginTop:'0.5rem'}}> <CircularProgress/> </div>
+
     return (<Grid item xs={12}>
         <InfiniteScroll
             dataLength={guests.length}

@@ -16,13 +16,11 @@ function srcset(image, size, rows = 1, cols = 1) {
     };
 }
 
-const AllPhotos = ({userId,handleCurrentImage,myPhotosCount}) => {
+const AllPhotos = ({myPhotos,userId,handleCurrentImage,myPhotosCount}) => {
     const dispatch = useDispatch()
 
     const [pageNumber,setPageNumber] = useState(1)
     let pageSize = 10
-
-    let myPhotos = useSelector(state=> state.profile.myPhotos)
 
     const fetchMoreData = () => {
         if (pageNumber > 1){
@@ -30,7 +28,6 @@ const AllPhotos = ({userId,handleCurrentImage,myPhotosCount}) => {
             dispatch(getMyPhotos({userId,pageSize,pageNumber}))
         }
     }
-
 
     useEffect(()=> {
             dispatch(getMyPhotos({userId,pageSize,pageNumber}))
@@ -41,6 +38,9 @@ const AllPhotos = ({userId,handleCurrentImage,myPhotosCount}) => {
             dispatch(myPhotosScope())
         }
     },[])
+
+    if(myPhotos===null)
+        return <div style={{ height: "100%", overflow:"hidden", display:'flex',justifyContent:'center',alignItems:'center',marginTop:'0.5rem'}}> <CircularProgress/> </div>
 
     return (<div>
         {myPhotos !== null &&
