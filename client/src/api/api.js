@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const instance = axios.create({
-    baseURL:'https://social-beatles.herokuapp.com/api/',
+    baseURL:'https://social-beatles.onrender.com/api/',
     headers: {"x-auth-token": localStorage.getItem('x-auth-token')}
 })
 
