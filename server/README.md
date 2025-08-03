@@ -6,7 +6,7 @@ muhokamalar uyushtirish,like tugmalarini bosish,shaxsiy yozishmalar yozish
 va boshqa bir qator hususiyatlarni o'z ichiga oladi.
 ushbu qismda loyihaning backend qismi bilan tanishib chiqish mumkin.
 
-saytga o'tish uchun: https://social-beatles.herokuapp.com
+saytga o'tish uchun: https://social-beatles.onrender.com/
  
 Loyihaning backend qismi node js run time muhitida express kutibxonasidan foydalanilgan holatda ishlab chiqilgan.
 malumotlar bazasi mongoDB
