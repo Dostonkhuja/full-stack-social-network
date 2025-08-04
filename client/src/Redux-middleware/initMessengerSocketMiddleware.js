@@ -2,7 +2,7 @@ import {createAsyncThunk} from "@reduxjs/toolkit";
 import createSocketIoMiddleware from 'redux-socket.io';
 import io from 'socket.io-client';
 
-let socket = io('https://social-beatles.herokuapp.com/messenger',{autoConnect:false,reconnection: true,transports: ["websocket"]});
+let socket = io('https://social-beatles.onrender.com/messenger',{autoConnect:false,reconnection: true,transports: ["websocket"]});
 export const messengerSocketIoMiddleware = createSocketIoMiddleware(socket, "messenger/");
 
 // server dispatch
